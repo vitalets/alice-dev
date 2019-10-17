@@ -3,8 +3,10 @@
   "version": "1.0.0",
   "description": "Alice devtools website and server",
   "scripts": {
-    "code": "eslint src test",
-    "test": "mocha test/setup.js test/*.spec.js"
+    "dev": "webpack-dev-server --open",
+    "lint": "eslint src test",
+    "build": "webpack",
+    "test": "mocha test/setup.js test/specs/*.js"
   },
   "lint-staged": {
     "{src,test}/**/*.js": "eslint"
@@ -15,13 +17,36 @@
       "pre-push": "npm run test"
     }
   },
-  "dependencies": {},
+  "dependencies": {
+    "@material-ui/core": "^4.5.1",
+    "@material-ui/icons": "^4.5.1",
+    "clsx": "^1.0.4",
+    "loggee": "^0.2.0",
+    "micro": "^9.3.4",
+    "prop-types": "^15.7.2",
+    "react": "^16.10.2",
+    "react-dom": "^16.10.2",
+    "ws": "^7.1.2"
+  },
   "devDependencies": {
+    "@babel/core": "^7.6.4",
+    "@babel/preset-react": "^7.6.3",
+    "alice-tester": "^0.8.0",
+    "babel-loader": "^8.0.6",
+    "chai": "^4.2.0",
+    "clean-webpack-plugin": "^3.0.0",
     "eslint": "^6.3.0",
     "eslint-plugin-mocha": "^6.1.0",
+    "get-port": "^5.0.0",
+    "html-webpack-plugin": "^3.2.0",
     "husky": "^3.0.5",
     "lint-staged": "^9.4.2",
-    "mocha": "^6.2.0"
+    "mocha": "^6.2.0",
+    "puppeteer": "^1.20.0",
+    "serve-handler": "^6.1.2",
+    "webpack": "^4.41.2",
+    "webpack-cli": "^3.3.9",
+    "webpack-dev-server": "^3.8.2"
   },
   "license": "MIT"
 }
