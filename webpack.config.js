@@ -44,7 +44,7 @@ module.exports = (env = {}) => {
         banner: `Alice-dev v${pkg.version}`
       }),
       new HtmlWebpackPlugin({
-        template: 'src/index.html'
+        template: 'src/front/index.html'
       })
     ],
   };

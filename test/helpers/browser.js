@@ -3,7 +3,7 @@
  */
 const puppeteer = require('puppeteer');
 
-module.exports = class Browser {
+class Browser {
   constructor() {
     this.browser = null;
     this.page = null;
@@ -23,8 +23,10 @@ module.exports = class Browser {
   }
 
   async _launchBrowser() {
-    this.browser = await puppeteer.launch({headless: false});
+    this.browser = await puppeteer.launch({headless: true});
     this.page = await this.browser.newPage();
     await this.page.setCacheEnabled(false);
   }
-};
+}
+
+module.exports = new Browser();

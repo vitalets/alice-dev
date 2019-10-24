@@ -5,20 +5,16 @@ const Logger = require('loggee');
 const Server = require('../src/back/server');
 const skillServer = require('./helpers/skill-server');
 const staticServer = require('./helpers/static-server');
-const Browser = require('./helpers/browser');
+const browser = require('./helpers/browser');
+const wsClientFactory = require('./helpers/ws-client-factory');
+const WebSocket = require('websocket').w3cwebsocket;
+const {URL} = require('url');
 
 chai.config.truncateThreshold = 0;
 Logger.setLogLevel(process.env.LOGGEE_LEVEL || 'none');
 
 (async () => {
   const server = new Server();
-  const browser = new Browser();
-
-  Object.assign(global, {
-    assert: chai.assert,
-    User,
-    browser,
-  });
 
   before(async () => {
     await Promise.all([
@@ -29,12 +25,24 @@ Logger.setLogLevel(process.env.LOGGEE_LEVEL || 'none');
       staticServer.setOptions({public: 'dist'}).listen(await getPort()),
     ]);
     User.config.webhookUrl = `http://localhost:${server.port}`;
-    await browser.open(`http://localhost:${staticServer.address().port}`);
+    wsClientFactory.config.url = `ws://localhost:${server.port}`;
+    // await browser.open(`http://localhost:${staticServer.address().port}`);
+
+    Object.assign(global, {
+      assert: chai.assert,
+      User,
+      browser,
+      wsClientFactory,
+      // emulate browser context
+      URL,
+      WebSocket,
+    });
   });
 
   after(async () => {
+    await wsClientFactory.closeAll();
     const results = await Promise.all([
-      server.stop(),
+      server.close(),
       skillServer.close(),
       staticServer.close(),
       browser.close(),
