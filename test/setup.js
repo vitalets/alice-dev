@@ -39,8 +39,11 @@ Logger.setLogLevel(process.env.LOGGEE_LEVEL || 'none');
     });
   });
 
-  after(async () => {
+  afterEach(async () => {
     await wsClientFactory.closeAll();
+  });
+
+  after(async () => {
     const results = await Promise.all([
       server.close(),
       skillServer.close(),

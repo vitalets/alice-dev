@@ -2,6 +2,7 @@
  * Websocket client.
  */
 const WebSocketAsPromised = require('websocket-as-promised');
+const aliceLogger = require('loggee').create('alice');
 const {buildUrl} = require('../shared/utils');
 const protocol = require('../shared/protocol');
 
@@ -13,6 +14,7 @@ const wspOptions = {
 module.exports = class WSClient {
   constructor(url, {userId} = {}) {
     this._url = buildUrl(url, {userId});
+    this.setAliceResponse('');
   }
 
   async connect() {
@@ -27,19 +29,29 @@ module.exports = class WSClient {
     }
   }
 
+  /**
+   * Sets static response for Alice requests
+   * @param {object} response
+   */
+  setAliceResponse(response) {
+    this._aliceResponse = response || {text: ''};
+  }
+
   _handleMessage(message) {
-    // console.log('client got message', message);
     if (protocol.aliceMessage.check(message)) {
       this._handleAliceMessage(message);
     }
   }
 
   _handleAliceMessage(message) {
-    const response = {
-      text: 'hello'
-    };
+    aliceLogger.log('REQUEST', message.payload); // eslint-disable-line no-console
     const {session, version} = message.payload;
-    const outMessage = protocol.aliceMessage.buildResponse(message.id, {response, session, version});
+    const outMessage = protocol.aliceMessage.buildResponse(message.id, {
+      response: this._aliceResponse,
+      session,
+      version
+    });
+    aliceLogger.log('RESPONSE', outMessage); // eslint-disable-line no-console
     this._wsp.sendPacked(outMessage);
   }
 };

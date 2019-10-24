@@ -3,9 +3,14 @@ describe('proxy', () => {
   it('proxy to existing client - show response', async () => {
     const user = new User();
     const wsClient = wsClientFactory.create(user.id);
+    wsClient.setAliceResponse({
+      text: 'Привет',
+      tts: 'Привет'
+    });
     await wsClient.connect();
     await user.enter();
-    assert.include(user.response.text, 'hello');
+    assert.include(user.response.text, 'Привет');
+    assert.include(user.response.tts, 'Привет');
   });
 
   it('proxy to non-existing client - show instruction', async () => {
