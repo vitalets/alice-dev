@@ -1,7 +1,8 @@
 /**
  * Helper to create and cleanup ws clients.
  */
-const WSClient = require('../../src/front/ws-client');
+const WSClient = require('../../src/front/controllers/ws-client');
+const {buildUrl} = require('../../src/shared/utils');
 
 const clients = new Set();
 
@@ -10,7 +11,8 @@ const config = {
 };
 
 const create = userId => {
-  const client = new WSClient(config.url, {userId});
+  const url = buildUrl(config.url, {userId});
+  const client = new WSClient(url);
   clients.add(client);
   return client;
 };

@@ -3,23 +3,27 @@
  */
 const WebSocketAsPromised = require('websocket-as-promised');
 const aliceLogger = require('loggee').create('alice');
-const {buildUrl} = require('../shared/utils');
-const protocol = require('../shared/protocol');
+const protocol = require('../../shared/protocol');
 
 const wspOptions = {
   packMessage: data => JSON.stringify(data),
   unpackMessage: data => JSON.parse(data)
 };
 
+// use module.exports for nodejs
 module.exports = class WSClient {
-  constructor(url, {userId} = {}) {
-    this._url = buildUrl(url, {userId});
+  /**
+   * Constructor
+   * @param {string} url
+   */
+  constructor(url) {
+    this._wsp = new WebSocketAsPromised(url, wspOptions);
+    this._wsp.onUnpackedMessage.addListener(message => this._handleMessage(message));
+    // todo: handle close
     this.setAliceResponse('');
   }
 
   async connect() {
-    this._wsp = new WebSocketAsPromised(this._url, wspOptions);
-    this._wsp.onUnpackedMessage.addListener(message => this._handleMessage(message));
     await this._wsp.open();
   }
 
