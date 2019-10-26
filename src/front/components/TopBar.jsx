@@ -6,7 +6,7 @@ import BuildIcon from '@material-ui/icons/Build';
 
 const useStyles = makeStyles(theme => ({
   root: {
-    flexGrow: 1,
+    // flexGrow: 1,
   },
   homeIcon: {
     marginRight: theme.spacing(2),

@@ -14,8 +14,9 @@ import { makeStyles } from '@material-ui/core/styles';
 
 const useStyles = makeStyles(theme => ({
   root: {
-    flexGrow: 1,
+    // flexGrow: 1,
     marginTop: theme.spacing(1),
+    marginBottom: theme.spacing(1),
     padding: theme.spacing(1),
   },
   connecting: {
