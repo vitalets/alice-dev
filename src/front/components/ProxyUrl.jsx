@@ -12,7 +12,9 @@ export default function ProxyUrl(props) {
   const [value, setValue] = React.useState('http://localhost:3000');
 
   const handleChange = event => {
-    setValue(event.target.value);
+    const newUrl = event.target.value;
+    setValue(newUrl);
+    // onProxyUrlChanged.dispatch(newUrl);
   };
 
   return (

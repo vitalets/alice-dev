@@ -4,7 +4,7 @@ env:
 globals:
   assert: false
   User: false
-  browser: false
+  page: false
   wsClientFactory: false
 
 plugins:

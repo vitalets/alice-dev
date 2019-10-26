@@ -18,14 +18,17 @@ module.exports = (env = {}) => {
     module: {
       rules: [
         {
-          test: /\.jsx$/,
+          test: /\.jsx?$/,
           exclude: /node_modules/,
           use: {
             loader: 'babel-loader',
             options: {
+              plugins: [
+                ['@babel/plugin-proposal-class-properties', { loose: true }]
+              ],
               presets: [
                 require.resolve('@babel/preset-react'),
-              ]
+              ],
             }
           }
         }

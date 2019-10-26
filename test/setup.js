@@ -26,12 +26,12 @@ Logger.setLogLevel(process.env.LOGGEE_LEVEL || 'none');
     ]);
     User.config.webhookUrl = `http://localhost:${server.port}`;
     wsClientFactory.config.url = `ws://localhost:${server.port}`;
-    // await browser.open(`http://localhost:${staticServer.address().port}`);
+    await browser.open(`http://localhost:${staticServer.address().port}`);
 
     Object.assign(global, {
       assert: chai.assert,
       User,
-      browser,
+      page: browser.page,
       wsClientFactory,
       // emulate browser context
       URL,

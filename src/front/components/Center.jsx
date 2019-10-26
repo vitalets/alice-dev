@@ -12,6 +12,7 @@ const useStyles = makeStyles(theme => ({
     height: '100%',
     width: '100%',
     padding: theme.spacing(2),
+    paddingTop: 0,
     display: 'flex',
   },
 }));

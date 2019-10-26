@@ -1,12 +1,12 @@
-describe('proxy', () => {
+describe('server: proxy', () => {
 
   it('proxy to existing client - show response', async () => {
     const user = new User();
     const wsClient = wsClientFactory.create(user.id);
-    wsClient.setAliceResponse({
+    wsClient.aliceResponse = {
       text: 'Привет',
       tts: 'Привет'
-    });
+    };
     await wsClient.connect();
     await user.enter();
     assert.include(user.response.text, 'Привет');

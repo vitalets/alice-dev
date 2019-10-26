@@ -1,5 +1,6 @@
 import { makeStyles } from '@material-ui/core/styles';
 import TextField from '@material-ui/core/TextField';
+import WsClient from '../controllers/ws-client';
 
 const useStyles = makeStyles(theme => ({
   textField: {
@@ -17,7 +18,12 @@ export default function FixedAnswer(props) {
   });
 
   const handleChange = name => event => {
-    setValues({ ...values, [name]: event.target.value });
+    const newState = {
+      ...values,
+      [name]: event.target.value
+    };
+    setValues(newState);
+    WsClient.onFixedAnswerChanged.dispatch(newState);
   };
 
   return [

@@ -5,7 +5,7 @@ import FormControlLabel from '@material-ui/core/FormControlLabel';
 import FormControl from '@material-ui/core/FormControl';
 import FixedAnswer from './FixedAnswer';
 import ProxyUrl from './ProxyUrl';
-
+import WsClient from '../controllers/ws-client';
 
 const useStyles = makeStyles(theme => ({
   root: {
@@ -19,11 +19,15 @@ const useStyles = makeStyles(theme => ({
 
 export default function Form() {
   const classes = useStyles();
-  const [value, setValue] = React.useState('fixed-answer');
+  const [value, setValue] = React.useState('fixed-response');
 
   const handleChange = event => {
-    setValue(event.target.value);
-    console.log(event.target.value);
+    const newValue = event.target.value;
+    setValue(newValue);
+    const mode = newValue === 'fixed-response'
+      ? WsClient.MODE_FIXED_RESPONSE
+      : WsClient.MODE_PROXY_URL;
+    WsClient.onModeChanged.dispatch(mode);
   };
 
   return (
@@ -37,12 +41,12 @@ export default function Form() {
         />
         <ProxyUrl disabled={value !== 'proxy'}/>
         <FormControlLabel
-          value="fixed-answer"
+          value="fixed-response"
           control={<Radio color="primary" />}
           label="Фиксированный ответ"
           className={classes.radio}
         />
-        <FixedAnswer disabled={value !== 'fixed-answer'}/>
+        <FixedAnswer disabled={value !== 'fixed-response'}/>
       </RadioGroup>
     </FormControl>
   );
