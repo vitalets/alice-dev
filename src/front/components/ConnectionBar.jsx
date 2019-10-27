@@ -14,7 +14,6 @@ import { makeStyles } from '@material-ui/core/styles';
 
 const useStyles = makeStyles(theme => ({
   root: {
-    // flexGrow: 1,
     marginTop: theme.spacing(1),
     marginBottom: theme.spacing(1),
     padding: theme.spacing(1),
@@ -41,14 +40,21 @@ const useStyles = makeStyles(theme => ({
   },
 }));
 
-export default function StatusBar() {
+export default function ConnectionBar() {
   const classes = useStyles();
+  //const [value, setValue] = React.useState(WebSocket.CLOSED);
+  // const [connectionState] = useGlobalState('connectionState');
+
+  const handleClick = () => {
+    console.log('click');
+  };
 
   return (
     <div className={clsx(classes.root, classes.connecting)}>
       <span id="client-snackbar" className={classes.message}>
         <InfoIcon className={classes.icon}/>
         Подключение...
+        <Button onClick={handleClick}>Подключиться</Button>
       </span>
     </div>
   );

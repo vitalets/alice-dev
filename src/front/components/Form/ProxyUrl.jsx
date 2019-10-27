@@ -1,19 +1,21 @@
 import { makeStyles } from '@material-ui/core/styles';
 import TextField from '@material-ui/core/TextField';
 
+
+
 const useStyles = makeStyles(theme => ({
   textField: {
     // marginTop: 0,
   },
 }));
 
-export default function ProxyUrl(props) {
+export default function ProxyUrl() {
   const classes = useStyles();
   const [value, setValue] = React.useState('http://localhost:3000');
 
   const handleChange = event => {
-    const newUrl = event.target.value;
-    setValue(newUrl);
+    // const newUrl = event.target.value;
+    setValue(event.target.value);
     // onProxyUrlChanged.dispatch(newUrl);
   };
 
@@ -27,7 +29,6 @@ export default function ProxyUrl(props) {
       margin="normal"
       variant="outlined"
       fullWidth
-      disabled={props.disabled}
     />
   );
 }
