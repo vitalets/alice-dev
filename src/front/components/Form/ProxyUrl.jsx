@@ -1,7 +1,7 @@
 import { makeStyles } from '@material-ui/core/styles';
 import TextField from '@material-ui/core/TextField';
-
-
+import { useDispatch, useSelector } from 'react-redux';
+import { setProxyUrl } from '../../store';
 
 const useStyles = makeStyles(theme => ({
   textField: {
@@ -11,20 +11,15 @@ const useStyles = makeStyles(theme => ({
 
 export default function ProxyUrl() {
   const classes = useStyles();
-  const [value, setValue] = React.useState('http://localhost:3000');
-
-  const handleChange = event => {
-    // const newUrl = event.target.value;
-    setValue(event.target.value);
-    // onProxyUrlChanged.dispatch(newUrl);
-  };
+  const url = useSelector(state => state.proxyUrl);
+  const dispatch = useDispatch();
 
   return (
     <TextField
       label="URL"
       placeholder="http://localhost:3000"
-      value={value}
-      onChange={handleChange}
+      value={url}
+      onChange={e => dispatch(setProxyUrl(e.target.value))}
       className={classes.textField}
       margin="normal"
       variant="outlined"

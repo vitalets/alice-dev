@@ -16,26 +16,13 @@ module.exports = class WSClient {
    * Constructor
    * @param {string} url
    */
-  constructor(url, getState) {
+  constructor(url) {
     this._createWSP(url);
-    // this.mode = WSClient.MODE_FIXED_RESPONSE;
-    // this.aliceResponse = {test: '', tts: ''};
-    // this.proxyUrl = '';
-    this.getState = getState;
     this.onAliceRequest = new Channel();
-    this.onAliceResponse = new Channel();
   }
 
-  get mode() {
-    return this.getState().mode;
-  }
-
-  get aliceResponse() {
-    return this.getState().aliceResponse;
-  }
-
-  get proxyUrl() {
-    return this.getState().proxyUrl;
+  get wsp() {
+    return this._wsp;
   }
 
   async connect() {
@@ -48,39 +35,19 @@ module.exports = class WSClient {
     }
   }
 
+  sendAliceResponse(messageId, responseBody) {
+    const message = protocol.aliceMessage.buildResponse(messageId, responseBody);
+    this._wsp.sendPacked(message);
+  }
+
   _createWSP(url) {
-    this.wsp = new WebSocketAsPromised(url, wspOptions);
-    this.wsp.onUnpackedMessage.addListener(message => this._handleMessage(message));
-    // todo: handle close
+    this._wsp = new WebSocketAsPromised(url, wspOptions);
+    this._wsp.onUnpackedMessage.addListener(message => this._handleMessage(message));
   }
 
   async _handleMessage(message) {
     if (protocol.aliceMessage.check(message)) {
-      const responseBody = await this._handleAliceRequest(message.payload);
-      const outMessage = protocol.aliceMessage.buildResponse(message.id, responseBody);
-      this.wsp.sendPacked(outMessage);
+      this.onAliceRequest.dispatch(message.id, message.payload);
     }
-  }
-
-  async _handleAliceRequest(requestBody) {
-    this.onAliceRequest.dispatch(requestBody);
-    const responseBody = this.mode === WSClient.MODE_PROXY_URL
-      ? await this._waitProxyResponse(requestBody)
-      : this._buildFixedResponse(requestBody);
-    this.onAliceResponse.dispatch(responseBody);
-    return responseBody;
-  }
-
-  _buildFixedResponse(requestBody) {
-    const {session, version} = requestBody;
-    return {
-      response: this.aliceResponse,
-      session,
-      version,
-    };
-  }
-
-  _waitProxyResponse() {
-    // todo
   }
 };

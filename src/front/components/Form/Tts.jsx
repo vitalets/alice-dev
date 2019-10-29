@@ -1,15 +1,18 @@
 import TextField from '@material-ui/core/TextField';
+import { useDispatch, useSelector } from 'react-redux';
+import { setFixedResponse } from '../../store';
 
 export default function Tts() {
-  const [value, setValue] = React.useState('Привет!');
+  const tts = useSelector(state => state.fixedResponse.tts);
+  const dispatch = useDispatch();
 
   return (
     <TextField
       label="TTS"
       multiline
       rows="3"
-      value={value}
-      onChange={e => setValue(e.target.value)}
+      value={tts}
+      onChange={e => dispatch(setFixedResponse({ tts: e.target.value }))}
       margin="normal"
       variant="outlined"
       fullWidth

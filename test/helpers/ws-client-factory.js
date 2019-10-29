@@ -10,9 +10,9 @@ const config = {
   url: ''
 };
 
-const create = userId => {
+const create = (userId, state) => {
   const url = buildUrl(config.url, {userId});
-  const client = new WSClient(url);
+  const client = new WSClient(url, () => state);
   clients.add(client);
   return client;
 };

@@ -1,16 +1,12 @@
 import PropTypes from 'prop-types';
 import clsx from 'clsx';
-import Button from '@material-ui/core/Button';
-import CheckCircleIcon from '@material-ui/icons/CheckCircle';
-import ErrorIcon from '@material-ui/icons/Error';
 import InfoIcon from '@material-ui/icons/Info';
-import CloseIcon from '@material-ui/icons/Close';
 import { amber, green, grey } from '@material-ui/core/colors';
-import IconButton from '@material-ui/core/IconButton';
-import Snackbar from '@material-ui/core/Snackbar';
-import SnackbarContent from '@material-ui/core/SnackbarContent';
-import WarningIcon from '@material-ui/icons/Warning';
 import { makeStyles } from '@material-ui/core/styles';
+import { useSelector } from 'react-redux';
+import { CONNECTION_STATE } from '../store';
+
+const { DISCONNECTED, CONNECTING, CONNECTED} = CONNECTION_STATE;
 
 const useStyles = makeStyles(theme => ({
   root: {
@@ -18,17 +14,14 @@ const useStyles = makeStyles(theme => ({
     marginBottom: theme.spacing(1),
     padding: theme.spacing(1),
   },
+  disconnected: {
+    backgroundColor: theme.palette.error.light,
+  },
   connecting: {
     backgroundColor: grey[300],
   },
-  error: {
-    backgroundColor: theme.palette.error.dark,
-  },
-  info: {
+  connected: {
     backgroundColor: theme.palette.primary.main,
-  },
-  warning: {
-    //backgroundColor: amber[700],
   },
   icon: {
     fontSize: 20,
@@ -42,19 +35,31 @@ const useStyles = makeStyles(theme => ({
 
 export default function ConnectionBar() {
   const classes = useStyles();
-  //const [value, setValue] = React.useState(WebSocket.CLOSED);
-  // const [connectionState] = useGlobalState('connectionState');
+  const connectionState = useSelector(state => state.connectionState);
 
-  const handleClick = () => {
-    console.log('click');
-  };
+  let text = '';
+  let classname;
+
+  switch (connectionState) {
+    case CONNECTING:
+      text = 'Подключение...';
+      classname = classes.connecting;
+      break;
+    case CONNECTED:
+      text = 'Подключено.';
+      classname = classes.connected;
+      break;
+    case DISCONNECTED:
+    default:
+      text = 'Нет подключения к серверу.';
+      classname = classes.disconnected;
+  }
 
   return (
-    <div className={clsx(classes.root, classes.connecting)}>
+    <div className={clsx(classes.root, classname)}>
       <span id="client-snackbar" className={classes.message}>
         <InfoIcon className={classes.icon}/>
-        Подключение...
-        <Button onClick={handleClick}>Подключиться</Button>
+        {text}
       </span>
     </div>
   );
