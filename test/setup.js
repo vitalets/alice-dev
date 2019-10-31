@@ -40,7 +40,6 @@ Logger.setLogLevel(debugMode ? 'debug' : 'none');
     const wsUrl = `ws://localhost:${server.port}`;
     const pageUrl = buildUrl(`http://localhost:${staticServer.address().port}`, {
       wsUrl,
-      debug: debugMode ? 1 : null
     });
     await browser.open(pageUrl);
 

@@ -1,6 +1,7 @@
 import { handleActions } from 'redux-actions';
 import produce from 'immer';
 import defaultState from './default-state';
+import persistentState from './persistent-state';
 import {
   setConnectionState,
   setMode,
@@ -12,7 +13,11 @@ import {
 
 const MAX_MESSAGES_IN_LOG = 10;
 
-const initialState = produce(defaultState, state => state);
+const savedState = persistentState.load();
+const initialState = {
+  ...defaultState,
+  ...savedState,
+};
 
 export const rootReducer = handleActions({
   [setConnectionState]: (state, {payload}) => {

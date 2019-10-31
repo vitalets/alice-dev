@@ -5,8 +5,7 @@ const logger = Logger.create('app:config');
 
 const defaults = {
   wsUrl: 'wss://vitalets.xyz/alice-dev',
-  saveStateDelay: 5000,
-  debug: false,
+  saveStateDelay: 3000,
 };
 
 const config = {
@@ -14,11 +13,8 @@ const config = {
   ...readFromUrl(),
 };
 
-if (config.debug) {
-  Logger.setLogLevel('debug');
-}
-
-logger.log('Using config', config);
+Logger.setLogLevel('debug');
+logger.debug('Using config', config);
 
 export default config;
 

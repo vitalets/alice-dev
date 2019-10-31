@@ -29,6 +29,8 @@ class Browser {
       : { headless: true };
     this.browser = await puppeteer.launch(options);
     this.page = (await this.browser.pages())[0];
+    await this.page.setCacheEnabled(false);
+    await this.page.evaluateOnNewDocument(() => localStorage.removeItem('state'));
     if (this.debugMode) {
       this.page.on('pageerror', message => console.log('PAGE ERROR:', message));
       this.page.on('console', async msg => {
@@ -41,7 +43,6 @@ class Browser {
         console.log('PAGE LOG:', strings.join(' '));
       });
     }
-    await this.page.setCacheEnabled(false);
   }
 }
 
