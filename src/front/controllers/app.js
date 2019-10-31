@@ -1,8 +1,7 @@
 /**
  * App controller.
  */
-import Logger from 'loggee';
-import * as config from '../config';
+import config from '../config';
 import WSClient from './ws-client';
 import { buildUrl } from '../../shared/utils';
 
@@ -24,6 +23,11 @@ export default class AppController {
     this._createWsClient();
   }
 
+  run() {
+    logger.debug('app started');
+    this._wsClient.connect();
+  }
+
   _createWsClient() {
     this._wsClient = new WSClient(this._buildWsUrl());
     this._wsClient.wsp.onOpen.addListener(() => dispatch(setConnectionState(CONNECTION_STATE.CONNECTED)));
@@ -32,11 +36,9 @@ export default class AppController {
   }
 
   _buildWsUrl() {
-    const query = new URL(location.href).searchParams;
-    const wsUrl = query.get('ws') || config.wsUrl;
     const firstDevice = getState().devices[0];
     const userId = firstDevice && firstDevice.userId;
-    return buildUrl(wsUrl, {userId});
+    return buildUrl(config.wsUrl, {userId});
   }
 
   async _handleAliceRequest(id, requestBody) {

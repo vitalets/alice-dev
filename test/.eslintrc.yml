@@ -5,6 +5,7 @@ globals:
   assert: false
   User: false
   page: false
+  PO: false
   wsClientFactory: false
 
 plugins:

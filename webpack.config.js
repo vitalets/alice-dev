@@ -37,11 +37,13 @@ module.exports = (env = {}) => {
     devtool: 'source-map',
     devServer: {
       contentBase: './dist',
+      writeToDisk: true,
     },
     plugins: [
       new CleanWebpackPlugin(),
       new webpack.ProvidePlugin({
         React: 'react',
+        Logger: 'loggee',
       }),
       new webpack.BannerPlugin({
         banner: `Alice-dev v${pkg.version}`

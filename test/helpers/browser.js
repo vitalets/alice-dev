@@ -4,9 +4,10 @@
 const puppeteer = require('puppeteer');
 
 class Browser {
-  constructor() {
+  constructor({debugMode} = {}) {
     this.browser = null;
     this.page = null;
+    this.debugMode = Boolean(debugMode);
   }
 
   async open(url) {
@@ -23,10 +24,25 @@ class Browser {
   }
 
   async _launchBrowser() {
-    this.browser = await puppeteer.launch({headless: true});
-    this.page = await this.browser.newPage();
+    const options = this.debugMode
+      ? { headless: false, slowMo: 100 }
+      : { headless: true };
+    this.browser = await puppeteer.launch(options);
+    this.page = (await this.browser.pages())[0];
+    if (this.debugMode) {
+      this.page.on('pageerror', message => console.log('PAGE ERROR:', message));
+      this.page.on('console', async msg => {
+        const args = msg.args();
+        const strings = [];
+        for (let i = 0; i < args.length; ++i) {
+          const jsonValue = await args[i].jsonValue();
+          strings.push(typeof jsonValue === 'object' ? JSON.stringify(jsonValue) : jsonValue);
+        }
+        console.log('PAGE LOG:', strings.join(' '));
+      });
+    }
     await this.page.setCacheEnabled(false);
   }
 }
 
-module.exports = new Browser();
+module.exports = Browser;

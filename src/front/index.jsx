@@ -11,4 +11,4 @@ ReactDOM.render(
   document.querySelector('#app')
 );
 
-new AppController();
+new AppController().run();

@@ -9,6 +9,7 @@ export default function Text() {
   return (
     <TextField
       label="TEXT"
+      name="text"
       multiline
       rows="3"
       value={text}

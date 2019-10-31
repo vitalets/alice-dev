@@ -14,12 +14,12 @@ module.exports = class WsClients {
    * Constructor
    */
   constructor() {
-    this._info = new Map();
+    this._clients = new Map();
   }
 
   register(client, {userId}) {
     logger.log(`WS client connected: ${userId}`);
-    this._info.set(client, {
+    this._clients.set(client, {
       userId,
       pendingRequests: new PromisedMap()
     });
@@ -56,9 +56,9 @@ module.exports = class WsClients {
   }
 
   _handleClose(client) {
-    const info = this._info.get(client);
+    const info = this._clients.get(client);
     if (info) {
-      this._info.delete(client);
+      this._clients.delete(client);
       logger.log(`WS client disconnected: ${info.userId}`);
       info.pendingRequests.rejectAll(new Error('WS client disconnected'));
     }
@@ -81,7 +81,7 @@ module.exports = class WsClients {
   }
 
   _findClientForUserId(userId) {
-    for (const [client, info] of this._info) {
+    for (const [client, info] of this._clients) {
       if (info.userId === userId) {
         return client;
       }
@@ -89,7 +89,7 @@ module.exports = class WsClients {
   }
 
   _getPendingRequests(client) {
-    const {pendingRequests} = this._info.get(client) || {};
+    const {pendingRequests} = this._clients.get(client) || {};
     return pendingRequests || throwError('WS connection closed');
   }
 };

@@ -7,7 +7,8 @@
     "lint": "eslint src test",
     "build": "webpack",
     "build:prod": "webpack --env.production",
-    "test": "mocha test/setup.js test/specs/*.js"
+    "test": "mocha test/setup.js test/specs/*.js --timeout=5000",
+    "test:d": "DEBUG_MODE=1 npm run test -- --bail --timeout=10000"
   },
   "lint-staged": {
     "{src,test}/**/*.js": "eslint"
@@ -59,7 +60,7 @@
     "serve-handler": "^6.1.2",
     "webpack": "^4.41.2",
     "webpack-cli": "^3.3.9",
-    "webpack-dev-server": "^3.8.2"
+    "webpack-dev-server": "^3.9.0"
   },
   "license": "MIT"
 }

@@ -12,6 +12,8 @@ import {
 
 const MAX_MESSAGES_IN_LOG = 10;
 
+const initialState = produce(defaultState, state => state);
+
 export const rootReducer = handleActions({
   [setConnectionState]: (state, {payload}) => {
     return produce(state, newState => void (newState.connectionState = payload));
@@ -31,5 +33,5 @@ export const rootReducer = handleActions({
   [addAliceMessage]: (state, {payload}) => {
     return produce(state, newState => newState.aliceMessages.concat([payload]).slice(-MAX_MESSAGES_IN_LOG));
   },
-}, defaultState);
+}, initialState);
 

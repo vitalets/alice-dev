@@ -1,7 +1,7 @@
 import PropTypes from 'prop-types';
 import clsx from 'clsx';
 import InfoIcon from '@material-ui/icons/Info';
-import { amber, green, grey } from '@material-ui/core/colors';
+import { green, red, grey } from '@material-ui/core/colors';
 import { makeStyles } from '@material-ui/core/styles';
 import { useSelector } from 'react-redux';
 import { CONNECTION_STATE } from '../store';
@@ -15,13 +15,13 @@ const useStyles = makeStyles(theme => ({
     padding: theme.spacing(1),
   },
   disconnected: {
-    backgroundColor: theme.palette.error.light,
+    backgroundColor: red[100],
   },
   connecting: {
     backgroundColor: grey[300],
   },
   connected: {
-    backgroundColor: theme.palette.primary.main,
+    backgroundColor: green[100],
   },
   icon: {
     fontSize: 20,
