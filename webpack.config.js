@@ -41,6 +41,9 @@ module.exports = (env = {}) => {
     },
     plugins: [
       new CleanWebpackPlugin(),
+      new webpack.DefinePlugin({
+        'WS_URL': JSON.stringify(process.env.WS_URL),
+      }),
       new webpack.ProvidePlugin({
         React: 'react',
         Logger: 'loggee',

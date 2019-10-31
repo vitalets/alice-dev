@@ -30,8 +30,8 @@ module.exports = class Webhook {
 
   _showInstruction() {
     const response = reply`${text(`
-      Здесь вы можете отлаживать навыки без публикации в каталоге.
-      Откройте на компьютере сайт: alice-dev.vitalets.xyz и следуйте инструкциям.
+      Здесь вы можете отлаживать локальную версию вашего навыка без публикации в каталоге.
+      Откройте на компьютере сайт: https://alice-dev.vitalets.xyz и следуйте инструкции.
     `)}`;
     return this._buildResBody(response);
   }

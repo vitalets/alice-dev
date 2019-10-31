@@ -2,19 +2,18 @@
  * Wrapper over puppeteer.
  */
 const puppeteer = require('puppeteer');
+const PO = require('./po');
 
-class Browser {
-  constructor({debugMode} = {}) {
+class BrowserHelper {
+  constructor({ debugMode }) {
     this.browser = null;
     this.page = null;
     this.debugMode = Boolean(debugMode);
   }
 
-  async open(url) {
-    if (!this.browser) {
-      await this._launchBrowser();
-    }
-    await this.page.goto(url);
+  async prepare(pageUrl) {
+    await this._launchBrowser();
+    await this._preparePage(pageUrl);
   }
 
   async close() {
@@ -23,27 +22,50 @@ class Browser {
     }
   }
 
+  async reloadPage(appState = null) {
+    await this._setAppState(appState);
+    await this.page.reload();
+    await this.page.waitForSelector(PO.connectionBar);
+  }
+
   async _launchBrowser() {
-    const options = this.debugMode
-      ? { headless: false, slowMo: 100 }
-      : { headless: true };
-    this.browser = await puppeteer.launch(options);
+    this.browser = await puppeteer.launch({
+      headless: true
+    });
+  }
+
+  async _preparePage(pageUrl) {
     this.page = (await this.browser.pages())[0];
     await this.page.setCacheEnabled(false);
-    await this.page.evaluateOnNewDocument(() => localStorage.removeItem('state'));
+    // сразу делаем первый переход, чтобы быть на нужном origin и иметь возможность менять localStorage
+    await this.page.goto(pageUrl);
     if (this.debugMode) {
-      this.page.on('pageerror', message => console.log('PAGE ERROR:', message));
-      this.page.on('console', async msg => {
-        const args = msg.args();
-        const strings = [];
-        for (let i = 0; i < args.length; ++i) {
-          const jsonValue = await args[i].jsonValue();
-          strings.push(typeof jsonValue === 'object' ? JSON.stringify(jsonValue) : jsonValue);
-        }
-        console.log('PAGE LOG:', strings.join(' '));
-      });
+      await this._applyDebugMode();
     }
+  }
+
+  async _setAppState(appState) {
+    await this.page.evaluate(appState => {
+      if (appState) {
+        localStorage.setItem('state', JSON.stringify(appState));
+      } else {
+        localStorage.removeItem('state');
+      }
+    }, appState);
+  }
+
+  async _applyDebugMode() {
+    this.page.on('pageerror', message => console.log('PAGE ERROR:', message));
+    this.page.on('console', async msg => {
+      const args = msg.args();
+      const strings = [];
+      for (let i = 0; i < args.length; ++i) {
+        const jsonValue = await args[i].jsonValue();
+        strings.push(typeof jsonValue === 'object' ? JSON.stringify(jsonValue) : jsonValue);
+      }
+      console.log('PAGE LOG:', strings.join(' '));
+    });
   }
 }
 
-module.exports = Browser;
+module.exports = BrowserHelper;

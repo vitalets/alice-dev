@@ -11,7 +11,7 @@ export default function Tts() {
       label="TTS"
       name="tts"
       multiline
-      rows="3"
+      rows="4"
       value={tts}
       onChange={e => dispatch(setFixedResponse({ tts: e.target.value }))}
       margin="normal"

@@ -11,7 +11,7 @@ export default function Text() {
       label="TEXT"
       name="text"
       multiline
-      rows="3"
+      rows="4"
       value={text}
       onChange={e => dispatch(setFixedResponse({ text: e.target.value }))}
       margin="normal"

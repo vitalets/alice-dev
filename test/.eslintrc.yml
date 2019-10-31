@@ -4,9 +4,9 @@ env:
 globals:
   assert: false
   User: false
+  browserHelper: false
   page: false
   PO: false
-  wsClientFactory: false
 
 plugins:
   - mocha

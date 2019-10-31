@@ -1,9 +1,8 @@
 describe('connection', () => {
 
   it('connect to ws on start', async () => {
-    await page.reload();
-    const el = await page.waitForSelector(PO.connectionBar);
-    const text = await el.evaluate(el => el.innerText);
+    await browserHelper.reloadPage();
+    const text = await page.$eval(PO.connectionBar, el => el.innerText);
     assert.include(text, 'Подключено');
   });
 

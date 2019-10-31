@@ -18,7 +18,7 @@ module.exports = class WsClients {
   }
 
   register(client, {userId}) {
-    logger.log(`WS client connected: ${userId}`);
+    logger.log(`WS client connected (userId: ${userId})`);
     this._clients.set(client, {
       userId,
       pendingRequests: new PromisedMap()
@@ -37,6 +37,7 @@ module.exports = class WsClients {
     const userId = reqBody.session.user_id;
     const client = this._findClientForUserId(userId);
     if (client) {
+      logger.log(`Proxying request to: ${userId}`);
       return Promise.race([
         this._proxy(reqBody, client),
         Timeout.set(PROXY_TIMEOUT, `Timeout: ${PROXY_TIMEOUT}`),

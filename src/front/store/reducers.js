@@ -33,10 +33,14 @@ export const rootReducer = handleActions({
     return produce(state, newState => void Object.assign(newState.fixedResponse, payload));
   },
   [addUserMessage]: (state, {payload}) => {
-    return produce(state, newState => newState.userMessages.concat([payload]).slice(-MAX_MESSAGES_IN_LOG));
+    return produce(state, newState => {
+      newState.userMessages = newState.userMessages.concat([payload]).slice(-MAX_MESSAGES_IN_LOG);
+    });
   },
   [addAliceMessage]: (state, {payload}) => {
-    return produce(state, newState => newState.aliceMessages.concat([payload]).slice(-MAX_MESSAGES_IN_LOG));
+    return produce(state, newState => {
+      newState.aliceMessages = newState.aliceMessages.concat([payload]).slice(-MAX_MESSAGES_IN_LOG);
+    });
   },
 }, initialState);
 

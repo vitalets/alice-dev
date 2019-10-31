@@ -7,7 +7,7 @@ const {URL} = require('url');
 const Server = require('../src/back/server');
 const skillServer = require('./helpers/skill-server');
 const staticServer = require('./helpers/static-server');
-const Browser = require('./helpers/browser');
+const BrowserHelper = require('./helpers/browser');
 const PO = require('./helpers/po');
 const {buildUrl} = require('../src/shared/utils');
 
@@ -24,7 +24,7 @@ Logger.setLogLevel(debugMode ? 'debug' : 'none');
 
 (async () => {
   const server = new Server();
-  const browser = new Browser({ debugMode });
+  const browserHelper = new BrowserHelper({ debugMode });
 
   before(async () => {
     await Promise.all([
@@ -38,19 +38,20 @@ Logger.setLogLevel(debugMode ? 'debug' : 'none');
     const pageUrl = buildUrl(`http://localhost:${staticServer.address().port}`, {
       wsUrl: `ws://localhost:${server.port}`,
     });
-    await browser.open(pageUrl);
+    await browserHelper.prepare(pageUrl);
 
     Object.assign(global, {
       assert: chai.assert,
       PO,
       User,
-      page: browser.page,
+      browserHelper,
+      page: browserHelper.page,
     });
   });
 
   after(async () => {
     const results = await Promise.all([
-      browser.close(),
+      browserHelper.close(),
       server.close(),
       skillServer.close(),
       staticServer.close(),

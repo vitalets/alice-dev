@@ -3,8 +3,10 @@
  */
 const logger = Logger.create('app:config');
 
+/* global WS_URL */
+
 const defaults = {
-  wsUrl: 'wss://vitalets.xyz/alice-dev',
+  wsUrl: WS_URL || 'wss://vitalets.xyz/alice-dev',
   saveStateDelay: 3000,
 };
 

@@ -1,30 +1,22 @@
 describe('mode', () => {
 
   before(async () => {
-    await page.reload();
-    const el = await page.waitForSelector(PO.connectionBar);
-    const text = await el.evaluate(el => el.innerText);
-    assert.include(text, 'Подключено');
+    await browserHelper.reloadPage();
   });
 
   const assertChecked = async (selector, isChecked) => {
     const checked = await page.$eval(selector, el => el.checked);
-    assert.equal(checked, isChecked);
+    assert.equal(checked, isChecked, `${selector} checked should be ${isChecked}`);
   };
 
-  it('default is fixedResponse', async () => {
+  it('change mode', async () => {
     await assertChecked(PO.proxyUrl.radio, false);
     await assertChecked(PO.fixedResponse.radio, true);
-  });
 
-  it('change to proxyUrl', async () => {
     await page.click(PO.proxyUrl.radio);
     await assertChecked(PO.proxyUrl.radio, true);
     await assertChecked(PO.fixedResponse.radio, false);
-  });
 
-  it('change to fixedResponse', async () => {
-    await page.click(PO.proxyUrl.radio);
     await page.click(PO.fixedResponse.radio);
     await assertChecked(PO.proxyUrl.radio, false);
     await assertChecked(PO.fixedResponse.radio, true);
