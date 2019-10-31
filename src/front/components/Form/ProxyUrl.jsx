@@ -17,6 +17,7 @@ export default function ProxyUrl() {
   return (
     <TextField
       label="URL"
+      name="proxy-url"
       placeholder="http://localhost:3000"
       value={url}
       onChange={e => dispatch(setProxyUrl(e.target.value))}

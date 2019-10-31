@@ -7,11 +7,6 @@ describe('fixed-response', () => {
     assert.include(text, 'Подключено');
   });
 
-  it('checked by default', async () => {
-    const checked = await page.$eval(PO.fixedResponse.radio, el => el.checked);
-    assert.equal(checked, true);
-  });
-
   it('text contains default value', async () => {
     const text = await page.$eval(PO.fixedResponse.text, el => el.value);
     assert.equal(text, 'Здорово! Как дела?');
