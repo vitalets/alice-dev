@@ -4,6 +4,7 @@
 import config from '../config';
 import WSClient from './ws-client';
 import { buildUrl } from '../../shared/utils';
+import { getProxiedResponse } from './proxy';
 
 import {
   store,
@@ -52,7 +53,7 @@ export default class AppController {
 
   async _getAliceResponse(requestBody) {
     return getState().mode === MODE.PROXY_URL
-      ? await this._fetchProxiedResponse(requestBody)
+      ? await getProxiedResponse(requestBody)
       : this._buildFixedResponse(requestBody);
   }
 
@@ -63,14 +64,5 @@ export default class AppController {
       session,
       version,
     };
-  }
-
-  async _fetchProxiedResponse(requestBody) {
-    const response = await fetch(getState().proxyUrl, {
-      method: 'POST',
-      body: JSON.stringify(requestBody),
-    });
-    // todo: handle error
-    return response.ok ? response.json() : {};
   }
 }

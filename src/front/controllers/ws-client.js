@@ -10,8 +10,7 @@ const wspOptions = {
   unpackMessage: data => JSON.parse(data)
 };
 
-// use module.exports for nodejs
-module.exports = class WSClient {
+export default class WSClient {
   /**
    * Constructor
    * @param {string} url
@@ -50,4 +49,4 @@ module.exports = class WSClient {
       this.onAliceRequest.dispatch(message.id, message.payload);
     }
   }
-};
+}

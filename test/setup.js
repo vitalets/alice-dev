@@ -8,7 +8,6 @@ const Server = require('../src/back/server');
 const skillServer = require('./helpers/skill-server');
 const staticServer = require('./helpers/static-server');
 const Browser = require('./helpers/browser');
-const wsClientFactory = require('./helpers/ws-client-factory');
 const PO = require('./helpers/po');
 const {buildUrl} = require('../src/shared/utils');
 
@@ -36,10 +35,8 @@ Logger.setLogLevel(debugMode ? 'debug' : 'none');
       staticServer.setOptions({public: 'dist'}).listen(await getPort()),
     ]);
     User.config.webhookUrl = `http://localhost:${server.port}`;
-    wsClientFactory.config.url = `ws://localhost:${server.port}`;
-    const wsUrl = `ws://localhost:${server.port}`;
     const pageUrl = buildUrl(`http://localhost:${staticServer.address().port}`, {
-      wsUrl,
+      wsUrl: `ws://localhost:${server.port}`,
     });
     await browser.open(pageUrl);
 
@@ -48,20 +45,15 @@ Logger.setLogLevel(debugMode ? 'debug' : 'none');
       PO,
       User,
       page: browser.page,
-      wsClientFactory,
     });
-  });
-
-  afterEach(async () => {
-    await wsClientFactory.closeAll();
   });
 
   after(async () => {
     const results = await Promise.all([
+      browser.close(),
       server.close(),
       skillServer.close(),
       staticServer.close(),
-      browser.close(),
     ].map(p => p.catch(e => e)));
     handleCleanupErrors(results);
   });
