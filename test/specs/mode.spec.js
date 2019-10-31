@@ -12,7 +12,7 @@ describe('mode', () => {
     assert.equal(checked, isChecked);
   };
 
-  it('fixedResponse checked by default', async () => {
+  it('default is fixedResponse', async () => {
     await assertChecked(PO.proxyUrl.radio, false);
     await assertChecked(PO.fixedResponse.radio, true);
   });
