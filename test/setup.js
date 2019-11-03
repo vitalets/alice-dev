@@ -18,6 +18,7 @@ Object.assign(global, {
 });
 
 chai.config.truncateThreshold = 0;
+User.config.responseTimeout = 3000;
 
 const debugMode = process.env.DEBUG_MODE;
 Logger.setLogLevel(debugMode ? 'debug' : 'none');
@@ -46,6 +47,7 @@ Logger.setLogLevel(debugMode ? 'debug' : 'none');
       User,
       browserHelper,
       page: browserHelper.page,
+      skillServer,
     });
   });
 
