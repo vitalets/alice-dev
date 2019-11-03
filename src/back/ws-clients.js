@@ -83,6 +83,7 @@ module.exports = class WsClients {
 
   _findClientForUserId(userId) {
     for (const [client, info] of this._clients) {
+      // return client;
       if (info.userId === userId) {
         return client;
       }

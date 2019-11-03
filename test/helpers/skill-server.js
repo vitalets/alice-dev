@@ -28,4 +28,8 @@ server.getUrl = () => `http://localhost:${server.address().port}`;
 server.setHandler = newHandler => handler = newHandler;
 server.resetHandler = () => handler = defaultHandler;
 
-module.exports = server;
+if (!module.parent) {
+  server.listen(process.env.PORT || 3000);
+} else {
+  module.exports = server;
+}

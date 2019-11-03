@@ -4,8 +4,8 @@ import { useDispatch, useSelector } from 'react-redux';
 import { setProxyUrl } from '../../store';
 
 const useStyles = makeStyles(theme => ({
-  textField: {
-    // marginTop: 0,
+  root: {
+    marginTop: 2,
   },
 }));
 
@@ -16,12 +16,12 @@ export default function ProxyUrl() {
 
   return (
     <TextField
+      className={classes.root}
       label="URL"
       name="proxy-url"
       placeholder="http://localhost:3000"
       value={url}
       onChange={e => dispatch(setProxyUrl(e.target.value))}
-      className={classes.textField}
       margin="normal"
       variant="outlined"
       fullWidth
