@@ -1,5 +1,6 @@
 import {makeStyles} from '@material-ui/core';
 import Box from '@material-ui/core/Box';
+import clsx from 'clsx';
 
 const useStyles = makeStyles(theme => ({
   root: {
@@ -19,7 +20,7 @@ const useStyles = makeStyles(theme => ({
 export default function UserMessage({ text }) {
   const classes = useStyles();
   return (
-    <Box className={classes.root}>
+    <Box className={clsx('message', classes.root)}>
       {text}
     </Box>
   );

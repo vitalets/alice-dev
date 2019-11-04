@@ -2,48 +2,39 @@ describe('fixed-response', () => {
 
   let user;
 
+  const setText = async text => {
+    await page.click(PO.fixedResponse.text, { clickCount: 3 });
+    await page.type(PO.fixedResponse.text, text);
+  };
+
+  const setTts = async tts => {
+    await page.click(PO.fixedResponse.tts, { clickCount: 3 });
+    await page.type(PO.fixedResponse.tts, tts);
+  };
+
   before(async () => {
     user = new User();
-    await browserHelper.reloadPage({
-      devices: [{userId: user.id, name: 'foo'}]
-    });
+    await browserHelper.reloadPageForUserId(user.id);
   });
 
-  it('text contains default value', async () => {
-    const text = await page.$eval(PO.fixedResponse.text, el => el.value);
-    assert.equal(text, 'Здорово! Как дела?');
-  });
-
-  it('tts contains default value', async () => {
-    const text = await page.$eval(PO.fixedResponse.tts, el => el.value);
-    assert.equal(text, 'Здор+ово! Как дела?');
-  });
-
-  it('respond to own userId enter', async () => {
+  it('respond to corresponding userId', async () => {
     await user.enter();
-    assert.equal(user.response.text, 'Здорово! Как дела?');
-    assert.equal(user.response.tts, 'Здор+ово! Как дела?');
-  });
+    assert.equal(user.response.text, 'Добро пожаловать в навык!');
+    assert.equal(user.response.tts, 'Добро пожаловать в н+авык!');
 
-  it('respond to own userId say', async () => {
-    await user.enter();
-    await user.say('Привет');
+    await setText('Нормально');
+    await setTts('Норм');
 
-    assert.equal(user.response.text, 'Здорово! Как дела?');
-    assert.equal(user.response.tts, 'Здор+ово! Как дела?');
-  });
+    await user.say('Как дела?');
+    assert.equal(user.response.text, 'Нормально');
+    assert.equal(user.response.tts, 'Норм');
 
-  it('respond to own userId (changed text/tts)', async () => {
-    await user.enter();
-
-    await page.click(PO.fixedResponse.text, { clickCount: 3 });
-    await page.type(PO.fixedResponse.text, 'Здравствуй');
-    await page.click(PO.fixedResponse.tts, { clickCount: 3 });
-    await page.type(PO.fixedResponse.tts, 'Хай');
-
-    await user.say('Привет');
-    assert.equal(user.response.text, 'Здравствуй');
-    assert.equal(user.response.tts, 'Хай');
+    const chatMessages = await page.$$eval(PO.chat.messages, elems => elems.map(el => el.textContent));
+    assert.deepEqual(chatMessages, [
+      'Добро пожаловать в навык!',
+      'Как дела?',
+      'Нормально',
+    ]);
   });
 
   it('dont respond to other userId, show instruction', async () => {

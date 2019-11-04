@@ -34,12 +34,19 @@ export const rootReducer = handleActions({
   },
   [addUserMessage]: (state, {payload}) => {
     return produce(state, newState => {
-      newState.userMessages = newState.userMessages.concat([payload]).slice(-MAX_MESSAGES_IN_LOG);
+      const { id, requestBody } = payload;
+      newState.chatMessages = newState.chatMessages
+        .concat([{ id, requestBody }])
+        .slice(-MAX_MESSAGES_IN_LOG);
     });
   },
   [addAliceMessage]: (state, {payload}) => {
     return produce(state, newState => {
-      newState.aliceMessages = newState.aliceMessages.concat([payload]).slice(-MAX_MESSAGES_IN_LOG);
+      const { id, responseBody, error } = payload;
+      const message = newState.chatMessages.find(msg => msg.id === id);
+      if (message) {
+        Object.assign(message, { responseBody, error });
+      }
     });
   },
 }, initialState);

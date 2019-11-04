@@ -13,3 +13,6 @@ exports.fixedResponse = {
   tts: 'textarea[name="tts"]',
 };
 
+exports.chat = {
+  messages: '.chat > .message',
+};

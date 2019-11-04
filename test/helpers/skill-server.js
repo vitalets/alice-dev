@@ -3,9 +3,10 @@ const micro = require('micro');
 
 const defaultHandler = (req, res) => {
   const {request, session, version} = req.body;
+  const responseText = session.new ? `Новая сессия` : `В навык пришло: ${request.command}`;
   const response = {
-    text: `В навык пришло: ${request.command}`,
-    tts: `В навык пришло: ${request.command}`
+    text: responseText,
+    tts: responseText
   };
   res.setHeader('Access-Control-Allow-Origin', '*');
   return {response, session, version};

@@ -2,6 +2,9 @@ import { makeStyles } from '@material-ui/core/styles';
 import Box from '@material-ui/core/Box';
 import AliceMessage from './AliceMessage';
 import UserMessage from './UserMessage';
+import NewSession from './NewSession';
+import { useSelector } from 'react-redux';
+import clsx from 'clsx';
 
 const useStyles = makeStyles(theme => ({
   root: {
@@ -21,23 +24,30 @@ const useStyles = makeStyles(theme => ({
 
 export default function Chat() {
   const classes = useStyles();
-  const [messages] = React.useState([
-    {request: {command: '1привет привет привет привет привет привет привет привет привет привет привет привет привет привет привет привет привет привет привет привет привет привет привет '}},
-    {response: {text: '2привет привет привет привет привет привет привет привет привет привет привет привет привет привет привет привет привет привет привет привет привет привет '}},
-    {request: {command: '3привет привет привет привет привет привет привет привет привет привет привет привет привет привет привет привет привет привет привет привет привет привет привет '}},
-    {response: {text: '4привет привет привет привет привет привет привет привет привет привет привет привет привет привет привет привет привет привет привет привет привет привет '}},
-    {request: {command: '5привет привет привет привет привет привет привет привет привет привет привет привет привет привет привет привет привет привет привет привет привет привет привет '}},
-    {response: {text: '6привет привет привет привет привет привет привет привет привет привет привет привет привет привет привет привет привет привет привет привет привет привет '}},
-    {request: {command: '7привет привет привет привет привет привет привет привет привет привет привет привет привет привет привет привет привет привет привет привет привет привет привет '}},
-    {response: {text: '8привет привет привет привет привет привет привет привет привет привет привет привет привет привет привет привет привет привет привет привет привет привет '}},
-  ]);
+  const chatMessages = useSelector(state => state.chatMessages);
 
   return (
-    <Box className={classes.root}>
-      {messages.map((message, index) => {
-        return message.request
-          ? <UserMessage key={index} text={message.request.command}/>
-          : <AliceMessage key={index} text={message.response.text}/>;
+    <Box className={clsx('chat', classes.root)}>
+      {chatMessages.map(message => {
+        const {id, requestBody, responseBody, error} = message;
+
+        const newSession = requestBody.session.new
+          ? <NewSession key={'new-session-' + id}/>
+          : null;
+
+        const userMessage = requestBody.request.command
+          ? <UserMessage key={'user-message-' + id} text={requestBody.request.command}/>
+          : null;
+
+        const aliceMessage = responseBody
+          ? <AliceMessage key={'alice-message-' + id} text={responseBody.response.text} error={error}/>
+          : null;
+
+        return ([
+          newSession,
+          userMessage,
+          aliceMessage
+        ]);
       })}
     </Box>
   );

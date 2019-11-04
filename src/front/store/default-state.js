@@ -5,10 +5,9 @@ export default {
   mode: MODE.FIXED_RESPONSE,
   proxyUrl: 'http://localhost:3000',
   fixedResponse: {
-    text: 'Здорово! Как дела?',
-    tts: 'Здор+ово! Как дела?',
+    text: 'Добро пожаловать в навык!',
+    tts: 'Добро пожаловать в н+авык!',
   },
-  devices: [],
-  userMessages: [],
-  aliceMessages: [],
+  devices: [], // {userId, deviceName}
+  chatMessages: [], // {id, requestBody, responseBody, error?}
 };

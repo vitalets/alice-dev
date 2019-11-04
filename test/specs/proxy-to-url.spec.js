@@ -9,25 +9,26 @@ describe('proxy-to-url', () => {
 
   before(async () => {
     user = new User();
-    await browserHelper.reloadPage({
-      devices: [{userId: user.id, name: 'foo'}]
-    });
+    await browserHelper.reloadPageForUserId(user.id);
     await page.click(PO.proxyUrl.radio);
     await setProxyUrl(skillServer.getUrl());
   });
 
-  it('proxy for own userId enter', async () => {
+  it('proxy for corresponding userId', async () => {
     await user.enter();
-    assert.equal(user.response.text, 'В навык пришло: ');
-    assert.equal(user.response.tts, 'В навык пришло: ');
-  });
+    assert.equal(user.response.text, 'Новая сессия');
+    assert.equal(user.response.tts, 'Новая сессия');
 
-  it('proxy for own userId say', async () => {
-    await user.enter();
     await user.say('Привет');
-
     assert.equal(user.response.text, 'В навык пришло: Привет');
     assert.equal(user.response.tts, 'В навык пришло: Привет');
+
+    const chatMessages = await page.$$eval(PO.chat.messages, elems => elems.map(el => el.textContent));
+    assert.deepEqual(chatMessages, [
+      'Новая сессия',
+      'Привет',
+      'В навык пришло: Привет'
+    ]);
   });
 
   it.skip('cors error', async () => {

@@ -44,20 +44,28 @@ export default class AppController {
 
   async _handleAliceRequest(id, requestBody) {
     logger.log('REQUEST:', requestBody);
-    dispatch(addUserMessage(requestBody));
+    dispatch(addUserMessage({id, requestBody}));
     const responseBody = await this._getAliceResponse(requestBody);
     logger.log('RESPONSE:', responseBody);
-    dispatch(addAliceMessage(responseBody));
+    dispatch(addAliceMessage({id, responseBody}));
     this._wsClient.sendAliceResponse(id, responseBody);
   }
 
   async _getAliceResponse(requestBody) {
-    return getState().mode === MODE.PROXY_URL
-      ? await getProxiedResponse(requestBody)
-      : this._buildFixedResponse(requestBody);
+    try {
+      return getState().mode === MODE.PROXY_URL
+        ? await getProxiedResponse(requestBody)
+        : this._getFixedResponse(requestBody);
+    } catch (e) {
+      console.log(e);
+      return {
+        text: e.message,
+        tts: 'Ошибка'
+      };
+    }
   }
 
-  _buildFixedResponse(requestBody) {
+  _getFixedResponse(requestBody) {
     const {session, version} = requestBody;
     return {
       response: getState().fixedResponse,

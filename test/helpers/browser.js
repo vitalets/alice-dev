@@ -28,6 +28,13 @@ class BrowserHelper {
     await this.page.waitForSelector(PO.connectionBar);
   }
 
+  async reloadPageForUserId(userId) {
+    const appState = {
+      devices: [{userId, deviceName: 'foo'}]
+    };
+    await this.reloadPage(appState);
+  }
+
   async _launchBrowser() {
     this.browser = await puppeteer.launch({
       headless: true

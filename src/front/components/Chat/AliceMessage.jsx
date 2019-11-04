@@ -22,7 +22,7 @@ export default function AliceMessage({ text }) {
   const classes = useStyles();
 
   return (
-    <Box className={classes.root}>
+    <Box className={clsx('message', classes.root)}>
       <Menu/>
       {text}
     </Box>
