@@ -34,6 +34,15 @@ describe('proxy-to-url', () => {
     ]);
   });
 
+  it('test button', async () => {
+    await page.click(PO.testButton);
+
+    assert.deepEqual(await browserHelper.getChatMessages(), [
+      'тест',
+      'В навык пришло: тест',
+    ]);
+  });
+
   it('cors error', async () => {
     skillServer.setHandler(() => {
       // no cors header
