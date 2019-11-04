@@ -4,6 +4,7 @@ import AliceMessage from './AliceMessage';
 import UserMessage from './UserMessage';
 import NewSession from './NewSession';
 import { useSelector } from 'react-redux';
+import { useEffect, useRef } from 'react';
 import clsx from 'clsx';
 
 const useStyles = makeStyles(theme => ({
@@ -26,8 +27,13 @@ export default function Chat() {
   const classes = useStyles();
   const chatMessages = useSelector(state => state.chatMessages);
 
+  const chatEl = useRef(null);
+  useEffect(() => {
+    chatEl.current.scrollTop = chatEl.current.scrollHeight;
+  });
+
   return (
-    <Box className={clsx('chat', classes.root)}>
+    <Box ref={chatEl} className={clsx('chat', classes.root)}>
       {chatMessages.map(message => {
         const {id, requestBody, responseBody, error} = message;
 

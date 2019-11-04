@@ -1,7 +1,7 @@
 import { makeStyles } from '@material-ui/core/styles';
 import TextField from '@material-ui/core/TextField';
 import { useDispatch, useSelector } from 'react-redux';
-import { setProxyUrl } from '../../store';
+import { setProxyUrl } from '../../../store';
 
 const useStyles = makeStyles(theme => ({
   root: {
@@ -9,7 +9,7 @@ const useStyles = makeStyles(theme => ({
   },
 }));
 
-export default function ProxyUrl() {
+export default function Field() {
   const classes = useStyles();
   const url = useSelector(state => state.proxyUrl);
   const dispatch = useDispatch();

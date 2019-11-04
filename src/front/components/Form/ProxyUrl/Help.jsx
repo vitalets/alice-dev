@@ -5,12 +5,15 @@ import Typography from '@material-ui/core/Typography';
 import IconButton from '@material-ui/core/IconButton';
 
 const useStyles = makeStyles(theme => ({
+  icon: {
+    marginLeft: theme.spacing(1)
+  },
   typography: {
     padding: theme.spacing(2),
   },
 }));
 
-export default function ProxyUrlHelp() {
+export default function Help() {
   const classes = useStyles();
   const [anchorEl, setAnchorEl] = React.useState(null);
 
@@ -27,7 +30,7 @@ export default function ProxyUrlHelp() {
 
   return (
     <div>
-      <IconButton variant="contained" onClick={handleClick}>
+      <IconButton className={classes.icon} size="small" variant="contained" onClick={handleClick}>
         <HelpIcon/>
       </IconButton>
       <Popover

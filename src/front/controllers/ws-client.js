@@ -1,9 +1,9 @@
 /**
  * Websocket client.
  */
-const WebSocketAsPromised = require('websocket-as-promised');
-const Channel = require('chnl');
-const protocol = require('../../shared/protocol');
+import WebSocketAsPromised from 'websocket-as-promised';
+import Channel from 'chnl';
+import protocol from '../../shared/protocol';
 
 const wspOptions = {
   packMessage: data => JSON.stringify(data),
