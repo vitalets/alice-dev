@@ -7,11 +7,15 @@ describe('proxy-to-url', () => {
     await page.type(PO.proxyUrl.input, url);
   }
 
-  before(async () => {
+  beforeEach(async () => {
     user = new User();
     await browserHelper.reloadPageForUserId(user.id);
     await page.click(PO.proxyUrl.radio);
     await setProxyUrl(skillServer.getUrl());
+  });
+
+  afterEach(async () => {
+    skillServer.resetHandler();
   });
 
   it('proxy for corresponding userId', async () => {
@@ -23,23 +27,32 @@ describe('proxy-to-url', () => {
     assert.equal(user.response.text, 'В навык пришло: Привет');
     assert.equal(user.response.tts, 'В навык пришло: Привет');
 
-    const chatMessages = await page.$$eval(PO.chat.messages, elems => elems.map(el => el.textContent));
-    assert.deepEqual(chatMessages, [
+    assert.deepEqual(await browserHelper.getChatMessages(), [
       'Новая сессия',
       'Привет',
       'В навык пришло: Привет'
     ]);
   });
 
-  it.skip('cors error', async () => {
+  it('cors error', async () => {
     skillServer.setHandler(() => {
       // no cors header
-      return 'response';
+      return '';
     });
-    await user.enter();
 
-    assert.equal(user.response.text, 'В навык пришло: Привет');
-    assert.equal(user.response.tts, 'В навык пришло: Привет');
+    await user.enter();
+    assert.equal(user.response.text, 'TypeError: Failed to fetch');
+    assert.equal(user.response.tts, 'Ошибка');
+
+    await user.say('Привет');
+    assert.equal(user.response.text, 'TypeError: Failed to fetch');
+    assert.equal(user.response.tts, 'Ошибка');
+
+    assert.deepEqual(await browserHelper.getChatMessages(), [
+      'TypeError: Failed to fetch',
+      'Привет',
+      'TypeError: Failed to fetch',
+    ]);
   });
 
   it('dont respond to other userId, show instruction', async () => {

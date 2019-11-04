@@ -15,14 +15,19 @@ const useStyles = makeStyles(theme => ({
     padding: theme.spacing(1),
     marginTop: theme.spacing(1),
     marginBottom: theme.spacing(1),
+  },
+  error: {
+    backgroundColor: theme.palette.error.light,
+    color: theme.palette.error.contrastText
   }
 }));
 
 export default function AliceMessage({ text }) {
   const classes = useStyles();
+  const isError = /error/i.test(text);
 
   return (
-    <Box className={clsx('message', classes.root)}>
+    <Box className={clsx('message', classes.root, isError && classes.error)}>
       <Menu/>
       {text}
     </Box>

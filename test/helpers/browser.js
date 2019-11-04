@@ -35,6 +35,10 @@ class BrowserHelper {
     await this.reloadPage(appState);
   }
 
+  async getChatMessages() {
+    return this.page.$$eval(PO.chat.messages, elems => elems.map(el => el.textContent));
+  }
+
   async _launchBrowser() {
     this.browser = await puppeteer.launch({
       headless: true

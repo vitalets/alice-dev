@@ -29,8 +29,7 @@ describe('fixed-response', () => {
     assert.equal(user.response.text, 'Нормально');
     assert.equal(user.response.tts, 'Норм');
 
-    const chatMessages = await page.$$eval(PO.chat.messages, elems => elems.map(el => el.textContent));
-    assert.deepEqual(chatMessages, [
+    assert.deepEqual(await browserHelper.getChatMessages(), [
       'Добро пожаловать в навык!',
       'Как дела?',
       'Нормально',

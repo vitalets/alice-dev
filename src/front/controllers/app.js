@@ -57,11 +57,7 @@ export default class AppController {
         ? await getProxiedResponse(requestBody)
         : this._getFixedResponse(requestBody);
     } catch (e) {
-      console.log(e);
-      return {
-        text: e.message,
-        tts: 'Ошибка'
-      };
+      return this._getErrorResponse(e, requestBody);
     }
   }
 
@@ -69,6 +65,18 @@ export default class AppController {
     const {session, version} = requestBody;
     return {
       response: getState().fixedResponse,
+      session,
+      version,
+    };
+  }
+
+  _getErrorResponse(error, requestBody) {
+    const {session, version} = requestBody;
+    return {
+      response: {
+        text: error.stack || `Error: ${error.message}`,
+        tts: 'Ошибка'
+      },
       session,
       version,
     };

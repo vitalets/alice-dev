@@ -9,5 +9,5 @@ export default {
     tts: 'Добро пожаловать в н+авык!',
   },
   devices: [], // {userId, deviceName}
-  chatMessages: [], // {id, requestBody, responseBody, error?}
+  chatMessages: [], // {id, requestBody, responseBody}
 };
