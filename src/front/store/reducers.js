@@ -4,6 +4,8 @@ import defaultState from './default-state';
 import persistentState from './persistent-state';
 import {
   setConnectionState,
+  setAuthCode,
+  addDevice,
   setMode,
   setProxyUrl,
   setFixedResponse,
@@ -26,11 +28,21 @@ export const rootReducer = handleActions({
   [setMode]: (state, {payload}) => {
     return produce(state, newState => void (newState.mode = payload));
   },
+  [setAuthCode]: (state, {payload}) => {
+    return produce(state, newState => void (newState.authCode = payload));
+  },
   [setProxyUrl]: (state, {payload}) => {
     return produce(state, newState => void (newState.proxyUrl = payload));
   },
   [setFixedResponse]: (state, {payload}) => {
     return produce(state, newState => void Object.assign(newState.fixedResponse, payload));
+  },
+  [addDevice]: (state, {payload}) => {
+    return produce(state, newState => {
+      const device = payload;
+      newState.devices = newState.devices.filter(d => d.userId !== device.userId);
+      newState.devices.unshift(device);
+    });
   },
   [addUserMessage]: (state, {payload}) => {
     return produce(state, newState => {

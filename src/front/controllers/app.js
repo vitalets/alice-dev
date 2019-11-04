@@ -3,21 +3,17 @@
  */
 import config from '../config';
 import WSClient from './ws-client';
-import { buildUrl } from '../../shared/utils';
 import { getProxiedResponse } from './proxy';
 import { TestButtonClicked } from '../store/channels';
 import testRequest from './test-request';
 
 import {
-  store,
-  CONNECTION_STATE,
   MODE,
-  setConnectionState,
+  dispatch,
+  getState,
   addUserMessage,
-  addAliceMessage
+  addAliceMessage,
 } from '../store';
-
-const {getState, dispatch} = store;
 
 const logger = Logger.create('app');
 
@@ -25,7 +21,6 @@ export default class AppController {
   constructor() {
     TestButtonClicked.addListener(() => this._handleAliceRequest(Date.now(), testRequest));
     this._createWsClient();
-
   }
 
   run() {
@@ -34,19 +29,11 @@ export default class AppController {
   }
 
   _createWsClient() {
-    this._wsClient = new WSClient(this._buildWsUrl());
-    this._wsClient.wsp.onOpen.addListener(() => dispatch(setConnectionState(CONNECTION_STATE.CONNECTED)));
-    this._wsClient.wsp.onClose.addListener(() => dispatch(setConnectionState(CONNECTION_STATE.DISCONNECTED)));
+    this._wsClient = new WSClient(config.wsUrl);
     this._wsClient.onAliceRequest.addListener(async (id, requestBody) => {
       const responseBody = await this._handleAliceRequest(id, requestBody);
       this._wsClient.sendAliceResponse(id, responseBody);
     });
-  }
-
-  _buildWsUrl() {
-    const firstDevice = getState().devices[0];
-    const userId = firstDevice && firstDevice.userId;
-    return buildUrl(config.wsUrl, {userId});
   }
 
   async _handleAliceRequest(id, requestBody) {

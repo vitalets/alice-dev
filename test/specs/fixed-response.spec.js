@@ -72,7 +72,7 @@ describe('fixed-response', () => {
   it('dont respond to other userId, show instruction', async () => {
     const user2 = new User();
     await user2.enter();
-    assert.include(user2.response.text, 'Здесь вы можете отлаживать локальную версию вашего навыка');
+    assert.include(user2.response.text, 'Здесь вы можете отлаживать ваши навыки');
     assert.equal(user2.response.tts, '');
   });
 

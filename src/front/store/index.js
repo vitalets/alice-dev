@@ -11,4 +11,7 @@ export * from './actions';
 
 export const store = createStore(rootReducer);
 
+export const getState = store.getState;
+export const dispatch = store.dispatch;
+
 persistentState.handleUpdates(store);

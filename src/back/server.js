@@ -25,7 +25,6 @@ module.exports = class Server {
 
   async close() {
     if (this._ws) {
-      // todo: wait for close event?
       await this._ws.shutDown();
     }
     if (this._http) {
@@ -46,13 +45,12 @@ module.exports = class Server {
     this._ws = new WebSocketServer({
       httpServer: this._http,
     });
-    this._ws.on('request', request => this._handleWsClient(request));
+    this._ws.on('request', request => this._handleWsConnection(request));
   }
 
-  _handleWsClient(request) {
-    const {userId} = request.resourceURL.query;
+  _handleWsConnection(request) {
     const client = request.accept(null, request.origin);
-    this._wsClients.register(client, {userId});
+    this._wsClients.register(client);
   }
 
   async _handleRequest(req) {

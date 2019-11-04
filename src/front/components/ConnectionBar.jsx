@@ -36,30 +36,38 @@ const useStyles = makeStyles(theme => ({
 export default function ConnectionBar() {
   const classes = useStyles();
   const connectionState = useSelector(state => state.connectionState);
+  const devices = useSelector(state => state.devices);
+  const authCode = useSelector(state => state.authCode);
 
-  let text = '';
+  let connectionStateText = '';
   let classname;
 
   switch (connectionState) {
     case CONNECTING:
-      text = 'Подключение...';
+      connectionStateText = 'Подключение...';
       classname = classes.connecting;
       break;
     case CONNECTED:
-      text = 'Подключено.';
+      connectionStateText = 'Подключено. ';
       classname = classes.connected;
       break;
     case DISCONNECTED:
     default:
-      text = 'Нет подключения к серверу.';
+      connectionStateText = 'Нет подключения к серверу.';
       classname = classes.disconnected;
   }
+
+  const message = devices.length
+    ? <span>Запустите навык <b>Инструменты разработчика</b> на устройстве: {devices[0].deviceName}</span>
+    : <span>Запустите навык <b>Инструменты разработчика</b> и скажите код: <b>{authCode.split('').join(' ')}</b></span>;
 
   return (
     <div className={clsx(classes.root, classname)}>
       <span id="client-snackbar" className={classes.message}>
         <InfoIcon className={classes.icon}/>
-        {text}
+        <span>{connectionStateText}</span>
+        &nbsp;
+        {message}
       </span>
     </div>
   );

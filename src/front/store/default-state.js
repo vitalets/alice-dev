@@ -2,6 +2,7 @@ import {CONNECTION_STATE, MODE} from './const';
 
 export default {
   connectionState: CONNECTION_STATE.DISCONNECTED,
+  authCode: '',
   mode: MODE.FIXED_RESPONSE,
   proxyUrl: 'http://localhost:3000',
   fixedResponse: {

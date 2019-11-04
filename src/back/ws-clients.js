@@ -17,15 +17,15 @@ module.exports = class WsClients {
     this._clients = new Map();
   }
 
-  register(client, {userId}) {
-    logger.log(`WS client connected (userId: ${userId})`);
+  register(client) {
+    logger.log(`WS client connected`);
     this._clients.set(client, {
-      userId,
+      devices: [],
+      authCode: '',
       pendingRequests: new PromisedMap()
     });
     client.on('message', message => this._handleMessage(client, message));
     client.on('close', (...args) => this._handleClose(client, ...args));
-    // todo: authorization
   }
 
   /**
@@ -45,13 +45,39 @@ module.exports = class WsClients {
     }
   }
 
+  /**
+   * Tries to authorize client by code
+   * @param {string} code
+   */
+  tryAuthorize({authCode, userId, deviceName}) {
+    for (const [client, info] of this._clients) {
+      if (info.authCode === authCode) {
+        const device = {userId, deviceName};
+        const message = protocol.authSuccess.buildMessage(device);
+        client.send(JSON.stringify(message));
+        return true;
+      }
+    }
+  }
+
   _handleMessage(client, {type, utf8Data}) {
     if (type !== 'utf8') {
       logger.error(`Unsupported message type: ${type}`);
       return;
     }
     const message = JSON.parse(utf8Data);
-    if (protocol.aliceMessage.check(message)) {
+    if (protocol.requestAuthCode.is(message)) {
+      const info = this._clients.get(client);
+      // todo: generate
+      info.authCode = '1234';
+      const message = protocol.requestAuthCode.buildMessage(info.authCode);
+      client.send(JSON.stringify(message));
+    }
+    if (protocol.sendDevices.is(message)) {
+      const info = this._clients.get(client);
+      info.devices = message.payload || [];
+    }
+    if (protocol.aliceMessage.is(message)) {
       this._handleAliceMessage(client, message);
     }
   }
@@ -83,8 +109,7 @@ module.exports = class WsClients {
 
   _findClientForUserId(userId) {
     for (const [client, info] of this._clients) {
-      // return client;
-      if (info.userId === userId) {
+      if (info.devices.some(device => device.userId === userId)) {
         return client;
       }
     }

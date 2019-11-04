@@ -2,22 +2,32 @@
  * Client-server ws communication protocol
  */
 
-class MessageType {
-  constructor(type, payloadFn = (data => data)) {
+class Message {
+  constructor(type) {
     this._type = type;
-    this._payloadFn = payloadFn;
   }
 
   /**
    * Checks is obj instance of message.
    * @param {*} obj
    */
-  check(obj) {
+  is(obj) {
     return obj && obj.type === this._type;
   }
 
   /**
    * Builds message for sending by websocket.
+   * @param {*} payload
+   */
+  buildMessage(payload) {
+    return {
+      type: this._type,
+      payload,
+    };
+  }
+
+  /**
+   * Builds request message with ID for sending by websocket.
    * @param {*} payload
    */
   buildRequest(payload) {
@@ -30,7 +40,8 @@ class MessageType {
 
   /**
    * Builds message for sending by websocket.
-   * @param {*} data
+   * @param {*} id
+   * @param {*} payload
    */
   buildResponse(id, payload) {
     return {
@@ -42,5 +53,8 @@ class MessageType {
 }
 
 module.exports = {
-  aliceMessage: new MessageType('alice'),
+  requestAuthCode: new Message('requestAuthCode'),
+  sendDevices: new Message('sendDevices'),
+  aliceMessage: new Message('aliceMessage'),
+  authSuccess: new Message('authSuccess'),
 };
