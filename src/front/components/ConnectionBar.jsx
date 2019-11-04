@@ -40,7 +40,12 @@ export default function ConnectionBar() {
   const authCode = useSelector(state => state.authCode);
 
   let connectionStateText = '';
+  let message = '';
   let classname;
+
+  const getMessage = () => devices.length
+    ? <span>Запустите навык <b>Инструменты разработчика</b> на устройстве: {devices[0].deviceName}</span>
+    : <span>Запустите навык <b>Инструменты разработчика</b> и скажите код: <b>{authCode.split('').join(' ')}</b></span>;
 
   switch (connectionState) {
     case CONNECTING:
@@ -48,8 +53,9 @@ export default function ConnectionBar() {
       classname = classes.connecting;
       break;
     case CONNECTED:
-      connectionStateText = 'Подключено. ';
+      connectionStateText = 'Подключено.';
       classname = classes.connected;
+      message = getMessage();
       break;
     case DISCONNECTED:
     default:
@@ -57,17 +63,11 @@ export default function ConnectionBar() {
       classname = classes.disconnected;
   }
 
-  const message = devices.length
-    ? <span>Запустите навык <b>Инструменты разработчика</b> на устройстве: {devices[0].deviceName}</span>
-    : <span>Запустите навык <b>Инструменты разработчика</b> и скажите код: <b>{authCode.split('').join(' ')}</b></span>;
-
   return (
     <div className={clsx(classes.root, classname)}>
       <span id="client-snackbar" className={classes.message}>
         <InfoIcon className={classes.icon}/>
-        <span>{connectionStateText}</span>
-        &nbsp;
-        {message}
+        {connectionStateText}&nbsp;{message}
       </span>
     </div>
   );

@@ -30,7 +30,7 @@ class BrowserHelper {
 
   async reloadPageForUserId(userId) {
     const appState = {
-      devices: [{userId, deviceName: 'foo'}]
+      devices: [{userId, deviceName: 'My Device'}]
     };
     await this.reloadPage(appState);
   }
