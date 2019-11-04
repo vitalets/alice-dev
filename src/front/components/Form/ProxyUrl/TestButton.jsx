@@ -12,7 +12,7 @@ export default function TestButton() {
   const classes = useStyles();
 
   return (
-      <Button size="small" onClick={() => TestButtonClicked.dispatch()}>
+      <Button id="test-button" size="small" onClick={() => TestButtonClicked.dispatch()}>
         ТЕСТ
       </Button>
   );

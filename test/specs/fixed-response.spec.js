@@ -1,7 +1,5 @@
 describe('fixed-response', () => {
 
-  let user;
-
   const setText = async text => {
     await page.click(PO.fixedResponse.text, { clickCount: 3 });
     await page.type(PO.fixedResponse.text, text);
@@ -12,12 +10,10 @@ describe('fixed-response', () => {
     await page.type(PO.fixedResponse.tts, tts);
   };
 
-  before(async () => {
-    user = new User();
-    await browserHelper.reloadPageForUserId(user.id);
-  });
-
   it('respond to corresponding userId', async () => {
+    const user = new User();
+    await browserHelper.reloadPageForUserId(user.id);
+
     await user.enter();
     assert.equal(user.response.text, 'Добро пожаловать в навык!');
     assert.equal(user.response.tts, 'Добро пожаловать в н+авык!');
@@ -33,6 +29,17 @@ describe('fixed-response', () => {
       'Добро пожаловать в навык!',
       'Как дела?',
       'Нормально',
+    ]);
+  });
+
+  it('test button', async () => {
+    await browserHelper.reloadPage();
+
+    await page.click(PO.testButton);
+
+    assert.deepEqual(await browserHelper.getChatMessages(), [
+      'тест',
+      'Добро пожаловать в навык!',
     ]);
   });
 

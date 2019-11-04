@@ -3,6 +3,7 @@
  */
 
 exports.connectionBar = '#client-snackbar';
+exports.testButton = '#test-button';
 exports.proxyUrl = {
   radio: 'input[name="radio-proxy-url"]',
   input: 'input[name="proxy-url"]',
