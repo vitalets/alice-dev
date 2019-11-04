@@ -5,7 +5,7 @@ import { setProxyUrl } from '../../../store';
 
 const useStyles = makeStyles(theme => ({
   root: {
-    marginTop: 2,
+    marginTop: 4,
   },
 }));
 
