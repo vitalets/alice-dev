@@ -43,6 +43,32 @@ describe('fixed-response', () => {
     ]);
   });
 
+  it('fix response from chat', async () => {
+    const user = new User();
+    await browserHelper.reloadPageForUserId(user.id);
+
+    await page.click(PO.proxyUrl.radio);
+    await user.enter();
+    assert.equal(user.response.text, 'Новая сессия');
+    assert.equal(user.response.tts, 'Новая сессия');
+
+    await page.click(PO.chat.messageMenu.button);
+    await page.click(PO.chat.messageMenu.firstItem);
+
+    await user.say('Как дела?');
+    assert.equal(user.response.text, 'Новая сессия');
+    assert.equal(user.response.tts, 'Новая сессия');
+
+    assert.equal(await page.$eval(PO.fixedResponse.radio, el => el.checked), true);
+    assert.equal(await page.$eval(PO.fixedResponse.text, el => el.textContent), 'Новая сессия');
+    assert.equal(await page.$eval(PO.fixedResponse.tts, el => el.textContent), 'Новая сессия');
+    assert.deepEqual(await browserHelper.getChatMessages(), [
+      'Новая сессия',
+      'Как дела?',
+      'Новая сессия',
+    ]);
+  });
+
   it('dont respond to other userId, show instruction', async () => {
     const user2 = new User();
     await user2.enter();

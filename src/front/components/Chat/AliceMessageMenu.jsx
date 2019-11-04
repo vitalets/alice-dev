@@ -7,7 +7,8 @@ import Menu from '@material-ui/core/Menu';
 import MenuItem from '@material-ui/core/MenuItem';
 import MoreVertIcon from '@material-ui/icons/MoreVert';
 import MoreHorizIcon from '@material-ui/icons/MoreHoriz';
-
+import { useDispatch } from 'react-redux';
+import { MODE, setMode, setFixedResponse } from '../../store';
 
 const useStyles = makeStyles(theme => ({
   root: {
@@ -19,10 +20,11 @@ const useStyles = makeStyles(theme => ({
   },
 }));
 
-export default function AliceMessageMenu() {
+export default function AliceMessageMenu({ responseBody }) {
   const classes = useStyles();
   const [anchorEl, setAnchorEl] = React.useState(null);
   const open = Boolean(anchorEl);
+  const dispatch = useDispatch();
 
   const showMenu = event => {
     setAnchorEl(event.currentTarget);
@@ -34,7 +36,8 @@ export default function AliceMessageMenu() {
 
   const fixResponse = () => {
     closeMenu();
-    console.log('fix response');
+    dispatch(setMode(MODE.FIXED_RESPONSE));
+    dispatch(setFixedResponse(responseBody.response));
   };
 
   return (

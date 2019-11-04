@@ -46,7 +46,7 @@ export default function Chat() {
           : null;
 
         const aliceMessage = responseBody
-          ? <AliceMessage key={'alice-message-' + id} text={responseBody.response.text} error={error}/>
+          ? <AliceMessage key={'alice-message-' + id} responseBody={responseBody}/>
           : null;
 
         return ([

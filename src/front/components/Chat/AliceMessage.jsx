@@ -1,8 +1,6 @@
 import {makeStyles} from '@material-ui/core';
 import clsx from 'clsx';
 import Box from '@material-ui/core/Box';
-import IconButton from '@material-ui/core/IconButton';
-import SaveIcon from '@material-ui/icons/Save';
 import Menu from './AliceMessageMenu';
 
 const useStyles = makeStyles(theme => ({
@@ -22,13 +20,14 @@ const useStyles = makeStyles(theme => ({
   }
 }));
 
-export default function AliceMessage({ text }) {
+export default function AliceMessage({ responseBody }) {
   const classes = useStyles();
+  const text = responseBody.response.text;
   const isError = /error/i.test(text);
 
   return (
     <Box className={clsx('message', classes.root, isError && classes.error)}>
-      <Menu/>
+      <Menu responseBody={responseBody}/>
       {text}
     </Box>
   );

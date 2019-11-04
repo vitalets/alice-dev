@@ -16,4 +16,8 @@ exports.fixedResponse = {
 
 exports.chat = {
   messages: '.chat > .message',
+  messageMenu: {
+    button: '.chat > .message button',
+    firstItem: 'ul[role="menu"] li:first-child',
+  },
 };

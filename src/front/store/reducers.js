@@ -48,6 +48,6 @@ export const rootReducer = handleActions({
         Object.assign(message, { responseBody, error });
       }
     });
-  },
+  }
 }, initialState);
 
