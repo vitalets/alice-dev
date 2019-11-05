@@ -1,21 +1,19 @@
 describe('auth', () => {
 
   it('no auth', async () => {
-    await browserHelper.reloadPage();
-    const text = await page.$eval(PO.connectionBar, el => el.textContent);
+    await pageHelper.reloadPage();
+    const text = await pageHelper.getConnectionBarText();
     assert.include(text, 'Запустите навык Инструменты разработчика и скажите код');
   });
 
   it('has auth', async () => {
-    await browserHelper.reloadPage({
-      devices: [{userId: '123', deviceName: 'My Device'}]
-    });
-    const text = await page.$eval(PO.connectionBar, el => el.textContent);
+    await pageHelper.reloadPageForUserId('123');
+    const text = await pageHelper.getConnectionBarText();
     assert.include(text, 'Используйте навык Инструменты разработчика на устройстве: My Device');
   });
 
   it('get auth by code (first device)', async () => {
-    await browserHelper.reloadPage();
+    await pageHelper.reloadPage();
     const code = await extractCode();
     const user = new User();
     await user.enter();
@@ -23,13 +21,13 @@ describe('auth', () => {
     await user.say(code, body => body.request.nlu.entities = toYandexNumbers(code));
     await page.waitFor(100);
 
-    const newText = await page.$eval(PO.connectionBar, el => el.textContent);
-    assert.include(newText, 'Используйте навык Инструменты разработчика на устройстве: ru.yandex.searchplugin');
+    const text = await pageHelper.getConnectionBarText();
+    assert.include(text, 'Используйте навык Инструменты разработчика на устройстве: ru.yandex.searchplugin');
     assert.include(user.response.text, 'Код принят');
   });
 
   it('incorrect code', async () => {
-    await browserHelper.reloadPage();
+    await pageHelper.reloadPage();
     const code = '12345';
     const user = new User();
     await user.enter();
@@ -37,8 +35,8 @@ describe('auth', () => {
     await user.say(code, body => body.request.nlu.entities = toYandexNumbers(code));
     await page.waitFor(100);
 
-    const newText = await page.$eval(PO.connectionBar, el => el.textContent);
-    assert.include(newText, 'Запустите навык Инструменты разработчика и скажите код');
+    const text = await pageHelper.getConnectionBarText();
+    assert.include(text, 'Запустите навык Инструменты разработчика и скажите код');
     assert.include(user.response.text, 'Неверный или устаревший код');
   });
 

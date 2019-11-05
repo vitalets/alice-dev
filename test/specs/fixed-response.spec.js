@@ -12,7 +12,7 @@ describe('fixed-response', () => {
 
   it('respond to corresponding userId', async () => {
     const user = new User();
-    await browserHelper.reloadPageForUserId(user.id);
+    await pageHelper.reloadPageForUserId(user.id);
 
     await user.enter();
     assert.equal(user.response.text, 'Добро пожаловать в навык!');
@@ -25,7 +25,7 @@ describe('fixed-response', () => {
     assert.equal(user.response.text, 'Нормально');
     assert.equal(user.response.tts, 'Норм');
 
-    assert.deepEqual(await browserHelper.getChatMessages(), [
+    assert.deepEqual(await pageHelper.getChatMessages(), [
       'Добро пожаловать в навык!',
       'Как дела?',
       'Нормально',
@@ -33,11 +33,11 @@ describe('fixed-response', () => {
   });
 
   it('test button', async () => {
-    await browserHelper.reloadPage();
+    await pageHelper.reloadPage();
 
     await page.click(PO.testButton);
 
-    assert.deepEqual(await browserHelper.getChatMessages(), [
+    assert.deepEqual(await pageHelper.getChatMessages(), [
       'тест',
       'Добро пожаловать в навык!',
     ]);
@@ -45,7 +45,7 @@ describe('fixed-response', () => {
 
   it('fix response from chat', async () => {
     const user = new User();
-    await browserHelper.reloadPageForUserId(user.id);
+    await pageHelper.reloadPageForUserId(user.id);
 
     await page.click(PO.proxyUrl.radio);
     await user.enter();
@@ -62,7 +62,7 @@ describe('fixed-response', () => {
     assert.equal(await page.$eval(PO.fixedResponse.radio, el => el.checked), true);
     assert.equal(await page.$eval(PO.fixedResponse.text, el => el.textContent), 'Новая сессия');
     assert.equal(await page.$eval(PO.fixedResponse.tts, el => el.textContent), 'Новая сессия');
-    assert.deepEqual(await browserHelper.getChatMessages(), [
+    assert.deepEqual(await pageHelper.getChatMessages(), [
       'Новая сессия',
       'Как дела?',
       'Новая сессия',

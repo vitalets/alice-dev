@@ -37,10 +37,8 @@ export default class AppController {
   }
 
   async _handleAliceRequest(id, requestBody) {
-    logger.log('REQUEST:', requestBody);
     dispatch(addUserMessage({id, requestBody}));
     const responseBody = await this._getAliceResponse(requestBody);
-    logger.log('RESPONSE:', responseBody);
     dispatch(addAliceMessage({id, responseBody}));
     return responseBody;
   }

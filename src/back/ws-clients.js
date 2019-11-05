@@ -18,6 +18,10 @@ module.exports = class WsClients {
     this._clients = new Map();
   }
 
+  /**
+   * Register new connected client.
+   * @param {Object} client
+   */
   register(client) {
     logger.log(`WS client connected`);
     this._clients.set(client, {

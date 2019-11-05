@@ -19,6 +19,10 @@ module.exports = class Server {
     return this._http && this._http.address().port;
   }
 
+  get wsClients() {
+    return this._wsClients;
+  }
+
   async start({port}) {
     await this._http.listen(port);
   }

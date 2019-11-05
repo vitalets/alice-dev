@@ -1,7 +1,7 @@
 describe('mode', () => {
 
   before(async () => {
-    await browserHelper.reloadPage();
+    await pageHelper.reloadPage();
   });
 
   const assertChecked = async (selector, isChecked) => {

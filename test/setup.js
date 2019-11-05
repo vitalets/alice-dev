@@ -8,6 +8,7 @@ const Server = require('../src/back/server');
 const skillServer = require('./helpers/skill-server');
 const staticServer = require('./helpers/static-server');
 const BrowserHelper = require('./helpers/browser');
+const PageHelper = require('./helpers/page');
 const PO = require('./helpers/po');
 const {buildUrl} = require('../src/shared/utils');
 
@@ -24,29 +25,33 @@ const debugMode = process.env.DEBUG_MODE;
 Logger.setLogLevel(debugMode ? 'debug' : 'none');
 
 (async () => {
-  const server = new Server();
+  const webhookServer = new Server();
   const browserHelper = new BrowserHelper({ debugMode });
 
   before(async () => {
     await Promise.all([
-      server.start({
-        port: await getPort(),
-      }),
+      webhookServer.start({ port: await getPort() }),
       skillServer.listen(await getPort()),
       staticServer.setOptions({public: 'dist'}).listen(await getPort()),
+      browserHelper.init(),
     ]);
-    User.config.webhookUrl = `http://localhost:${server.port}`;
+    User.config.webhookUrl = `http://localhost:${webhookServer.port}`;
     const pageUrl = buildUrl(`http://localhost:${staticServer.address().port}`, {
-      wsUrl: `ws://localhost:${server.port}`,
+      wsUrl: `ws://localhost:${webhookServer.port}`,
     });
-    await browserHelper.prepare(pageUrl);
+
+    const page = browserHelper.page;
+    const pageHelper = new PageHelper(page);
+    // сразу делаем первый переход, чтобы быть на нужном origin и иметь возможность менять localStorage
+    await page.goto(pageUrl);
 
     Object.assign(global, {
       assert: chai.assert,
       PO,
       User,
-      browserHelper,
-      page: browserHelper.page,
+      page,
+      pageHelper,
+      webhookServer,
       skillServer,
     });
   });
@@ -54,7 +59,7 @@ Logger.setLogLevel(debugMode ? 'debug' : 'none');
   after(async () => {
     const results = await Promise.all([
       browserHelper.close(),
-      server.close(),
+      webhookServer.close(),
       skillServer.close(),
       staticServer.close(),
     ].map(p => p.catch(e => e)));

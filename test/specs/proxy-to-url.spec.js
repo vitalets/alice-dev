@@ -9,7 +9,7 @@ describe('proxy-to-url', () => {
 
   beforeEach(async () => {
     user = new User();
-    await browserHelper.reloadPageForUserId(user.id);
+    await pageHelper.reloadPageForUserId(user.id);
     await page.click(PO.proxyUrl.radio);
     await setProxyUrl(skillServer.getUrl());
   });
@@ -27,7 +27,7 @@ describe('proxy-to-url', () => {
     assert.equal(user.response.text, 'В навык пришло: Привет');
     assert.equal(user.response.tts, 'В навык пришло: Привет');
 
-    assert.deepEqual(await browserHelper.getChatMessages(), [
+    assert.deepEqual(await pageHelper.getChatMessages(), [
       'Новая сессия',
       'Привет',
       'В навык пришло: Привет'
@@ -37,7 +37,7 @@ describe('proxy-to-url', () => {
   it('test button', async () => {
     await page.click(PO.testButton);
 
-    assert.deepEqual(await browserHelper.getChatMessages(), [
+    assert.deepEqual(await pageHelper.getChatMessages(), [
       'тест',
       'В навык пришло: тест',
     ]);
@@ -57,7 +57,7 @@ describe('proxy-to-url', () => {
     assert.equal(user.response.text, 'TypeError: Failed to fetch');
     assert.equal(user.response.tts, 'Ошибка');
 
-    assert.deepEqual(await browserHelper.getChatMessages(), [
+    assert.deepEqual(await pageHelper.getChatMessages(), [
       'TypeError: Failed to fetch',
       'Привет',
       'TypeError: Failed to fetch',

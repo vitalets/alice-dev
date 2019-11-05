@@ -2,18 +2,17 @@
  * Wrapper over puppeteer.
  */
 const puppeteer = require('puppeteer');
-const PO = require('./po');
 
-class BrowserHelper {
+module.exports = class BrowserHelper {
   constructor({ debugMode }) {
     this.browser = null;
     this.page = null;
     this.debugMode = Boolean(debugMode);
   }
 
-  async prepare(pageUrl) {
+  async init() {
     await this._launchBrowser();
-    await this._preparePage(pageUrl);
+    await this._preparePage();
   }
 
   async close() {
@@ -22,47 +21,18 @@ class BrowserHelper {
     }
   }
 
-  async reloadPage(appState = null) {
-    await this._setAppState(appState);
-    await this.page.reload();
-    await this.page.waitForSelector(PO.connectionBar);
-  }
-
-  async reloadPageForUserId(userId) {
-    const appState = {
-      devices: [{userId, deviceName: 'My Device'}]
-    };
-    await this.reloadPage(appState);
-  }
-
-  async getChatMessages() {
-    return this.page.$$eval(PO.chat.messages, elems => elems.map(el => el.textContent));
-  }
-
   async _launchBrowser() {
     this.browser = await puppeteer.launch({
       headless: true
     });
   }
 
-  async _preparePage(pageUrl) {
+  async _preparePage() {
     this.page = (await this.browser.pages())[0];
     await this.page.setCacheEnabled(false);
-    // сразу делаем первый переход, чтобы быть на нужном origin и иметь возможность менять localStorage
-    await this.page.goto(pageUrl);
     if (this.debugMode) {
       await this._applyDebugMode();
     }
-  }
-
-  async _setAppState(appState) {
-    await this.page.evaluate(appState => {
-      if (appState) {
-        localStorage.setItem('state', JSON.stringify(appState));
-      } else {
-        localStorage.removeItem('state');
-      }
-    }, appState);
   }
 
   async _applyDebugMode() {
@@ -77,6 +47,4 @@ class BrowserHelper {
       console.log('PAGE LOG:', strings.join(' '));
     });
   }
-}
-
-module.exports = BrowserHelper;
+};

@@ -4,9 +4,10 @@ env:
 globals:
   assert: false
   User: false
-  browserHelper: false
   page: false
+  pageHelper: false
   PO: false
+  webhookServer: false
   skillServer: false
 
 plugins:

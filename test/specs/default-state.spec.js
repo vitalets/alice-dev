@@ -1,7 +1,7 @@
 describe('default state', () => {
 
   before(async () => {
-    await browserHelper.reloadPage();
+    await pageHelper.reloadPage();
   });
 
   it('proxy url has default value', async () => {
