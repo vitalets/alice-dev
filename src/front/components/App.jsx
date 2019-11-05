@@ -21,7 +21,6 @@ export default function App() {
   return (
     <Container className={classes.root}>
       <CssBaseline />
-      <TopBar />
       <ConnectionBar />
       <Center />
     </Container>
