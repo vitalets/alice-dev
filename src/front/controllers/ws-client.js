@@ -44,11 +44,12 @@ export default class WSClient {
   }
 
   sendAliceResponse(messageId, responseBody) {
-    const message = protocol.aliceMessage.buildResponse(messageId, responseBody);
+    const message = protocol.aliceMessage.buildMessage(responseBody, messageId);
     this._wsp.sendPacked(message);
   }
 
   _requestAuthCode() {
+    dispatch(setAuthCode(''));
     const message = protocol.requestAuthCode.buildMessage();
     this._wsp.sendPacked(message);
   }
@@ -81,9 +82,14 @@ export default class WSClient {
       this.onAliceRequest.dispatch(message.id, message.payload);
     }
     if (protocol.requestAuthCode.is(message)) {
-      dispatch(setAuthCode(message.payload));
+      if (message.error) {
+        // todo: show error
+      } else {
+        dispatch(setAuthCode(message.payload));
+      }
     }
     if (protocol.authSuccess.is(message)) {
+      dispatch(setAuthCode(''));
       dispatch(addDevice(message.payload));
     }
   }

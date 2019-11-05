@@ -9,45 +9,36 @@ class Message {
 
   /**
    * Checks is obj instance of message.
-   * @param {*} obj
+   * @param {*} message
    */
-  is(obj) {
-    return obj && obj.type === this._type;
+  is(message) {
+    return message && message.type === this._type;
   }
 
   /**
-   * Builds message for sending by websocket.
-   * @param {*} payload
+   * Builds message.
+   * @param {*} [payload]
+   * @param {string|number} [id]
    */
-  buildMessage(payload) {
+  buildMessage(payload, id) {
     return {
       type: this._type,
       payload,
-    };
-  }
-
-  /**
-   * Builds request message with ID for sending by websocket.
-   * @param {*} payload
-   */
-  buildRequest(payload) {
-    return {
-      type: this._type,
-      id: Date.now(),
-      payload,
-    };
-  }
-
-  /**
-   * Builds message for sending by websocket.
-   * @param {*} id
-   * @param {*} payload
-   */
-  buildResponse(id, payload) {
-    return {
-      type: this._type,
       id,
-      payload,
+    };
+  }
+
+  /**
+   * Builds error message.
+   * @param {string|Error} error
+   * @param {string|number} [id]
+   */
+  buildError(error, id) {
+    return {
+      type: this._type,
+      error: true,
+      payload: (error && error.message) || String(error),
+      id,
     };
   }
 }

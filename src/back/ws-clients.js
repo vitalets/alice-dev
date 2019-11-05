@@ -8,6 +8,7 @@ const {throwError} = require('throw-utils');
 const protocol = require('../shared/protocol');
 
 const PROXY_TIMEOUT = 2000;
+const AUTH_CODE_TIMEOUT = 3 * 60 * 1000;
 
 module.exports = class WsClients {
   /**
@@ -22,10 +23,25 @@ module.exports = class WsClients {
     this._clients.set(client, {
       devices: [],
       authCode: '',
+      authCodeTime: 0,
       pendingRequests: new PromisedMap()
     });
     client.on('message', message => this._handleMessage(client, message));
     client.on('close', (...args) => this._handleClose(client, ...args));
+  }
+
+  /**
+   * Tries to authorize client by code
+   * @param {string} code
+   */
+  tryAuthorize({authCode, userId, deviceName}) {
+    const client = this._findClientForAuthCode(authCode);
+    if (client) {
+      const device = {userId, deviceName};
+      const message = protocol.authSuccess.buildMessage(device);
+      client.send(JSON.stringify(message));
+      return true;
+    }
   }
 
   /**
@@ -45,21 +61,6 @@ module.exports = class WsClients {
     }
   }
 
-  /**
-   * Tries to authorize client by code
-   * @param {string} code
-   */
-  tryAuthorize({authCode, userId, deviceName}) {
-    for (const [client, info] of this._clients) {
-      if (info.authCode === authCode) {
-        const device = {userId, deviceName};
-        const message = protocol.authSuccess.buildMessage(device);
-        client.send(JSON.stringify(message));
-        return true;
-      }
-    }
-  }
-
   _handleMessage(client, {type, utf8Data}) {
     if (type !== 'utf8') {
       logger.error(`Unsupported message type: ${type}`);
@@ -67,11 +68,7 @@ module.exports = class WsClients {
     }
     const message = JSON.parse(utf8Data);
     if (protocol.requestAuthCode.is(message)) {
-      const info = this._clients.get(client);
-      // todo: generate
-      info.authCode = '1234';
-      const message = protocol.requestAuthCode.buildMessage(info.authCode);
-      client.send(JSON.stringify(message));
+      this._handleRequestAuthCode(client);
     }
     if (protocol.sendDevices.is(message)) {
       const info = this._clients.get(client);
@@ -93,7 +90,7 @@ module.exports = class WsClients {
 
   async _proxy(reqBody, client) {
     const pendingRequests = this._getPendingRequests(client);
-    const message = protocol.aliceMessage.buildRequest(reqBody);
+    const message = protocol.aliceMessage.buildMessage(reqBody, Date.now());
     client.send(JSON.stringify(message));
     return pendingRequests.wait(message.id);
   }
@@ -107,6 +104,20 @@ module.exports = class WsClients {
     }
   }
 
+  _handleRequestAuthCode(client) {
+    const authCode = this._generateAuthCode();
+    if (authCode) {
+      const info = this._clients.get(client);
+      info.authCode = authCode;
+      info.authCodeTime = Date.now();
+      const message = protocol.requestAuthCode.buildMessage(info.authCode);
+      client.send(JSON.stringify(message));
+    } else {
+      const message = protocol.requestAuthCode.buildError('Can not generate auth code.');
+      client.send(JSON.stringify(message));
+    }
+  }
+
   _findClientForUserId(userId) {
     for (const [client, info] of this._clients) {
       if (info.devices.some(device => device.userId === userId)) {
@@ -115,8 +126,26 @@ module.exports = class WsClients {
     }
   }
 
+  _findClientForAuthCode(authCode) {
+    for (const [client, info] of this._clients) {
+      if (info.authCode === authCode && Date.now() - info.authCodeTime < AUTH_CODE_TIMEOUT) {
+        return client;
+      }
+    }
+  }
+
   _getPendingRequests(client) {
     const {pendingRequests} = this._clients.get(client) || {};
     return pendingRequests || throwError('WS connection closed');
+  }
+
+  _generateAuthCode() {
+    for (let i = 0; i < 100; i++) {
+      const authCode = Math.random().toString().slice(-4);
+      const client = this._findClientForAuthCode(authCode);
+      if (!client) {
+        return authCode;
+      }
+    }
   }
 };
