@@ -4,10 +4,11 @@
 const puppeteer = require('puppeteer');
 
 module.exports = class BrowserHelper {
-  constructor({ debugMode }) {
+  constructor({ debugMode, headless }) {
     this.browser = null;
     this.page = null;
     this.debugMode = Boolean(debugMode);
+    this.headless = headless;
   }
 
   async init() {
@@ -23,7 +24,8 @@ module.exports = class BrowserHelper {
 
   async _launchBrowser() {
     this.browser = await puppeteer.launch({
-      headless: true
+      headless: this.headless,
+      slowMo: this.headless ? 0 : 500
     });
   }
 

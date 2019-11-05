@@ -22,11 +22,12 @@ chai.config.truncateThreshold = 0;
 User.config.responseTimeout = 3000;
 
 const debugMode = process.env.DEBUG_MODE;
+const headless = process.env.PUPPETEER_HEADLESS !== 'false';
 Logger.setLogLevel(debugMode ? 'debug' : 'none');
 
 (async () => {
   const webhookServer = new Server();
-  const browserHelper = new BrowserHelper({ debugMode });
+  const browserHelper = new BrowserHelper({ debugMode, headless });
 
   before(async () => {
     await Promise.all([

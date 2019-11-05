@@ -48,4 +48,9 @@ module.exports = class PageHelper {
       }
     }, {}, PO.connectionBar, text);
   }
+
+  async setInputValue(selector, value) {
+    await this.page.click(selector, { clickCount: 3 });
+    await this.page.type(selector, value);
+  }
 };

@@ -1,15 +1,5 @@
 describe('fixed-response', () => {
 
-  const setText = async text => {
-    await page.click(PO.fixedResponse.text, { clickCount: 3 });
-    await page.type(PO.fixedResponse.text, text);
-  };
-
-  const setTts = async tts => {
-    await page.click(PO.fixedResponse.tts, { clickCount: 3 });
-    await page.type(PO.fixedResponse.tts, tts);
-  };
-
   it('respond to corresponding userId', async () => {
     const user = new User();
     await pageHelper.reloadPageForUserId(user.id);
@@ -18,8 +8,8 @@ describe('fixed-response', () => {
     assert.equal(user.response.text, 'Добро пожаловать в навык!');
     assert.equal(user.response.tts, 'Добро пожаловать в н+авык!');
 
-    await setText('Нормально');
-    await setTts('Норм');
+    await pageHelper.setInputValue(PO.fixedResponse.text, 'Нормально');
+    await pageHelper.setInputValue(PO.fixedResponse.tts, 'Норм');
 
     await user.say('Как дела?');
     assert.equal(user.response.text, 'Нормально');
@@ -48,10 +38,13 @@ describe('fixed-response', () => {
     await pageHelper.reloadPageForUserId(user.id);
 
     await page.click(PO.proxyUrl.radio);
+    await pageHelper.setInputValue(PO.proxyUrl.input, skillServer.getUrl());
+
     await user.enter();
     assert.equal(user.response.text, 'Новая сессия');
     assert.equal(user.response.tts, 'Новая сессия');
 
+    await page.waitForSelector(PO.chat.messageMenu.button);
     await page.click(PO.chat.messageMenu.button);
     await page.click(PO.chat.messageMenu.firstItem);
 

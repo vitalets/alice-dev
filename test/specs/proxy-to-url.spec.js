@@ -2,16 +2,11 @@ describe('proxy-to-url', () => {
 
   let user;
 
-  async function setProxyUrl(url) {
-    await page.click(PO.proxyUrl.input, { clickCount: 3 });
-    await page.type(PO.proxyUrl.input, url);
-  }
-
   beforeEach(async () => {
     user = new User();
     await pageHelper.reloadPageForUserId(user.id);
     await page.click(PO.proxyUrl.radio);
-    await setProxyUrl(skillServer.getUrl());
+    await pageHelper.setInputValue(PO.proxyUrl.input, skillServer.getUrl());
   });
 
   afterEach(async () => {
