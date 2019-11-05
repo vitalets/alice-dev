@@ -46,16 +46,16 @@ module.exports = class Webhook {
 
   _showAuthSuccess() {
     const response = reply`
-      Успешно.
-      ${text('Теперь вы можете отлаживать ваши навыки на этом устройстве.')}
+      Код принят. Теперь вы можете отлаживать ваши навыки на этом устройстве.
+      ${text('Используйте сайт: https://alice-dev.vitalets.xyz')}
     `;
     return this._buildResponseBody(response);
   }
 
   _showAuthIncorrect() {
     const response = reply`
-      Неверный код.
-      ${text('Проверьте еще раз на: https://alice-dev.vitalets.xyz')}
+      Неверный или устаревший код.
+      Обновите страницу ${text('https://alice-dev.vitalets.xyz')} и попробуйте еще раз.
     `;
     return this._buildResponseBody(response);
   }
