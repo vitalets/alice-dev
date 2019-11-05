@@ -4,7 +4,7 @@
 import config from '../config';
 import WSClient from './ws-client';
 import { getProxiedResponse } from './proxy';
-import { TestButtonClicked } from '../store/channels';
+import { TestButtonClicked, ConnectButtonClicked } from '../store/channels';
 import testRequest from './test-request';
 
 import {
@@ -21,6 +21,7 @@ export default class AppController {
   constructor() {
     TestButtonClicked.addListener(() => this._handleAliceRequest(Date.now(), testRequest));
     this._createWsClient();
+    ConnectButtonClicked.addListener(() => this._wsClient.connect());
   }
 
   run() {

@@ -4,6 +4,7 @@ import InfoIcon from '@material-ui/icons/Info';
 import { green, red, grey } from '@material-ui/core/colors';
 import { makeStyles } from '@material-ui/core/styles';
 import { useSelector } from 'react-redux';
+import ConnectButton from './ConnectButton';
 import { CONNECTION_STATE } from '../store';
 
 const { DISCONNECTED, CONNECTING, CONNECTED} = CONNECTION_STATE;
@@ -13,6 +14,11 @@ const useStyles = makeStyles(theme => ({
     marginTop: theme.spacing(1),
     marginBottom: theme.spacing(1),
     padding: theme.spacing(1),
+    fontSize: theme.typography.body1.fontSize,
+    display: 'flex',
+    flexDirection: 'row',
+    alignItems: 'center',
+    minHeight: 50
   },
   disconnected: {
     backgroundColor: red[100],
@@ -26,10 +32,6 @@ const useStyles = makeStyles(theme => ({
   icon: {
     fontSize: 20,
     marginRight: theme.spacing(1),
-  },
-  message: {
-    display: 'flex',
-    alignItems: 'center',
   },
 }));
 
@@ -64,11 +66,10 @@ export default function ConnectionBar() {
   }
 
   return (
-    <div className={clsx(classes.root, classname)}>
-      <span id="client-snackbar" className={classes.message}>
-        <InfoIcon className={classes.icon}/>
-        {connectionStateText}&nbsp;{message}
-      </span>
+    <div id="connection-bar" className={clsx(classes.root, classname)}>
+      <InfoIcon className={classes.icon}/>
+      {connectionStateText}&nbsp;{message}
+      {connectionState === DISCONNECTED && <ConnectButton/>}
     </div>
   );
 }

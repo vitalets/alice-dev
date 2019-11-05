@@ -5,3 +5,4 @@
 import Channel from 'chnl';
 
 export const TestButtonClicked = new Channel();
+export const ConnectButtonClicked = new Channel();

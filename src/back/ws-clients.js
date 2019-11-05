@@ -87,7 +87,7 @@ module.exports = class WsClients {
     const info = this._clients.get(client);
     if (info) {
       this._clients.delete(client);
-      logger.log(`WS client disconnected: ${info.userId}`);
+      logger.log(`WS client disconnected.`);
       info.pendingRequests.rejectAll(new Error('WS client disconnected'));
     }
   }

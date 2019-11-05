@@ -7,8 +7,13 @@ describe('connection', () => {
     await pageHelper.waitConnectionBarText('Нет подключения к серверу');
   });
 
-  it.skip('re-connect by button', async () => {
-    // todo
+  it('re-connect by button', async () => {
+    await pageHelper.reloadPage();
+    const client = getConnectedClient();
+    client.close();
+    await pageHelper.waitConnectionBarText('Нет подключения к серверу');
+    await page.click(PO.connectButton);
+    await pageHelper.waitConnectionBarText('Подключено');
   });
 
   function getConnectedClient() {

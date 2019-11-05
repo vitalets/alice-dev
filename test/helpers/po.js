@@ -2,8 +2,9 @@
  * Page objects.
  */
 
-exports.connectionBar = '#client-snackbar';
+exports.connectionBar = '#connection-bar';
 exports.testButton = '#test-button';
+exports.connectButton = '#connect-button';
 exports.proxyUrl = {
   radio: 'input[name="radio-proxy-url"]',
   input: 'input[name="proxy-url"]',
