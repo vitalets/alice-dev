@@ -60,10 +60,11 @@ describe('proxy-to-url', () => {
   });
 
   it('dont respond to other userId, show instruction', async () => {
-    const user2 = new User();
-    await user2.enter();
-    assert.include(user2.response.text, 'Здесь вы можете отлаживать ваши навыки');
-    assert.equal(user2.response.tts, '');
+    const user = new User();
+    await user.enter();
+    assert.include(user.response.text, 'Здесь вы можете отлаживать ваши навыки');
+    assert.include(user.response.text, 'https://alice-dev.vitalets.xyz');
+    assert.include(user.response.tts, 'Здесь вы можете отлаживать ваши навыки');
   });
 
 });

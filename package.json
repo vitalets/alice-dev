@@ -4,7 +4,7 @@
   "description": "Alice devtools website and server",
   "scripts": {
     "lint": "eslint src test",
-    "dev:back": "PORT=4000 nodemon -w src/back src/back",
+    "dev:back": "PORT=4000 nodemon -w src/backend src/backend",
     "dev:front": "WS_URL=ws://localhost:4000 webpack-dev-server --open",
     "dev:skill": "PORT=3000 node test/helpers/skill-server",
     "dev": "run-p dev:*",
