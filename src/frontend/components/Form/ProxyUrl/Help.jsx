@@ -48,18 +48,17 @@ export default function Help() {
         }}
       >
         <Typography className={classes.typography}>
-          Чтобы работало проксирование запросов на URL,<br/>
-          ваш навык должен отдавать HTTP заголовок:<br/>
-          <code>Access-Control-Allow-Origin: *</code>
+          Чтобы работало проксирование запросов на URL, ваш навык должен отдавать HTTP заголовок:<br/>
+          <code>Access-Control-Allow-Origin: https://alice-dev.vitalets.xyz</code>
           <br/><br/>
           Пример для <b>Node.js:</b><br/>
-          <code>res.setHeader('Access-Control-Allow-Origin', '*');</code>
+          <code>res.setHeader("Access-Control-Allow-Origin", "https://alice-dev.vitalets.xyz");</code>
           <br/><br/>
           Пример для <b>Python:</b><br/>
-          <code>self.send_header("Access-Control-Allow-Origin", "*")</code>
+          <code>self.send_header("Access-Control-Allow-Origin", "https://alice-dev.vitalets.xyz");</code>
           <br/><br/>
           Пример для <b>PHP:</b><br/>
-          <code>header("Access-Control-Allow-Origin: *");</code>
+          <code>header("Access-Control-Allow-Origin: https://alice-dev.vitalets.xyz");</code>
           <br/><br/>
           На взаимодействие с серверами Алисы это не влияет.<br/>
           <a href="https://developer.mozilla.org/en-US/docs/Web/HTTP/CORS" target="_blank">Подробнее про CORS</a>.
