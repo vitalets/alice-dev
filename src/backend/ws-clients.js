@@ -2,36 +2,26 @@
  * Manages connected ws clients.
  */
 const logger = require('loggee').create('ws-clients');
-const PromisedMap = require('promised-map');
-const Timeout = require('await-timeout');
-const {throwError} = require('throw-utils');
-const protocol = require('../shared/protocol');
+const WSClient = require('./ws-client');
 
-const PROXY_TIMEOUT = 2000;
-const AUTH_CODE_TIMEOUT = 3 * 60 * 1000;
-
-module.exports = class WsClients {
+module.exports = class WSClients {
   /**
    * Constructor
    */
   constructor() {
-    this._clients = new Map();
+    this._clients = new Set();
   }
 
   /**
    * Register new connected client.
-   * @param {Object} client
+   * @param {Object} connection
    */
-  register(client) {
+  register(connection) {
     logger.log(`WS client connected`);
-    this._clients.set(client, {
-      devices: [],
-      authCode: '',
-      authCodeTime: 0,
-      pendingRequests: new PromisedMap()
-    });
-    client.on('message', message => this._handleMessage(client, message));
-    client.on('close', (...args) => this._handleClose(client, ...args));
+    const client = new WSClient(connection);
+    this._clients.add(client);
+    client.onRequestAuthCode.addListener(() => this._handleRequestAuthCode(client));
+    connection.on('close', () => this._deleteClient(client));
   }
 
   /**
@@ -41,15 +31,14 @@ module.exports = class WsClients {
   tryAuthorize({authCode, userId, deviceName}) {
     const client = this._findClientForAuthCode(authCode);
     if (client) {
-      const device = {userId, deviceName};
-      const message = protocol.authSuccess.buildMessage(device);
-      client.send(JSON.stringify(message));
+      client.authorizeDevice({userId, deviceName});
       return true;
     }
   }
 
   /**
    * Tries to proxy request to ws client.
+   *
    * @param {Object} reqBody
    * @returns {Promise}
    */
@@ -57,90 +46,43 @@ module.exports = class WsClients {
     const userId = reqBody.session.user_id;
     const client = this._findClientForUserId(userId);
     if (client) {
-      logger.log(`Proxying request to: ${userId}`);
-      return Promise.race([
-        this._proxy(reqBody, client),
-        Timeout.set(PROXY_TIMEOUT, `Timeout: ${PROXY_TIMEOUT}`),
-      ]);
+      logger.log(`Proxying alice request for: ${userId.slice(0, 6)}`);
+      return client.proxyAliceRequest(reqBody);
     }
   }
 
-  _handleMessage(client, {type, utf8Data}) {
-    if (type !== 'utf8') {
-      logger.error(`Unsupported message type: ${type}`);
-      return;
-    }
-    const message = JSON.parse(utf8Data);
-    if (protocol.requestAuthCode.is(message)) {
-      this._handleRequestAuthCode(client);
-    }
-    if (protocol.sendDevices.is(message)) {
-      const info = this._clients.get(client);
-      info.devices = message.payload || [];
-    }
-    if (protocol.aliceMessage.is(message)) {
-      this._handleAliceMessage(client, message);
-    }
-  }
-
-  _handleClose(client) {
-    const info = this._clients.get(client);
-    if (info) {
-      this._clients.delete(client);
-      logger.log(`WS client disconnected.`);
-      info.pendingRequests.rejectAll(new Error('WS client disconnected'));
-    }
-  }
-
-  async _proxy(reqBody, client) {
-    const pendingRequests = this._getPendingRequests(client);
-    const message = protocol.aliceMessage.buildMessage(reqBody, Date.now());
-    client.send(JSON.stringify(message));
-    return pendingRequests.wait(message.id);
-  }
-
-  _handleAliceMessage(client, message) {
-    const pendingRequests = this._getPendingRequests(client);
-    if (pendingRequests.has(message.id)) {
-      pendingRequests.resolve(message.id, message.payload);
-    } else {
-      logger.error(`Unknown request id: ${JSON.stringify(message)}`);
-    }
-  }
-
-  _handleRequestAuthCode(client) {
-    const authCode = this._generateAuthCode();
-    if (authCode) {
-      const info = this._clients.get(client);
-      info.authCode = authCode;
-      info.authCodeTime = Date.now();
-      const message = protocol.requestAuthCode.buildMessage(info.authCode);
-      client.send(JSON.stringify(message));
-    } else {
-      const message = protocol.requestAuthCode.buildError('Can not generate auth code.');
-      client.send(JSON.stringify(message));
-    }
+  _deleteClient(client) {
+    logger.log(`WS client disconnected.`);
+    client.destroy();
+    this._clients.delete(client);
   }
 
   _findClientForUserId(userId) {
-    for (const [client, info] of this._clients) {
-      if (info.devices.some(device => device.userId === userId)) {
+    for (const client of this._clients) {
+      if (client.hasUserId(userId)) {
         return client;
       }
     }
   }
 
   _findClientForAuthCode(authCode) {
-    for (const [client, info] of this._clients) {
-      if (info.authCode === authCode && Date.now() - info.authCodeTime < AUTH_CODE_TIMEOUT) {
+    for (const client of this._clients) {
+      if (client.isValidAuthCode(authCode)) {
         return client;
       }
     }
   }
 
-  _getPendingRequests(client) {
-    const {pendingRequests} = this._clients.get(client) || {};
-    return pendingRequests || throwError('WS connection closed');
+  _handleRequestAuthCode(client) {
+    const authCode = this._generateAuthCode();
+    if (authCode) {
+      logger.log(`Auth code generated: ${authCode}`);
+      client.setAuthCode(authCode);
+    } else {
+      const message = 'Can not generate auth code.';
+      logger.error(message);
+      client.setAuthCodeError(message);
+    }
   }
 
   _generateAuthCode() {

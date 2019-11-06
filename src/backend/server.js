@@ -5,14 +5,14 @@ const {promisify} = require('util');
 const micro = require('micro');
 const WebSocketServer = require('websocket').server;
 const logger = require('loggee').create('server');
-const WsClients = require('./ws-clients');
+const WSClients = require('./ws-clients');
 const WebhookHandler = require('./webhook');
 
 module.exports = class Server {
   constructor() {
     this._createHttpServer();
     this._createWsServer();
-    this._wsClients = new WsClients();
+    this._wsClients = new WSClients();
   }
 
   get port() {
@@ -49,12 +49,12 @@ module.exports = class Server {
     this._ws = new WebSocketServer({
       httpServer: this._http,
     });
-    this._ws.on('request', request => this._handleWsConnection(request));
+    this._ws.on('request', request => this._handleWSConnection(request));
   }
 
-  _handleWsConnection(request) {
-    const client = request.accept(null, request.origin);
-    this._wsClients.register(client);
+  _handleWSConnection(request) {
+    const connection = request.accept(null, request.origin);
+    this._wsClients.register(connection);
   }
 
   async _handleRequest(req) {

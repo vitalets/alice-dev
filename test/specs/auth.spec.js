@@ -24,6 +24,9 @@ describe('auth', () => {
     const text = await pageHelper.getConnectionBarText();
     assert.include(text, 'Используйте навык Инструменты разработчика на устройстве: ru.yandex.searchplugin');
     assert.include(user.response.text, 'Код принят');
+
+    await user.say('привет');
+    assert.include(user.response.text, 'Добро пожаловать в навык!');
   });
 
   it('incorrect code', async () => {
