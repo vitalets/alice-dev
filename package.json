@@ -15,7 +15,8 @@
     "test:dd": "PUPPETEER_HEADLESS=false npm run test:d -- --timeout=30000",
     "docs:update": "npm run build:prod && npm test && cp -R dist/ docs/",
     "docs:commit": "git add docs && git commit -m'update docs' --no-verify --allow-empty",
-    "release:front": "npm run docs:update && npm run docs:commit && git push --no-verify"
+    "release:frontend": "npm run docs:update && npm run docs:commit && git push --no-verify",
+    "release:backend": "./scripts/release-backend.sh"
   },
   "lint-staged": {
     "{src,test}/**/*.js": "eslint"
