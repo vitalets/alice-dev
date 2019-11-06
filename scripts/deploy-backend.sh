@@ -1,7 +1,7 @@
 #!/usr/bin/env bash
 
 echo "COPY SOURCES..."
-rsync -avz --delete -e 'ssh' ./src/back ./src/shared ./package{,-lock}.json ya-cloud:/srv/alice-dev-backend
+rsync -avz --delete -e 'ssh' ./src/backend ./src/shared ./package{,-lock}.json ya-cloud:/srv/alice-dev-backend
 
 echo "INSTALLING DEPS..."
 ssh ya-cloud "cd /srv/alice-dev-backend && npm ci --only=prod"

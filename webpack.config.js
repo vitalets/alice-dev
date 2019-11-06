@@ -8,7 +8,7 @@ const pkg = require('./package');
 module.exports = (env = {}) => {
   const config = {
     mode: env.production ? 'production' : 'development',
-    entry: './src/front',
+    entry: './src/frontend',
     output: {
       path: path.resolve('dist'),
       filename: 'bundle.js',
@@ -53,7 +53,7 @@ module.exports = (env = {}) => {
         banner: `Alice-dev v${pkg.version}`
       }),
       new HtmlWebpackPlugin({
-        template: 'src/front/index.html'
+        template: 'src/frontend/index.html'
       }),
     ],
   };
