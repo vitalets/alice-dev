@@ -2,10 +2,11 @@ const path = require('path');
 const webpack = require('webpack');
 const {CleanWebpackPlugin} = require('clean-webpack-plugin');
 const HtmlWebpackPlugin = require('html-webpack-plugin');
+const TerserPlugin = require('terser-webpack-plugin');
 const pkg = require('./package');
 
 module.exports = (env = {}) => {
-  return {
+  const config = {
     mode: env.production ? 'production' : 'development',
     entry: './src/front',
     output: {
@@ -53,7 +54,18 @@ module.exports = (env = {}) => {
       }),
       new HtmlWebpackPlugin({
         template: 'src/front/index.html'
-      })
+      }),
     ],
   };
+
+  if (env.production) {
+    // see https://reactjs.org/docs/optimizing-performance.html
+    config.optimization = {
+      minimizer: [
+        new TerserPlugin()
+      ],
+    };
+  }
+
+  return config;
 };
