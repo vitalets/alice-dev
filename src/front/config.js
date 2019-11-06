@@ -6,7 +6,7 @@ const logger = Logger.create('app:config');
 /* global WS_URL */
 
 const defaults = {
-  wsUrl: WS_URL || 'wss://vitalets.xyz/alice-dev',
+  wsUrl: WS_URL || 'wss://alice-skills.vitalets.xyz/alice-dev-backend',
   saveStateDelay: 3000,
 };
 
