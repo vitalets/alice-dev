@@ -31,6 +31,7 @@ module.exports = class WSClient {
    */
   authorizeDevice({ userId, deviceName }) {
     logger.log(`Devices authorized: ${userId.slice(0, 6)} ${deviceName}`);
+    this._clearAuthCode();
     this._devices.push({ userId, deviceName });
     const message = protocol.authSuccess.buildMessage({ userId, deviceName });
     this._send(message);
@@ -104,8 +105,7 @@ module.exports = class WSClient {
   _handleMessage({ utf8Data }) {
     const message = JSON.parse(utf8Data);
     if (protocol.requestAuthCode.is(message)) {
-      this._authCode = '';
-      this._authCodeTime = 0;
+      this._clearAuthCode();
       this.onRequestAuthCode.dispatch();
     } else if (protocol.sendDevices.is(message)) {
       this._devices = message.payload || [];
@@ -122,6 +122,11 @@ module.exports = class WSClient {
     } else {
       logger.error(`Unknown request id: ${JSON.stringify(message)}`);
     }
+  }
+
+  _clearAuthCode() {
+    this._authCode = '';
+    this._authCodeTime = 0;
   }
 
   /**
