@@ -56,7 +56,7 @@ module.exports = () => {
         Logger: 'loggee',
       }),
       new webpack.BannerPlugin({
-        banner: `Alice-dev v${pkg.version}`
+        banner: `Alice-dev v${pkg.version} (${new Date().toISOString()})`
       }),
       new HtmlWebpackPlugin({
         title: `Alice dev${isDevServerMode ? ' (local)' : ''}`,
