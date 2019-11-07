@@ -16,6 +16,7 @@ const useStyles = makeStyles(theme => ({
     paddingTop: theme.spacing(2),
     paddingBottom: theme.spacing(2),
     paddingRight: theme.spacing(2),
+    scrollBehavior: 'smooth',
     // https://stackoverflow.com/questions/36130760/use-justify-content-flex-end-and-to-have-vertical-scrollbar
     '& > :first-child': {
       marginTop: 'auto !important',
