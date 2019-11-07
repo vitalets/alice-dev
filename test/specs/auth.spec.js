@@ -48,8 +48,8 @@ describe('auth', () => {
     assert.include(user.response.text, 'Код принят');
 
     await user.say('привет');
-    assert.include(user.response.text, 'Ответ со страницы alice-dev');
-    assert.include(user.response.tts, 'Ответ со страницы элис-дев');
+    assert.include(user.response.text, 'Ответ со страницы alice-dev: привет!');
+    assert.include(user.response.tts, 'Ответ со страницы элис-дев: привет!');
 
     // clear code after auth
     const user2 = new User();

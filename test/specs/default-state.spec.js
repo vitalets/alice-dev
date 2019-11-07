@@ -11,12 +11,12 @@ describe('default state', () => {
 
   it('text contains default value', async () => {
     const text = await page.$eval(PO.fixedResponse.text, el => el.value);
-    assert.equal(text, 'Ответ со страницы alice-dev');
+    assert.equal(text, 'Ответ со страницы alice-dev: привет!');
   });
 
   it('tts contains default value', async () => {
     const tts = await page.$eval(PO.fixedResponse.tts, el => el.value);
-    assert.equal(tts, 'Ответ со страницы элис-дев');
+    assert.equal(tts, 'Ответ со страницы элис-дев: привет!');
   });
 
 });
