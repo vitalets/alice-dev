@@ -9,14 +9,15 @@ const useStyles = makeStyles(theme => ({
     height: '100%',
     marginBottom: 0,
   },
-  right: {
+  gridCell: {
     height: '100%',
   },
   paper: {
     height: '100%',
     width: '100%',
-    padding: theme.spacing(2),
     display: 'flex',
+    // padding: theme.spacing(1),
+    paddingRight: 0, // for scroll
   },
 }));
 
@@ -26,13 +27,13 @@ export default function Center() {
 
   return (
     <Grid container className={classes.root} spacing={2}>
-      <Grid item xs={6}>
+      <Grid item xs={6} className={classes.gridCell}>
         <Paper className={classes.paper} style={{paddingTop: 0}}>
           <Form />
         </Paper>
       </Grid>
-      <Grid item xs={6} className={classes.right}>
-        <Paper className={classes.paper} style={{paddingRight: 0}}>
+      <Grid item xs={6} className={classes.gridCell}>
+        <Paper className={classes.paper}>
           <Chat />
         </Paper>
       </Grid>

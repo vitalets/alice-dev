@@ -1,9 +1,9 @@
 import CssBaseline from '@material-ui/core/CssBaseline';
 import Container from '@material-ui/core/Container';
-import TopBar from './TopBar';
+import {makeStyles} from '@material-ui/core';
 import ConnectionBar from './ConnectionBar';
 import Center from './Center';
-import {makeStyles} from '@material-ui/core';
+import Footer from './Footer';
 
 const useStyles = makeStyles(theme => ({
   root: {
@@ -23,6 +23,7 @@ export default function App() {
       <CssBaseline />
       <ConnectionBar />
       <Center />
+      <Footer />
     </Container>
   );
 }

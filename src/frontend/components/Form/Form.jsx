@@ -16,7 +16,15 @@ import {MODE, setMode} from '../../store';
 const useStyles = makeStyles(theme => ({
   root: {
     flexGrow: 1,
-    marginTop: 0,
+    margin: 0,
+    overflowY: 'auto',
+    padding: theme.spacing(2),
+    paddingTop: 0,
+  },
+  proxyUrlWrapper: {
+    display: 'flex',
+    marginTop: 8,
+    alignItems: 'center'
   },
   radio: {
     marginTop: theme.spacing(1),
@@ -31,7 +39,7 @@ export default function Form() {
   return (
     <FormControl component="fieldset" className={classes.root}>
       <RadioGroup value={mode} name="mode" onChange={e => dispatch(setMode(e.target.value))}>
-        <div style={{display: 'flex', marginTop: 8, alignItems: 'center'}}>
+        <div className={classes.proxyUrlWrapper}>
           <FormControlLabel
             style={{flexGrow: 1, marginTop: 0}}
             name="radio-proxy-url"
