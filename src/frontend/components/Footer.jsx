@@ -14,7 +14,7 @@ export default function Footer() {
   return (
     <footer className={classes.root}>
       <Typography variant="body2" color="textSecondary">
-        {'Copyright © Виталий Потапов '}
+        {'© Виталий Потапов '}
         {new Date().getFullYear()}
         <Link style={{float: 'right'}} color="inherit" href="https://github.com/vitalets/alice-dev/issues" target="_blank">
           Предложить идею или сообщить об ошибке
