@@ -1,3 +1,5 @@
+const fetch = require('node-fetch');
+
 describe('connection', () => {
 
   it('terminate by server', async () => {
@@ -12,6 +14,12 @@ describe('connection', () => {
     await pageHelper.waitConnectionBarText('Нет подключения к серверу');
     await page.click(PO.connectButton);
     await pageHelper.waitConnectionBarText('Подключено');
+  });
+
+  it('show connections count on get', async () => {
+    await pageHelper.reloadPage();
+    const response = await fetch(User.config.webhookUrl);
+    assert.equal(await response.text(), 'Connected clients: 1');
   });
 
   function closeConnectedClient() {

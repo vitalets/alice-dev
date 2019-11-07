@@ -2,8 +2,6 @@ const chai = require('chai');
 const getPort = require('get-port');
 const User = require('alice-tester');
 const Logger = require('loggee');
-const WebSocket = require('websocket').w3cwebsocket;
-const {URL} = require('url');
 const Server = require('../src/backend/server');
 const skillServer = require('./helpers/skill-server');
 const staticServer = require('./helpers/static-server');
@@ -11,12 +9,6 @@ const BrowserHelper = require('./helpers/browser');
 const PageHelper = require('./helpers/page');
 const PO = require('./helpers/po');
 const {buildUrl} = require('../src/shared/utils');
-
-// emulate browser context
-Object.assign(global, {
-  URL,
-  WebSocket,
-});
 
 chai.config.truncateThreshold = 0;
 User.config.responseTimeout = 3000;

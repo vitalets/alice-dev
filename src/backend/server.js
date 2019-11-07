@@ -62,6 +62,6 @@ module.exports = class Server {
       res.setHeader('Access-Control-Allow-Origin', 'https://alice-dev.vitalets.xyz');
       return new WebhookHandler(this._wsClients, req).handle();
     }
-    return 'Running';
+    return `Connected clients: ${this._wsClients.count}`;
   }
 };

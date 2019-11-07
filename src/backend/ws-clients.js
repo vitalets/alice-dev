@@ -13,6 +13,14 @@ module.exports = class WSClients {
   }
 
   /**
+   * Count of connected clients.
+   * @returns {number}
+   */
+  get count() {
+    return this._clients.size;
+  }
+
+  /**
    * Register new connected client.
    * @param {Object} connection
    */
