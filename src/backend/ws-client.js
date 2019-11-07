@@ -7,7 +7,7 @@ const Timeout = require('await-timeout');
 const Channel = require('chnl');
 const protocol = require('../shared/protocol');
 
-const WS_RESPONSE_TIMEOUT = 2000;
+const WS_RESPONSE_TIMEOUT = 2500;
 const AUTH_CODE_TIMEOUT = 3 * 60 * 1000;
 
 module.exports = class WSClient {

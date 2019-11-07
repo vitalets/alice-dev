@@ -17,6 +17,7 @@ exports.fixedResponse = {
 
 exports.chat = {
   messages: '.chat > .message',
+  lastMessage: '.chat > .message:last-child',
   lastAliceMessage: '.chat > .alice-message:last-child',
   lastAliceMessageMenuButton: '.chat > .alice-message:last-child button',
   messageMenu: {

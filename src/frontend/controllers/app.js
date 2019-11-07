@@ -3,7 +3,7 @@
  */
 import config from '../config';
 import WSClient from './ws-client';
-import { getProxiedResponse } from './proxy';
+import ProxyToUrl from './proxy';
 import { TestButtonClicked, ConnectButtonClicked } from '../store/channels';
 import testRequest from './test-request';
 
@@ -47,9 +47,10 @@ export default class AppController {
   async _getAliceResponse(requestBody) {
     try {
       return getState().mode === MODE.PROXY_URL
-        ? await getProxiedResponse(requestBody)
+        ? await new ProxyToUrl(requestBody).proxy()
         : this._getFixedResponse(requestBody);
     } catch (e) {
+      logger.error(e);
       return this._getErrorResponse(e, requestBody);
     }
   }
@@ -67,7 +68,7 @@ export default class AppController {
     const {session, version} = requestBody;
     return {
       response: {
-        text: error.stack || `Error: ${error.message}`,
+        text: `Error: ${error.message}`,
         tts: 'Ошибка'
       },
       session,

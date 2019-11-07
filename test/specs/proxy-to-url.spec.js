@@ -1,3 +1,5 @@
+const Timeout = require('await-timeout');
+
 describe('proxy-to-url', () => {
 
   let user;
@@ -31,6 +33,7 @@ describe('proxy-to-url', () => {
 
   it('test button', async () => {
     await page.click(PO.testButton);
+    await pageHelper.waitLastChatMessage('В навык пришло: тест');
 
     assert.deepEqual(await pageHelper.getChatMessages(), [
       'тест',
@@ -39,17 +42,16 @@ describe('proxy-to-url', () => {
   });
 
   it('cors error', async () => {
-    skillServer.setHandler(() => {
-      // no cors header
-      return '';
-    });
+    // no cors header in handler
+    skillServer.setHandler(() => 'running');
 
     await user.enter();
-    assert.equal(user.response.text, 'TypeError: Failed to fetch');
+    assert.equal(user.response.text, 'Error: Failed to fetch');
     assert.equal(user.response.tts, 'Ошибка');
 
     await user.say('Привет');
-    assert.equal(user.response.text, 'TypeError: Failed to fetch');
+
+    assert.equal(user.response.text, 'Error: Failed to fetch');
     assert.equal(user.response.tts, 'Ошибка');
     assert.equal(
       Boolean(await page.$(PO.chat.lastAliceMessageMenuButton)),
@@ -58,10 +60,37 @@ describe('proxy-to-url', () => {
     );
 
     assert.deepEqual(await pageHelper.getChatMessages(), [
-      'TypeError: Failed to fetch',
+      'Error: Failed to fetch',
       'Привет',
-      'TypeError: Failed to fetch',
+      'Error: Failed to fetch',
     ]);
   });
 
+  it('timeout', async () => {
+    skillServer.setHandler(async (req, res) => {
+      res.setHeader('Access-Control-Allow-Origin', '*');
+      await Timeout.set(3000);
+      return 'running';
+    });
+
+    await user.say('Привет');
+
+    await pageHelper.waitLastChatMessage('Error: Proxy URL не ответил за 2000 мс');
+    assert.include(user.response.text, 'Proxy URL не ответил за 2000 мс');
+    assert.include(user.response.tts, 'Ошибка');
+  });
+
+  it('404', async () => {
+    skillServer.setHandler(async (req, res) => {
+      res.setHeader('Access-Control-Allow-Origin', '*');
+      res.writeHead(404);
+      res.end();
+    });
+
+    await user.say('Привет');
+
+    await pageHelper.waitLastChatMessage('Error: Proxy URL: 404 Not Found');
+    assert.include(user.response.text, 'Error: Proxy URL: 404 Not Found');
+    assert.include(user.response.tts, 'Ошибка');
+  });
 });

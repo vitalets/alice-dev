@@ -53,6 +53,15 @@ module.exports = class PageHelper {
     }, {}, PO.connectionBar, text);
   }
 
+  async waitLastChatMessage(text) {
+    return this.page.waitForFunction((sel, text) => {
+      const el = document.querySelector(sel);
+      if (el && el.textContent.includes(text)) {
+        return el.textContent;
+      }
+    }, {}, PO.chat.lastMessage, text);
+  }
+
   async setInputValue(selector, value) {
     await this.page.click(selector, { clickCount: 3 });
     await this.page.type(selector, value);
