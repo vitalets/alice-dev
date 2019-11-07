@@ -51,6 +51,11 @@ describe('proxy-to-url', () => {
     await user.say('Привет');
     assert.equal(user.response.text, 'TypeError: Failed to fetch');
     assert.equal(user.response.tts, 'Ошибка');
+    assert.equal(
+      Boolean(await page.$(PO.chat.lastAliceMessageMenuButton)),
+      false,
+      'No chat menu for error messages'
+    );
 
     assert.deepEqual(await pageHelper.getChatMessages(), [
       'TypeError: Failed to fetch',

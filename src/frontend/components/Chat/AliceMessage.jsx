@@ -26,8 +26,8 @@ export default function AliceMessage({ responseBody }) {
   const isError = /error/i.test(text);
 
   return (
-    <Box className={clsx('message', classes.root, isError && classes.error)}>
-      <Menu responseBody={responseBody}/>
+    <Box className={clsx('message', 'alice-message', classes.root, isError && classes.error)}>
+      {!isError && <Menu responseBody={responseBody}/>}
       {text}
     </Box>
   );

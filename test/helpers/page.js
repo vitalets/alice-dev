@@ -40,6 +40,10 @@ module.exports = class PageHelper {
     return this.page.$eval(PO.connectionBar, el => el.textContent);
   }
 
+  async getElementText(selector) {
+    return this.page.$eval(selector, el => el.textContent);
+  }
+
   async waitConnectionBarText(text) {
     return this.page.waitForFunction((sel, text) => {
       const el = document.querySelector(sel);
