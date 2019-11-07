@@ -20,7 +20,7 @@ export default function Text() {
       label="TEXT"
       name="text"
       multiline
-      rows="4"
+      rows="5"
       value={text}
       onChange={e => dispatch(setFixedResponse({ text: e.target.value.trim() }))}
       margin="normal"
