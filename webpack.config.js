@@ -5,6 +5,8 @@ const HtmlWebpackPlugin = require('html-webpack-plugin');
 const TerserPlugin = require('terser-webpack-plugin');
 const pkg = require('./package');
 
+const isDevServerMode = process.env.WEBPACK_DEV_SERVER;
+
 module.exports = (env = {}) => {
   const config = {
     mode: env.production ? 'production' : 'development',
@@ -53,6 +55,7 @@ module.exports = (env = {}) => {
         banner: `Alice-dev v${pkg.version}`
       }),
       new HtmlWebpackPlugin({
+        title: `Alice dev${isDevServerMode ? ' (local)' : ''}`,
         template: 'src/frontend/index.html'
       }),
     ],
