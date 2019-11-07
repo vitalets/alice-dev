@@ -1,5 +1,13 @@
 describe('auth', () => {
 
+  it('no connections, show instruction', async () => {
+    const user = new User();
+    await user.enter();
+    assert.include(user.response.text, 'Здесь вы можете отлаживать ваши навыки');
+    assert.include(user.response.text, 'alice-dev.vitalets.xyz');
+    assert.include(user.response.tts, 'Здесь вы можете отлаживать ваши навыки');
+  });
+
   it('no auth', async () => {
     await pageHelper.reloadPage();
     const text = await pageHelper.getConnectionBarText();

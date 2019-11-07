@@ -57,8 +57,9 @@ module.exports = class Server {
     this._wsClients.register(connection);
   }
 
-  async _handleRequest(req) {
+  async _handleRequest(req, res) {
     if (req.method === 'POST') {
+      res.setHeader('Access-Control-Allow-Origin', 'https://alice-dev.vitalets.xyz');
       return new WebhookHandler(this._wsClients, req).handle();
     }
     return 'Running';

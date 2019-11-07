@@ -2,11 +2,11 @@
  * Handles Alice requests: proxy to client or
  */
 const micro = require('micro');
-const {reply, text, tts} = require('alice-renderer');
+const {reply, text, tts, br} = require('alice-renderer');
 
 module.exports = class Webhook {
   /**
-   * @param {WsClients} wsClients
+   * @param {WSClients} wsClients
    * @param {Request} req
    */
   constructor(wsClients, req) {
@@ -31,7 +31,10 @@ module.exports = class Webhook {
   _showInstruction() {
     const response = reply`
       Здесь вы можете отлаживать ваши навыки без публикации в каталоге.
-      ${text('Откройте на компьютере сайт:\n🌐 https://alice-dev.vitalets.xyz\nи следуйте инструкции.')}
+      ${br()}
+      Откройте на компьютере вот этот сайт и получ+ите код авторизации.
+      ${br(2)}
+      ${text('🌐 alice-dev.vitalets.xyz')}
     `;
     return this._buildResponseBody(response);
   }
@@ -46,7 +49,8 @@ module.exports = class Webhook {
 
   _showAuthSuccess() {
     const response = reply`
-      Код принят. Теперь вы можете отлаживать ваши навыки на этом устройстве.
+      Код принят. Теперь запросы с этого устройства можно обрабатывать через сайт.
+      Скажите что-нибудь 😉
     `;
     return this._buildResponseBody(response);
   }
@@ -54,7 +58,9 @@ module.exports = class Webhook {
   _showAuthIncorrect() {
     const response = reply`
       Неверный или устаревший код.
-      Обновите страницу ${text('https://alice-dev.vitalets.xyz')} и попробуйте еще раз.
+      Обновите страницу и попробуйте еще раз.
+      ${br(2)}
+      ${text('🌐 alice-dev.vitalets.xyz')}
     `;
     return this._buildResponseBody(response);
   }
