@@ -13,4 +13,5 @@ echo "CHECKING..."
 sleep 1
 curl https://alice-skills.vitalets.xyz/alice-dev-backend/
 
+echo ""
 echo "DONE."
