@@ -46,7 +46,7 @@ export default function ConnectionBar() {
   let classname;
 
   const getMessage = () => devices.length
-    ? <span>Используйте навык <b>Инструменты разработчика</b> на устройстве: {devices[0].deviceName}</span>
+    ? <span>Скажите что-нибудь в навык <b>Инструменты разработчика</b> на устройстве: {devices[0].deviceName}</span>
     : <span>Запустите навык <b>Инструменты разработчика</b> и скажите код: <b>{authCode.split('').join(' ')}</b></span>;
 
   switch (connectionState) {

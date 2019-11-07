@@ -17,7 +17,7 @@ describe('auth', () => {
   it('has auth', async () => {
     await pageHelper.reloadPageForUserId('123');
     const text = await pageHelper.getConnectionBarText();
-    assert.include(text, 'Используйте навык Инструменты разработчика на устройстве: My Device');
+    assert.include(text, 'Скажите что-нибудь в навык Инструменты разработчика на устройстве: My Device');
   });
 
   it('incorrect code', async () => {
@@ -44,7 +44,7 @@ describe('auth', () => {
     await page.waitFor(100);
 
     const text = await pageHelper.getConnectionBarText();
-    assert.include(text, 'Используйте навык Инструменты разработчика на устройстве: ru.yandex.searchplugin');
+    assert.include(text, 'Скажите что-нибудь в навык Инструменты разработчика на устройстве: ru.yandex.searchplugin');
     assert.include(user.response.text, 'Код принят');
 
     await user.say('привет');
