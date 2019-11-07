@@ -1,15 +1,19 @@
 const path = require('path');
+const fs = require('fs');
 const webpack = require('webpack');
 const {CleanWebpackPlugin} = require('clean-webpack-plugin');
 const HtmlWebpackPlugin = require('html-webpack-plugin');
 const TerserPlugin = require('terser-webpack-plugin');
 const pkg = require('./package');
 
+const isProduction = process.env.NODE_ENV === 'production';
 const isDevServerMode = process.env.WEBPACK_DEV_SERVER;
 
-module.exports = (env = {}) => {
+console.log(`PRODUCTION: ${isProduction}`);
+
+module.exports = () => {
   const config = {
-    mode: env.production ? 'production' : 'development',
+    mode: isProduction ? 'production' : 'development',
     entry: './src/frontend',
     output: {
       path: path.resolve('dist'),
@@ -56,12 +60,13 @@ module.exports = (env = {}) => {
       }),
       new HtmlWebpackPlugin({
         title: `Alice dev${isDevServerMode ? ' (local)' : ''}`,
-        template: 'src/frontend/index.html'
+        template: 'src/frontend/index.html',
+        metrika: fs.readFileSync('src/frontend/metrika.html', 'utf8'),
       }),
     ],
   };
 
-  if (env.production) {
+  if (isProduction) {
     // see https://reactjs.org/docs/optimizing-performance.html
     config.optimization = {
       minimizer: [

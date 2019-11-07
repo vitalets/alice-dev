@@ -9,7 +9,7 @@
     "dev:skill": "PORT=3000 node test/helpers/skill-server",
     "dev": "run-p dev:*",
     "build": "webpack",
-    "build:prod": "webpack --env.production",
+    "build:prod": "NODE_ENV=production npm run build",
     "test": "mocha test/setup.js test/specs/*.js --timeout=5000",
     "test:d": "DEBUG_MODE=1 npm run test -- --bail",
     "test:dd": "PUPPETEER_HEADLESS=false npm run test:d -- --timeout=30000",
