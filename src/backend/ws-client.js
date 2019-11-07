@@ -21,7 +21,17 @@ module.exports = class WSClient {
     this._authCodeTime = 0;
     this._pendingRequests = new PromisedMap();
     this.onRequestAuthCode = new Channel();
+    this.onDisconnected = new Channel();
+    this.onDevicesUpdated = new Channel();
     connection.on('message', message => this._handleMessage(message));
+    connection.on('close', () => this._handleDisconnect());
+  }
+
+  /**
+   * @returns {Array}
+   */
+  get devices() {
+    return this._devices;
   }
 
   /**
@@ -32,8 +42,9 @@ module.exports = class WSClient {
   authorizeDevice({ userId, deviceName }) {
     logger.log(`Devices authorized: ${userId.slice(0, 6)} ${deviceName}`);
     this._clearAuthCode();
-    this._devices.push({ userId, deviceName });
-    const message = protocol.authSuccess.buildMessage({ userId, deviceName });
+    const device = { userId, deviceName };
+    this._updateDevices(this._devices.concat([device]));
+    const message = protocol.authSuccess.buildMessage(device);
     this._send(message);
   }
 
@@ -96,10 +107,15 @@ module.exports = class WSClient {
   }
 
   /**
-   * Cleanup.
+   * Disconnects client.
    */
-  destroy() {
+  disconnect() {
+    this._connection.close();
+  }
+
+  _handleDisconnect() {
     this._pendingRequests.rejectAll(new Error('WS client disconnected'));
+    this.onDisconnected.dispatch();
   }
 
   _handleMessage({ utf8Data }) {
@@ -108,7 +124,7 @@ module.exports = class WSClient {
       this._clearAuthCode();
       this.onRequestAuthCode.dispatch();
     } else if (protocol.sendDevices.is(message)) {
-      this._devices = message.payload || [];
+      this._updateDevices(message.payload);
     } else if (protocol.aliceMessage.is(message)) {
       this._handleAliceResponse(message);
     } else {
@@ -127,6 +143,11 @@ module.exports = class WSClient {
   _clearAuthCode() {
     this._authCode = '';
     this._authCodeTime = 0;
+  }
+
+  _updateDevices(devices) {
+    this._devices = devices || [];
+    this.onDevicesUpdated.dispatchAsync();
   }
 
   /**

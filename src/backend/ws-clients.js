@@ -29,7 +29,8 @@ module.exports = class WSClients {
     const client = new WSClient(connection);
     this._clients.add(client);
     client.onRequestAuthCode.addListener(() => this._handleRequestAuthCode(client));
-    connection.on('close', () => this._deleteClient(client));
+    client.onDevicesUpdated.addListener(() => this._disconnectClientsWithSameUserId(client));
+    client.onDisconnected.addListener(() => this._deleteClient(client));
   }
 
   /**
@@ -60,8 +61,7 @@ module.exports = class WSClients {
   }
 
   _deleteClient(client) {
-    logger.log(`WS client disconnected.`);
-    client.destroy();
+    logger.log('WS client disconnected');
     this._clients.delete(client);
   }
 
@@ -77,6 +77,22 @@ module.exports = class WSClients {
     for (const client of this._clients) {
       if (client.isValidAuthCode(authCode)) {
         return client;
+      }
+    }
+  }
+
+  /**
+   * Only one clinet should be connected for userId as only one will respond.
+   */
+  _disconnectClientsWithSameUserId(newestClient) {
+    for (const client of this._clients) {
+      if (client === newestClient) {
+        continue;
+      }
+      const hasSameUserId = newestClient.devices.some(device => client.hasUserId(device.userId));
+      if (hasSameUserId) {
+        // todo: add reason
+        client.disconnect();
       }
     }
   }
