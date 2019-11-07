@@ -34,7 +34,8 @@ describe('auth', () => {
     assert.include(user.response.text, 'Код принят');
 
     await user.say('привет');
-    assert.include(user.response.text, 'Добро пожаловать в навык!');
+    assert.include(user.response.text, 'Ответ со страницы alice-dev');
+    assert.include(user.response.tts, 'Ответ со страницы элис-дев');
   });
 
   it('incorrect code', async () => {

@@ -5,10 +5,10 @@ describe('fixed-response', () => {
     await pageHelper.reloadPageForUserId(user.id);
 
     await user.enter();
-    assert.equal(user.response.text, 'Добро пожаловать в навык!');
-    assert.equal(user.response.tts, 'Добро пожаловать в н+авык!');
+    assert.equal(user.response.text, 'Ответ со страницы alice-dev');
+    assert.equal(user.response.tts, 'Ответ со страницы элис-дев');
 
-    await pageHelper.setInputValue(PO.fixedResponse.text, 'Нормально');
+    await pageHelper.setInputValue(PO.fixedResponse.text, ' Нормально \n');
     await pageHelper.setInputValue(PO.fixedResponse.tts, 'Норм');
 
     await user.say('Как дела?');
@@ -16,7 +16,7 @@ describe('fixed-response', () => {
     assert.equal(user.response.tts, 'Норм');
 
     assert.deepEqual(await pageHelper.getChatMessages(), [
-      'Добро пожаловать в навык!',
+      'Ответ со страницы alice-dev',
       'Как дела?',
       'Нормально',
     ]);
@@ -29,7 +29,7 @@ describe('fixed-response', () => {
 
     assert.deepEqual(await pageHelper.getChatMessages(), [
       'тест',
-      'Добро пожаловать в навык!',
+      'Ответ со страницы alice-dev',
     ]);
   });
 

@@ -21,7 +21,7 @@ export default function Field() {
       name="proxy-url"
       placeholder="http://localhost:3000"
       value={url}
-      onChange={e => dispatch(setProxyUrl(e.target.value))}
+      onChange={e => dispatch(setProxyUrl(e.target.value.trim()))}
       margin="normal"
       variant="outlined"
       fullWidth

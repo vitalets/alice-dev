@@ -13,7 +13,7 @@ export default function Tts() {
       multiline
       rows="4"
       value={tts}
-      onChange={e => dispatch(setFixedResponse({ tts: e.target.value }))}
+      onChange={e => dispatch(setFixedResponse({ tts: e.target.value.trim() }))}
       margin="normal"
       variant="outlined"
       fullWidth
