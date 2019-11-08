@@ -1,7 +1,10 @@
 /**
  * Websocket client.
  */
-import WebSocketAsPromised from 'websocket-as-promised';
+
+// Importing from websocket-as-promised/src has smaller size
+// see: https://github.com/vitalets/websocket-as-promised/issues/22
+import WebSocketAsPromised from 'websocket-as-promised/src';
 import Channel from 'chnl';
 import protocol from '../../shared/protocol';
 

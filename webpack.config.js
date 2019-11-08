@@ -4,6 +4,7 @@ const webpack = require('webpack');
 const {CleanWebpackPlugin} = require('clean-webpack-plugin');
 const HtmlWebpackPlugin = require('html-webpack-plugin');
 const TerserPlugin = require('terser-webpack-plugin');
+const { BundleAnalyzerPlugin } = require('webpack-bundle-analyzer');
 const pkg = require('./package');
 
 const isProduction = process.env.NODE_ENV === 'production';
@@ -65,6 +66,12 @@ module.exports = () => {
       }),
     ],
   };
+
+  if (process.env.WEBPACK_ANALYZE) {
+    config.plugins.push(
+      new BundleAnalyzerPlugin()
+    );
+  }
 
   if (isProduction) {
     // see https://reactjs.org/docs/optimizing-performance.html
