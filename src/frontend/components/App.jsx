@@ -4,6 +4,7 @@ import {makeStyles} from '@material-ui/core';
 import ConnectionBar from './ConnectionBar';
 import Center from './Center';
 import Footer from './Footer';
+import JSONPopup from './JSONPopup';
 
 const useStyles = makeStyles(theme => ({
   root: {
@@ -24,6 +25,7 @@ export default function App() {
       <ConnectionBar />
       <Center />
       <Footer />
+      <JSONPopup />
     </Container>
   );
 }

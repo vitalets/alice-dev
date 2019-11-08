@@ -25,21 +25,9 @@ module.exports = () => {
     },
     module: {
       rules: [
-        {
-          test: /\.jsx?$/,
-          exclude: /node_modules/,
-          use: {
-            loader: 'babel-loader',
-            options: {
-              plugins: [
-                ['@babel/plugin-proposal-class-properties', { loose: true }]
-              ],
-              presets: [
-                require.resolve('@babel/preset-react'),
-              ],
-            }
-          }
-        }
+        jsLoader(),
+        cssLoader(),
+        svgLoader(),
       ]
     },
     devtool: 'source-map',
@@ -84,3 +72,38 @@ module.exports = () => {
 
   return config;
 };
+
+function jsLoader() {
+  return {
+    test: /\.jsx?$/,
+    exclude: /node_modules/,
+    use: {
+      loader: 'babel-loader',
+      options: {
+        plugins: [
+          ['@babel/plugin-proposal-class-properties', { loose: true }]
+        ],
+        presets: [
+          require.resolve('@babel/preset-react'),
+        ],
+      }
+    }
+  };
+}
+
+function cssLoader() {
+  return {
+    test: /\.css$/i,
+    use: ['style-loader', 'css-loader'],
+  };
+}
+
+function svgLoader() {
+  return {
+    test: /\.svg/,
+    use: {
+      loader: 'svg-url-loader',
+      options: {}
+    }
+  };
+}

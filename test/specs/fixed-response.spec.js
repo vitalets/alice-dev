@@ -44,9 +44,9 @@ describe('fixed-response', () => {
     assert.equal(user.response.text, 'Новая сессия');
     assert.equal(user.response.tts, 'Новая сессия');
 
-    await page.waitForSelector(PO.chat.lastAliceMessageMenuButton);
-    await page.click(PO.chat.lastAliceMessageMenuButton);
-    await page.click(PO.chat.messageMenu.firstItem);
+    await page.waitForSelector(PO.chat.lastMessageMenuButton);
+    await page.click(PO.chat.lastMessageMenuButton);
+    await page.click(PO.chat.messageMenu.firstChild);
 
     await user.say('Как дела?');
     assert.equal(user.response.text, 'Новая сессия');

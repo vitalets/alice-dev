@@ -1,5 +1,6 @@
 /**
  * Page objects.
+ * todo: create pageobject helper
  */
 
 exports.connectionBar = '#connection-bar';
@@ -18,9 +19,14 @@ exports.fixedResponse = {
 exports.chat = {
   messages: '.chat > .message',
   lastMessage: '.chat > .message:last-child',
-  lastAliceMessage: '.chat > .alice-message:last-child',
-  lastAliceMessageMenuButton: '.chat > .alice-message:last-child button',
+  lastMessageMenuButton: '.chat > .message:last-child button',
   messageMenu: {
-    firstItem: 'ul[role="menu"] li:first-child',
+    firstChild: 'ul[role="menu"] li:first-child',
+    secondChild: 'ul[role="menu"] li:nth-child(2)',
   },
+};
+
+exports.jsonPopup = {
+  title: '#json-popup h2',
+  value: '', // todo
 };
