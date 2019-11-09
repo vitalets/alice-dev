@@ -50,7 +50,6 @@ export default function MessageMenu({ type, json }) {
       <Menu
         id="long-menu"
         anchorEl={anchorEl}
-        keepMounted
         open={open}
         onClose={closeMenu}
       >

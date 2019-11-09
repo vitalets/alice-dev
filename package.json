@@ -13,7 +13,7 @@
     "analyze": "WEBPACK_ANALYZE=1 npm run build:prod",
     "test": "mocha test/setup.js test/specs/*.js --timeout=5000",
     "test:d": "DEBUG_MODE=1 npm run test -- --bail",
-    "test:dd": "PUPPETEER_HEADLESS=false npm run test:d -- --timeout=60000",
+    "test:dd": "PUPPETEER_HEADLESS=false npm run test:d -- --timeout=30000",
     "docs:update": "npm run build:prod && npm test && cp -R dist/ docs/",
     "docs:commit": "git add docs && git commit -m'update docs' --no-verify --allow-empty",
     "release:frontend": "npm run docs:update && npm run docs:commit && git push --no-verify",
