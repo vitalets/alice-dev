@@ -25,7 +25,7 @@ describe('fixed-response', () => {
   it('test button', async () => {
     await pageHelper.reloadPage();
 
-    await page.click(PO.testButton);
+    await page.click(PO.proxyUrl.testButton);
 
     assert.deepEqual(await pageHelper.getChatMessages(), [
       'тест',
@@ -44,9 +44,9 @@ describe('fixed-response', () => {
     assert.equal(user.response.text, 'Новая сессия');
     assert.equal(user.response.tts, 'Новая сессия');
 
-    await page.waitForSelector(PO.chat.lastMessageMenuButton);
-    await page.click(PO.chat.lastMessageMenuButton);
-    await page.click(PO.chat.messageMenu.firstChild);
+    await page.waitForSelector(PO.chat.messages`:last-child`.menuButton);
+    await page.click(PO.chat.messages`:last-child`.menuButton);
+    await page.click(PO.chatMenu.item`:first-child`);
 
     await user.say('Как дела?');
     assert.equal(user.response.text, 'Новая сессия');

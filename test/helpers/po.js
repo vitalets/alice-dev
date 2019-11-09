@@ -1,32 +1,30 @@
 /**
  * Page objects.
- * todo: create pageobject helper
  */
 
-exports.connectionBar = '#connection-bar';
-exports.testButton = '#test-button';
-exports.connectButton = '#connect-button';
-exports.proxyUrl = {
-  radio: 'input[name="radio-proxy-url"]',
-  input: 'input[name="proxy-url"]',
-};
-exports.fixedResponse = {
-  radio: 'input[name="radio-fixed-response"]',
-  text: 'textarea[name="text"]',
-  tts: 'textarea[name="tts"]',
-};
+const po = require('./pageobject');
 
-exports.chat = {
-  messages: '.chat > .message',
-  lastMessage: '.chat > .message:last-child',
-  lastMessageMenuButton: '.chat > .message:last-child button',
-  messageMenu: {
-    firstChild: 'ul[role="menu"] li:first-child',
-    secondChild: 'ul[role="menu"] li:nth-child(2)',
-  },
-};
+const connectionBar = exports.connectionBar = po`#connection-bar`;
+connectionBar.connectButton = po`#connect-button`;
 
-exports.jsonPopup = {
-  title: '#json-popup h2',
-  value: '', // todo
-};
+const proxyUrl = exports.proxyUrl = po``;
+proxyUrl.radio = po`input[name="radio-proxy-url"]`;
+proxyUrl.input = po`input[name="proxy-url"]`;
+proxyUrl.testButton = po`#test-button`;
+
+const fixedResponse = exports.fixedResponse = po``;
+fixedResponse.radio = po`input[name="radio-fixed-response"]`;
+fixedResponse.text = po`textarea[name="text"]`;
+fixedResponse.tts = po`textarea[name="tts"]`;
+
+const chat = exports.chat = po`.chat`;
+chat.messages = po`> .message`;
+chat.messages.menuButton = po`button`;
+
+const chatMenu = exports.chatMenu = po`ul[role="menu"]`;
+chatMenu.item = po`li`;
+
+const jsonPopup = exports.jsonPopup = po`#json-popup`;
+jsonPopup.title = po`h2`;
+jsonPopup.value = po``; // todo
+

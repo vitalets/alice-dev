@@ -12,7 +12,7 @@ describe('connection', () => {
     await pageHelper.reloadPage();
     closeConnectedClient();
     await pageHelper.waitConnectionBarText('Нет подключения к серверу');
-    await page.click(PO.connectButton);
+    await page.click(PO.connectionBar.connectButton);
     await pageHelper.waitConnectionBarText('Подключено');
   });
 

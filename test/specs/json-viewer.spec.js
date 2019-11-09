@@ -6,11 +6,11 @@ describe('json-viewer', () => {
 
     await user.enter();
 
-    await page.waitForSelector(PO.chat.lastMessageMenuButton);
-    await page.click(PO.chat.lastMessageMenuButton);
+    await page.waitForSelector(PO.chat.messages`:last-child`.menuButton);
+    await page.click(PO.chat.messages`:last-child`.menuButton);
 
-    await page.waitForSelector(PO.chat.messageMenu.secondChild);
-    await page.click(PO.chat.messageMenu.secondChild);
+    await page.waitForSelector(PO.chatMenu);
+    await page.click(PO.chatMenu.item`:nth-child(2)`);
 
     await page.waitForSelector(PO.jsonPopup.title);
     assert.equal(await pageHelper.getElementText(PO.jsonPopup.title), 'JSON ответа');

@@ -59,7 +59,7 @@ module.exports = class PageHelper {
       if (el && el.textContent.includes(text)) {
         return el.textContent;
       }
-    }, {}, PO.chat.lastMessage, text);
+    }, {}, PO.chat.messages`:last-child`, text);
   }
 
   async setInputValue(selector, value) {

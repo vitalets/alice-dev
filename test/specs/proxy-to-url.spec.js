@@ -32,7 +32,7 @@ describe('proxy-to-url', () => {
   });
 
   it('test button', async () => {
-    await page.click(PO.testButton);
+    await page.click(PO.proxyUrl.testButton);
     await pageHelper.waitLastChatMessage('В навык пришло: тест');
 
     assert.deepEqual(await pageHelper.getChatMessages(), [
