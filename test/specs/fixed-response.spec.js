@@ -12,13 +12,14 @@ describe('fixed-response', () => {
     await pageHelper.setInputValue(PO.fixedResponse.tts, 'Норм');
 
     await user.say('Как дела?');
-    assert.equal(user.response.text, 'Нормально');
+    // keep original formatting (trailing spaces) - to see raw in JSON
+    assert.equal(user.response.text, ' Нормально \n');
     assert.equal(user.response.tts, 'Норм');
 
     assert.deepEqual(await pageHelper.getChatMessages(), [
       'Ответ со страницы alice-dev: привет!',
       'Как дела?',
-      'Нормально',
+      ' Нормально \n',
     ]);
   });
 

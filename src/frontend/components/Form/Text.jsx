@@ -22,7 +22,7 @@ export default function Text() {
       multiline
       rows="5"
       value={text}
-      onChange={e => dispatch(setFixedResponse({ text: e.target.value.trim() }))}
+      onChange={e => dispatch(setFixedResponse({ text: e.target.value }))}
       margin="normal"
       variant="outlined"
       fullWidth
