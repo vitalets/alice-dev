@@ -10,7 +10,7 @@ echo "RESTARTING PM2..."
 ssh ya-cloud "pm2 reload /srv/ecosystem.config.js --only alice-dev-backend --update-env"
 
 echo "CHECKING..."
-sleep 1
+sleep 2
 curl https://alice-skills.vitalets.xyz/alice-dev-backend/
 
 echo ""
