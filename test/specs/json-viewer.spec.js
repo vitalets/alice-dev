@@ -14,6 +14,9 @@ describe('json-viewer', () => {
 
     await page.waitForSelector(PO.jsonPopup.title);
     assert.equal(await pageHelper.getElementText(PO.jsonPopup.title), 'JSON ответа');
+    assert.include(await pageHelper.getElementText(PO.jsonPopup.content),
+      'object{3}response{2}text:Ответ со страницы alice-dev: привет!'
+    );
   });
 
 });

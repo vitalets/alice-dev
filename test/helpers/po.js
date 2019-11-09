@@ -26,5 +26,5 @@ chatMenu.item = po`li`;
 
 const jsonPopup = exports.jsonPopup = po`#json-popup`;
 jsonPopup.title = po`h2`;
-jsonPopup.value = po``; // todo
+jsonPopup.content = po`.jsoneditor`;
 
