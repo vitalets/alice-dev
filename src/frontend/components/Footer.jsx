@@ -4,8 +4,12 @@ import Link from '@material-ui/core/Link';
 
 const useStyles = makeStyles(theme => ({
   root: {
-    marginBottom: theme.spacing(1)
+    marginBottom: theme.spacing(1),
+    textAlign: 'right'
   },
+  feedbackLink: {
+    marginRight: theme.spacing(1)
+  }
 }));
 
 export default function Footer() {
@@ -14,11 +18,10 @@ export default function Footer() {
   return (
     <footer className={classes.root}>
       <Typography variant="body2" color="textSecondary">
-        {'© Виталий Потапов '}
-        {new Date().getFullYear()}
-        <Link style={{float: 'right'}} color="inherit" href="https://github.com/vitalets/alice-dev/issues" target="_blank">
-          Предложить идею или сообщить об ошибке
+        <Link className={classes.feedbackLink} href="https://github.com/vitalets/alice-dev/issues" target="_blank">
+          Сообщить об ошибке
         </Link>
+        {'© ' + new Date().getFullYear() + ' Виталий Потапов'}
       </Typography>
     </footer>
   );
