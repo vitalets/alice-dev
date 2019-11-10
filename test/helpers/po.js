@@ -2,7 +2,7 @@
  * Page objects.
  */
 
-const po = require('./pageobject');
+const po = require('@vitalets/page-object');
 
 const connectionBar = exports.connectionBar = po`#connection-bar`;
 connectionBar.connectButton = po`#connect-button`;
