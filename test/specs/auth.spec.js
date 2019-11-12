@@ -26,7 +26,7 @@ describe('auth', () => {
     const user = new User();
     await user.enter();
 
-    await user.say(code, body => body.request.nlu.entities = toYandexNumbers(code));
+    await user.say(code);
     await page.waitFor(100);
 
     const text = await pageHelper.getConnectionBarText();
@@ -40,7 +40,7 @@ describe('auth', () => {
     const user = new User();
     await user.enter();
 
-    await user.say(code, body => body.request.nlu.entities = toYandexNumbers(code));
+    await user.say(code);
     await page.waitFor(100);
 
     const text = await pageHelper.getConnectionBarText();
@@ -54,7 +54,7 @@ describe('auth', () => {
     // clear code after auth
     const user2 = new User();
     await user2.enter();
-    await user2.say(code, body => body.request.nlu.entities = toYandexNumbers(code));
+    await user2.say(code);
     assert.include(user2.response.text, 'Неверный или устаревший код');
   });
 
@@ -64,13 +64,4 @@ describe('auth', () => {
 async function extractCode() {
   const text = await page.$eval(PO.connectionBar, el => el.textContent);
   return text.match(/код:([\d\s]+)/)[1];
-}
-
-function toYandexNumbers(str) {
-  return str.split(/\s+/).filter(Boolean).map(value => {
-    return {
-      type: 'YANDEX.NUMBER',
-      value
-    };
-  });
 }

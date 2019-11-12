@@ -14,7 +14,7 @@ describe('json-viewer', () => {
     await page.waitForSelector(PO.jsonPopup.title);
     assert.equal(await pageHelper.getElementText(PO.jsonPopup.title), 'JSON запроса');
     assert.include(await pageHelper.getElementText(PO.jsonPopup.content),
-      'object{4}request{4}command:Приветoriginal_utterance:Приветtype:SimpleUtterance'
+      'object{4}request{4}command:приветoriginal_utterance:Приветtype:SimpleUtterance'
     );
 
     // close popup

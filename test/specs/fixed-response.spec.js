@@ -18,7 +18,7 @@ describe('fixed-response', () => {
 
     assert.deepEqual(await pageHelper.getChatMessages(), [
       'Ответ со страницы alice-dev: привет!',
-      'Как дела?',
+      'как дела',
       ' Нормально \n',
     ]);
   });
@@ -58,7 +58,7 @@ describe('fixed-response', () => {
     assert.equal(await pageHelper.getElementText(PO.fixedResponse.tts), 'Новая сессия');
     assert.deepEqual(await pageHelper.getChatMessages(), [
       'Новая сессия',
-      'Как дела?',
+      'как дела',
       'Новая сессия',
     ]);
   });

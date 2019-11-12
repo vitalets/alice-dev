@@ -21,13 +21,13 @@ describe('proxy-to-url', () => {
     assert.equal(user.response.tts, 'Новая сессия');
 
     await user.say('Привет');
-    assert.equal(user.response.text, 'В навык пришло: Привет');
-    assert.equal(user.response.tts, 'В навык пришло: Привет');
+    assert.equal(user.response.text, 'В навык пришло: привет');
+    assert.equal(user.response.tts, 'В навык пришло: привет');
 
     assert.deepEqual(await pageHelper.getChatMessages(), [
       'Новая сессия',
-      'Привет',
-      'В навык пришло: Привет'
+      'привет',
+      'В навык пришло: привет'
     ]);
   });
 
@@ -61,7 +61,7 @@ describe('proxy-to-url', () => {
 
     assert.deepEqual(await pageHelper.getChatMessages(), [
       'Error: Failed to fetch',
-      'Привет',
+      'привет',
       'Error: Failed to fetch',
     ]);
   });
