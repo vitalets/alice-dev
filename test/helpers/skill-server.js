@@ -3,7 +3,9 @@ const micro = require('micro');
 
 const defaultHandler = (req, res) => {
   const {request, session, version} = req.body;
-  const responseText = session.new ? `Новая сессия` : `В навык пришло: ${request.command}`;
+  const responseText = session.new
+    ? `Добро пожаловать`
+    : `Навык получил команду: ${request.command}`;
   const response = {
     text: responseText,
     tts: responseText

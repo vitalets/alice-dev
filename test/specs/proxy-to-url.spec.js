@@ -17,27 +17,37 @@ describe('proxy-to-url', () => {
 
   it('proxy for corresponding userId', async () => {
     await user.enter();
-    assert.equal(user.response.text, 'Новая сессия');
-    assert.equal(user.response.tts, 'Новая сессия');
+    assert.equal(user.response.text, 'Добро пожаловать');
+    assert.equal(user.response.tts, 'Добро пожаловать');
 
     await user.say('Привет');
-    assert.equal(user.response.text, 'В навык пришло: привет');
-    assert.equal(user.response.tts, 'В навык пришло: привет');
+    assert.equal(user.response.text, 'Навык получил команду: привет');
+    assert.equal(user.response.tts, 'Навык получил команду: привет');
 
     assert.deepEqual(await pageHelper.getChatMessages(), [
-      'Новая сессия',
+      'запусти навык тест',
+      'Добро пожаловать',
       'привет',
-      'В навык пришло: привет'
+      'Навык получил команду: привет'
     ]);
   });
 
   it('test button', async () => {
     await page.click(PO.proxyUrl.testButton);
-    await pageHelper.waitLastChatMessage('В навык пришло: тест');
+    await pageHelper.waitChatMessagesCount(2);
+    assert.deepEqual(await pageHelper.getChatMessages(), [
+      'Запусти навык тест',
+      'Добро пожаловать',
+    ]);
+
+    await page.click(PO.proxyUrl.testButton);
+    await pageHelper.waitChatMessagesCount(4);
 
     assert.deepEqual(await pageHelper.getChatMessages(), [
+      'Запусти навык тест',
+      'Добро пожаловать',
       'тест',
-      'В навык пришло: тест',
+      'Навык получил команду: тест'
     ]);
   });
 
@@ -60,6 +70,7 @@ describe('proxy-to-url', () => {
     );
 
     assert.deepEqual(await pageHelper.getChatMessages(), [
+      'запусти навык тест',
       'Error: Failed to fetch',
       'привет',
       'Error: Failed to fetch',
@@ -73,9 +84,13 @@ describe('proxy-to-url', () => {
       return 'running';
     });
 
-    await user.say('Привет');
+    await user.enter();
+    await pageHelper.waitChatMessagesCount(2);
 
-    await pageHelper.waitLastChatMessage('Error: Proxy URL не ответил за 2000 мс');
+    assert.deepEqual(await pageHelper.getChatMessages(), [
+      'запусти навык тест',
+      'Error: Proxy URL не ответил за 2000 мс',
+    ]);
     assert.include(user.response.text, 'Proxy URL не ответил за 2000 мс');
     assert.include(user.response.tts, 'Ошибка');
   });
@@ -87,9 +102,13 @@ describe('proxy-to-url', () => {
       res.end();
     });
 
-    await user.say('Привет');
+    await user.enter();
+    await pageHelper.waitChatMessagesCount(2);
 
-    await pageHelper.waitLastChatMessage('Error: Proxy URL: 404 Not Found');
+    assert.deepEqual(await pageHelper.getChatMessages(), [
+      'запусти навык тест',
+      'Error: Proxy URL: 404 Not Found',
+    ]);
     assert.include(user.response.text, 'Error: Proxy URL: 404 Not Found');
     assert.include(user.response.tts, 'Ошибка');
   });

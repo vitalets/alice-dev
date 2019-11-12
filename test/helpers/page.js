@@ -53,13 +53,10 @@ module.exports = class PageHelper {
     }, {}, PO.connectionBar, text);
   }
 
-  async waitLastChatMessage(text) {
-    return this.page.waitForFunction((sel, text) => {
-      const el = document.querySelector(sel);
-      if (el && el.textContent.includes(text)) {
-        return el.textContent;
-      }
-    }, {}, PO.chat.messages`:last-child`, text);
+  async waitChatMessagesCount(count) {
+    return this.page.waitForFunction((sel, count) => {
+      return document.querySelectorAll(sel).length >= count;
+    }, {}, PO.chat.messages, count);
   }
 
   async setInputValue(selector, value) {

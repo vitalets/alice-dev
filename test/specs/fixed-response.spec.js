@@ -17,6 +17,7 @@ describe('fixed-response', () => {
     assert.equal(user.response.tts, 'Норм');
 
     assert.deepEqual(await pageHelper.getChatMessages(), [
+      'запусти навык тест',
       'Ответ со страницы alice-dev: привет!',
       'как дела',
       ' Нормально \n',
@@ -27,8 +28,15 @@ describe('fixed-response', () => {
     await pageHelper.reloadPage();
 
     await page.click(PO.proxyUrl.testButton);
-
     assert.deepEqual(await pageHelper.getChatMessages(), [
+      'Запусти навык тест',
+      'Ответ со страницы alice-dev: привет!',
+    ]);
+
+    await page.click(PO.proxyUrl.testButton);
+    assert.deepEqual(await pageHelper.getChatMessages(), [
+      'Запусти навык тест',
+      'Ответ со страницы alice-dev: привет!',
       'тест',
       'Ответ со страницы alice-dev: привет!',
     ]);
@@ -42,24 +50,25 @@ describe('fixed-response', () => {
     await pageHelper.setInputValue(PO.proxyUrl.input, skillServer.getUrl());
 
     await user.enter();
-    assert.equal(user.response.text, 'Новая сессия');
-    assert.equal(user.response.tts, 'Новая сессия');
+    assert.equal(user.response.text, 'Добро пожаловать');
+    assert.equal(user.response.tts, 'Добро пожаловать');
 
     await page.waitForSelector(PO.chat.messages`:last-child`.menuButton);
     await page.click(PO.chat.messages`:last-child`.menuButton);
     await page.click(PO.chatMenu.item`:first-child`);
 
     await user.say('Как дела?');
-    assert.equal(user.response.text, 'Новая сессия');
-    assert.equal(user.response.tts, 'Новая сессия');
+    assert.equal(user.response.text, 'Добро пожаловать');
+    assert.equal(user.response.tts, 'Добро пожаловать');
 
     assert.equal(await page.$eval(PO.fixedResponse.radio, el => el.checked), true);
-    assert.equal(await pageHelper.getElementText(PO.fixedResponse.text), 'Новая сессия');
-    assert.equal(await pageHelper.getElementText(PO.fixedResponse.tts), 'Новая сессия');
+    assert.equal(await pageHelper.getElementText(PO.fixedResponse.text), 'Добро пожаловать');
+    assert.equal(await pageHelper.getElementText(PO.fixedResponse.tts), 'Добро пожаловать');
     assert.deepEqual(await pageHelper.getChatMessages(), [
-      'Новая сессия',
+      'запусти навык тест',
+      'Добро пожаловать',
       'как дела',
-      'Новая сессия',
+      'Добро пожаловать',
     ]);
   });
 

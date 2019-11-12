@@ -5,7 +5,7 @@ import config from '../config';
 import WSClient from './ws-client';
 import ProxyToUrl from './proxy';
 import { TestButtonClicked, ConnectButtonClicked } from '../store/channels';
-import testRequest from './test-request';
+import getTestRequest from './get-test-request';
 
 import {
   MODE,
@@ -19,7 +19,7 @@ const logger = Logger.create('app');
 
 export default class AppController {
   constructor() {
-    TestButtonClicked.addListener(() => this._handleAliceRequest(Date.now(), testRequest));
+    TestButtonClicked.addListener(() => this._sendTestRequest());
     this._createWsClient();
     ConnectButtonClicked.addListener(() => this._wsClient.connect());
   }
@@ -74,5 +74,11 @@ export default class AppController {
       session,
       version,
     };
+  }
+
+  _sendTestRequest() {
+    const isNewSession = getState().chatMessages.length === 0;
+    const request = getTestRequest(isNewSession);
+    void this._handleAliceRequest(Date.now(), request);
   }
 }

@@ -21,6 +21,9 @@ const useStyles = makeStyles(theme => ({
     backgroundColor: theme.palette.primary.main,
     color: theme.palette.primary.contrastText,
   },
+  newSession: {
+    fontStyle: 'italic'
+  },
   error: {
     backgroundColor: theme.palette.error.light,
     color: theme.palette.error.contrastText
@@ -30,14 +33,18 @@ const useStyles = makeStyles(theme => ({
 export default function Message({ type, json }) {
   const classes = useStyles();
   const isUserMessage = type === 'user';
-  const text = isUserMessage ? json.request.command : json.response.text;
+  const isNewSession = isUserMessage && json.session.new;
+  const text = isUserMessage
+    ? (isNewSession ? json.request.original_utterance : json.request.command)
+    : json.response.text;
   const isError = !isUserMessage && /^Error/.test(text);
 
   const className = clsx(
     'message',
     classes.root,
     isUserMessage ? classes.user : classes.alice,
-    isError && classes.error
+    isError && classes.error,
+    isNewSession && classes.newSession,
   );
 
   return (

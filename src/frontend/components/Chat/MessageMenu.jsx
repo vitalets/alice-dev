@@ -14,7 +14,7 @@ const useStyles = makeStyles(theme => ({
   },
   button: {
     position: 'absolute',
-    top: -40,
+    top: -39,
   },
   buttonRight: {
     right: 0

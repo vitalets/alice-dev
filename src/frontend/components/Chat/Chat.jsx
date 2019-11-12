@@ -39,7 +39,7 @@ export default function Chat() {
           ? <NewSession key={'new-session-' + id}/>
           : null;
 
-        const userMessage = requestBody.request.command
+        const userMessage = requestBody
           ? <Message key={'user-message-' + id} type="user" json={requestBody}/>
           : null;
 
