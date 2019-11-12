@@ -1,4 +1,5 @@
 import {makeStyles} from '@material-ui/core';
+import clsx from 'clsx';
 import IconButton from '@material-ui/core/IconButton';
 import Menu from '@material-ui/core/Menu';
 import MenuItem from '@material-ui/core/MenuItem';
@@ -15,6 +16,9 @@ const useStyles = makeStyles(theme => ({
     position: 'absolute',
     top: -40,
   },
+  buttonRight: {
+    right: 0
+  }
 }));
 
 export default function MessageMenu({ type, json }) {
@@ -44,7 +48,7 @@ export default function MessageMenu({ type, json }) {
 
   return (
     <div className={classes.root}>
-      <IconButton className={classes.button} size="small" onClick={showMenu}>
+      <IconButton className={clsx(classes.button, type === 'user' && classes.buttonRight)} size="small" onClick={showMenu}>
         <MoreHorizIcon />
       </IconButton>
       <Menu
