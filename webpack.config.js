@@ -1,9 +1,10 @@
 const path = require('path');
 const fs = require('fs');
 const webpack = require('webpack');
-const {CleanWebpackPlugin} = require('clean-webpack-plugin');
+const { CleanWebpackPlugin } = require('clean-webpack-plugin');
 const HtmlWebpackPlugin = require('html-webpack-plugin');
 const TerserPlugin = require('terser-webpack-plugin');
+const CopyPlugin = require('copy-webpack-plugin');
 const { BundleAnalyzerPlugin } = require('webpack-bundle-analyzer');
 const pkg = require('./package');
 
@@ -52,6 +53,9 @@ module.exports = () => {
         template: 'src/frontend/index.html',
         metrika: fs.readFileSync('src/frontend/metrika.html', 'utf8'),
       }),
+      new CopyPlugin([
+        { from: 'src/assets' },
+      ]),
     ],
   };
 
