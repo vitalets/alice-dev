@@ -56,12 +56,16 @@ describe('proxy-to-url', () => {
     skillServer.setHandler(() => 'running');
 
     await user.enter();
-    assert.equal(user.response.text, 'Error: Failed to fetch');
+    assert.equal(user.response.text,
+      `Error: Прокси URL не ответил. Проверьте, что навык запущен на ${skillServer.getUrl()} и возвращает заголовок Access-Control-Allow-Origin.`
+    );
     assert.equal(user.response.tts, 'Ошибка');
 
     await user.say('Привет');
 
-    assert.equal(user.response.text, 'Error: Failed to fetch');
+    assert.equal(user.response.text,
+      `Error: Прокси URL не ответил. Проверьте, что навык запущен на ${skillServer.getUrl()} и возвращает заголовок Access-Control-Allow-Origin.`
+    );
     assert.equal(user.response.tts, 'Ошибка');
     assert.equal(
       Boolean(await page.$(PO.chat.lastAliceMessageMenuButton)),
@@ -71,9 +75,9 @@ describe('proxy-to-url', () => {
 
     assert.deepEqual(await pageHelper.getChatMessages(), [
       'запусти навык тест',
-      'Error: Failed to fetch',
+      `Error: Прокси URL не ответил. Проверьте, что навык запущен на ${skillServer.getUrl()} и возвращает заголовок Access-Control-Allow-Origin.`,
       'привет',
-      'Error: Failed to fetch',
+      `Error: Прокси URL не ответил. Проверьте, что навык запущен на ${skillServer.getUrl()} и возвращает заголовок Access-Control-Allow-Origin.`,
     ]);
   });
 

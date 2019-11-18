@@ -11,7 +11,7 @@
     "build": "webpack",
     "build:prod": "NODE_ENV=production npm run build",
     "analyze": "WEBPACK_ANALYZE=1 npm run build:prod",
-    "test": "mocha test/setup.js test/specs/*.js --timeout=5000",
+    "test": "mocha test/setup.js test/specs/*.js --timeout=10000",
     "test:d": "DEBUG_MODE=1 npm run test -- --bail",
     "test:dd": "PUPPETEER_HEADLESS=false npm run test:d -- --timeout=30000",
     "docs:update": "npm run build:prod && npm test && cp -R dist/ docs/",

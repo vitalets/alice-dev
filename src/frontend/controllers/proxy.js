@@ -14,9 +14,24 @@ export default class ProxyToUrl {
 
   async proxy() {
     return Promise.race([
-      this._fetch(),
+      this._tryFetch(),
       this._startTimer(),
     ]);
+  }
+
+  async _tryFetch() {
+    try {
+      return await this._fetch();
+    } catch (e) {
+      if (e.message === 'Failed to fetch') {
+        const proxyUrl = store.getState().proxyUrl;
+        e.message = [
+          `Прокси URL не ответил.`,
+          `Проверьте, что навык запущен на ${proxyUrl} и возвращает заголовок Access-Control-Allow-Origin.`
+        ].join(' ');
+      }
+      throw e;
+    }
   }
 
   async _fetch() {
