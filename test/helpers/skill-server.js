@@ -8,7 +8,8 @@ const defaultHandler = (req, res) => {
     : `Навык получил команду: ${request.command}`;
   const response = {
     text: responseText,
-    tts: responseText
+    tts: responseText,
+    end_session: false,
   };
   res.setHeader('Access-Control-Allow-Origin', '*');
   return {response, session, version};

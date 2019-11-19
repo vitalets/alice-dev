@@ -52,6 +52,7 @@ describe('fixed-response', () => {
     await user.enter();
     assert.equal(user.response.text, 'Добро пожаловать');
     assert.equal(user.response.tts, 'Добро пожаловать');
+    assert.equal(user.response.end_session, false);
 
     await page.waitForSelector(PO.chat.messages`:last-child`.menuButton);
     await page.click(PO.chat.messages`:last-child`.menuButton);
@@ -60,6 +61,7 @@ describe('fixed-response', () => {
     await user.say('Как дела?');
     assert.equal(user.response.text, 'Добро пожаловать');
     assert.equal(user.response.tts, 'Добро пожаловать');
+    assert.equal(user.response.end_session, false);
 
     assert.equal(await page.$eval(PO.fixedResponse.radio, el => el.checked), true);
     assert.equal(await pageHelper.getElementText(PO.fixedResponse.text), 'Добро пожаловать');

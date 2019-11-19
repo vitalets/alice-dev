@@ -19,10 +19,12 @@ describe('proxy-to-url', () => {
     await user.enter();
     assert.equal(user.response.text, 'Добро пожаловать');
     assert.equal(user.response.tts, 'Добро пожаловать');
+    assert.equal(user.response.end_session, false);
 
     await user.say('Привет');
     assert.equal(user.response.text, 'Навык получил команду: привет');
     assert.equal(user.response.tts, 'Навык получил команду: привет');
+    assert.equal(user.response.end_session, false);
 
     assert.deepEqual(await pageHelper.getChatMessages(), [
       'запусти навык тест',

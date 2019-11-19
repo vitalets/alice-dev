@@ -8,6 +8,7 @@ export default {
   fixedResponse: {
     text: 'Ответ со страницы alice-dev: привет!',
     tts: 'Ответ со страницы элис-дев: привет!',
+    end_session: false,
   },
   devices: [], // {userId, deviceName}
   chatMessages: [], // {id, requestBody, responseBody}
