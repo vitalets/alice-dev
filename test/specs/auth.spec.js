@@ -37,13 +37,15 @@ describe('auth', () => {
   it('auth device by code', async () => {
     await pageHelper.reloadPage();
     const code = await extractCode();
-    const user = new User(null, body => body.meta.client_id = 'device1');
+    const user = new User(null, body => {
+      return body.meta.client_id = 'ru.yandex.mobile.search/1910 (Apple iPhone; iphone 13.1.3)';
+    });
     await user.enter();
 
     await user.say(code);
     const barText = await pageHelper.waitConnectionBarText('Скажите что-нибудь');
     assert.include(barText,
-      'Скажите что-нибудь в навык Инструменты разработчика на устройстве: device1'
+      'Скажите что-нибудь в навык Инструменты разработчика на устройстве: Apple iPhone; iphone 13.1.3'
     );
     assert.include(user.response.text, 'Код принят');
 
@@ -61,7 +63,7 @@ describe('auth', () => {
   it('change device', async () => {
     await pageHelper.reloadPage();
     let code = await extractCode();
-    let user1 = new User(null, body => body.meta.client_id = 'device1');
+    let user1 = new User(null, body => body.meta.client_id = 'xxx (device1)');
     await user1.enter();
 
     await user1.say(code);
@@ -71,7 +73,7 @@ describe('auth', () => {
     await page.click(PO.connectionBar.changeDeviceButton);
     await pageHelper.waitConnectionBarText('скажите код');
     code = await extractCode();
-    let user2 = new User(null, body => body.meta.client_id = 'device2');
+    let user2 = new User(null, body => body.meta.client_id = 'xxx (device2)');
     await user2.enter();
 
     await user2.say(code);

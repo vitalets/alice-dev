@@ -1,4 +1,3 @@
-import PropTypes from 'prop-types';
 import clsx from 'clsx';
 import InfoIcon from '@material-ui/icons/Info';
 import { green, red, grey } from '@material-ui/core/colors';
@@ -43,12 +42,8 @@ export default function ConnectionBar() {
   const authCode = useSelector(state => state.authCode);
 
   let connectionStateText = '';
-  let message = '';
+  let text = '';
   let classname;
-
-  const getMessage = () => devices.length
-    ? <span>Скажите что-нибудь в навык <b>Инструменты разработчика</b> на устройстве: {devices[0].deviceName}</span>
-    : <span>Запустите навык <b>Инструменты разработчика</b> и скажите код: <b>{authCode.split('').join(' ')}</b></span>;
 
   switch (connectionState) {
     case CONNECTING:
@@ -58,7 +53,7 @@ export default function ConnectionBar() {
     case CONNECTED:
       connectionStateText = 'Подключено.';
       classname = classes.connected;
-      message = getMessage();
+      text = getText(devices, authCode);
       break;
     case DISCONNECTED:
     default:
@@ -69,9 +64,28 @@ export default function ConnectionBar() {
   return (
     <div id="connection-bar" className={clsx(classes.root, classname)}>
       <InfoIcon className={classes.icon}/>
-      {connectionStateText}&nbsp;{message}
+      {connectionStateText}&nbsp;{text}
       {connectionState === DISCONNECTED && <ConnectButton/>}
       {connectionState === CONNECTED && devices.length > 0 && <ChangeDeviceButton/>}
     </div>
   );
+}
+
+function getText(devices, authCode) {
+  if (devices.length > 0) {
+    const deviceName = getShortDeviceName(devices[0].deviceName);
+    return (
+      <span>Скажите что-нибудь в навык <b>Инструменты разработчика</b> на устройстве: {deviceName}</span>
+    );
+  } else {
+    const spacedAuthCode = authCode.split('').join(' ');
+    return (
+      <span>Запустите навык <b>Инструменты разработчика</b> и скажите код: <b>{spacedAuthCode}</b></span>
+    );
+  }
+}
+
+function getShortDeviceName(deviceName) {
+  const matches = deviceName.match(/\((.+?)\)/);
+  return matches ? matches[1] : deviceName;
 }
