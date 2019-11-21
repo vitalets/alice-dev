@@ -10,15 +10,17 @@ const pkg = require('./package');
 
 const isProduction = process.env.NODE_ENV === 'production';
 const isDevServerMode = process.env.WEBPACK_DEV_SERVER;
+const outPath = path.join('dist', isProduction ? 'prod' : 'dev');
 
 console.log(`PRODUCTION: ${isProduction}`);
+console.log(`OUT_PATH: ${outPath}`);
 
 module.exports = () => {
   const config = {
     mode: isProduction ? 'production' : 'development',
     entry: './src/frontend',
     output: {
-      path: path.resolve('dist'),
+      path: path.resolve(outPath),
       filename: 'bundle.js',
     },
     resolve: {
@@ -33,7 +35,7 @@ module.exports = () => {
     },
     devtool: 'source-map',
     devServer: {
-      contentBase: './dist',
+      contentBase: './dist/dev',
       writeToDisk: true,
     },
     plugins: [

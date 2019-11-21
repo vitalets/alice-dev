@@ -17,6 +17,9 @@ const debugMode = process.env.DEBUG_MODE;
 const headless = process.env.PUPPETEER_HEADLESS !== 'false';
 Logger.setLogLevel(debugMode ? 'debug' : 'none');
 
+const staticPath = process.env.NODE_ENV==='production' ? 'dist/prod' : 'dist/dev';
+console.log(`TESTING PATH: ${staticPath}`);
+
 (async () => {
   const webhookServer = new Server();
   const browserHelper = new BrowserHelper({ debugMode, headless });
@@ -25,7 +28,7 @@ Logger.setLogLevel(debugMode ? 'debug' : 'none');
     await Promise.all([
       webhookServer.start({ port: await getPort() }),
       skillServer.listen(await getPort()),
-      staticServer.setOptions({public: 'dist'}).listen(await getPort()),
+      staticServer.setOptions({public: staticPath}).listen(await getPort()),
       browserHelper.init(),
     ]);
     User.config.webhookUrl = `http://localhost:${webhookServer.port}`;
