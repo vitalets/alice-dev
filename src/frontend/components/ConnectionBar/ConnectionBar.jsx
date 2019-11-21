@@ -5,7 +5,8 @@ import { green, red, grey } from '@material-ui/core/colors';
 import { makeStyles } from '@material-ui/core/styles';
 import { useSelector } from 'react-redux';
 import ConnectButton from './ConnectButton';
-import { CONNECTION_STATE } from '../store';
+import ChangeDeviceButton from './ChangeDeviceButton';
+import { CONNECTION_STATE } from '../../store';
 
 const { DISCONNECTED, CONNECTING, CONNECTED} = CONNECTION_STATE;
 
@@ -70,6 +71,7 @@ export default function ConnectionBar() {
       <InfoIcon className={classes.icon}/>
       {connectionStateText}&nbsp;{message}
       {connectionState === DISCONNECTED && <ConnectButton/>}
+      {connectionState === CONNECTED && devices.length > 0 && <ChangeDeviceButton/>}
     </div>
   );
 }

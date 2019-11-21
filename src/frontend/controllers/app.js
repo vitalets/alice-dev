@@ -4,7 +4,11 @@
 import config from '../config';
 import WSClient from './ws-client';
 import ProxyToUrl from './proxy';
-import { TestButtonClicked, ConnectButtonClicked } from '../store/channels';
+import {
+  TestButtonClicked,
+  ConnectButtonClicked,
+  ChangeDeviceButtonClicked,
+} from '../store/channels';
 import getTestRequest from './get-test-request';
 
 import {
@@ -22,6 +26,7 @@ export default class AppController {
     TestButtonClicked.addListener(() => this._sendTestRequest());
     this._createWsClient();
     ConnectButtonClicked.addListener(() => this._wsClient.connect());
+    ChangeDeviceButtonClicked.addListener(() => this._wsClient.clearDevices());
   }
 
   run() {

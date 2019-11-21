@@ -6,6 +6,7 @@ import {
   setConnectionState,
   setAuthCode,
   addDevice,
+  clearDevices,
   setMode,
   setProxyUrl,
   setFixedResponse,
@@ -42,6 +43,11 @@ export const rootReducer = handleActions({
       const device = payload;
       newState.devices = newState.devices.filter(d => d.userId !== device.userId);
       newState.devices.unshift(device);
+    });
+  },
+  [clearDevices]: (state) => {
+    return produce(state, newState => {
+      newState.devices = [];
     });
   },
   [addUserMessage]: (state, {payload}) => {

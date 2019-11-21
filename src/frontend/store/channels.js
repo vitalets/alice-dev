@@ -6,4 +6,5 @@ import Channel from 'chnl';
 
 export const TestButtonClicked = new Channel();
 export const ConnectButtonClicked = new Channel();
+export const ChangeDeviceButtonClicked = new Channel();
 export const ShowJSONPopup = new Channel();

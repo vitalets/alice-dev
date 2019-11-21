@@ -45,12 +45,13 @@ module.exports = class PageHelper {
   }
 
   async waitConnectionBarText(text) {
-    return this.page.waitForFunction((sel, text) => {
+    const jsHandle = await this.page.waitForFunction((sel, text) => {
       const el = document.querySelector(sel);
       if (el && el.textContent.includes(text)) {
         return el.textContent;
       }
     }, {}, PO.connectionBar, text);
+    return jsHandle.jsonValue();
   }
 
   async waitChatMessagesCount(count) {

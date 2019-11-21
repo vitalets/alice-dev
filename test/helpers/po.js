@@ -1,11 +1,13 @@
 /**
  * Page objects.
+ * See: https://github.com/vitalets/page-object
  */
 
 const po = require('@vitalets/page-object');
 
 const connectionBar = exports.connectionBar = po`#connection-bar`;
 connectionBar.connectButton = po`#connect-button`;
+connectionBar.changeDeviceButton = po`#change-device-button`;
 
 const proxyUrl = exports.proxyUrl = po``;
 proxyUrl.radio = po`input[name="radio-proxy-url"]`;

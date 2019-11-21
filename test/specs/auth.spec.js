@@ -34,31 +34,57 @@ describe('auth', () => {
     assert.include(user.response.text, 'Неверный или устаревший код');
   });
 
-  it('auth by code (first device)', async () => {
+  it('auth device by code', async () => {
     await pageHelper.reloadPage();
     const code = await extractCode();
-    const user = new User();
+    const user = new User(null, body => body.meta.client_id = 'device1');
     await user.enter();
 
     await user.say(code);
-    await page.waitFor(100);
-
-    const text = await pageHelper.getConnectionBarText();
-    assert.include(text, 'Скажите что-нибудь в навык Инструменты разработчика на устройстве: ru.yandex.searchplugin');
+    const barText = await pageHelper.waitConnectionBarText('Скажите что-нибудь');
+    assert.include(barText,
+      'Скажите что-нибудь в навык Инструменты разработчика на устройстве: device1'
+    );
     assert.include(user.response.text, 'Код принят');
 
     await user.say('привет');
     assert.include(user.response.text, 'Ответ со страницы alice-dev: привет!');
     assert.include(user.response.tts, 'Ответ со страницы элис-дев: привет!');
 
-    // clear code after auth
+    // can not re-use code after auth
     const user2 = new User();
     await user2.enter();
     await user2.say(code);
     assert.include(user2.response.text, 'Неверный или устаревший код');
   });
 
-  it('get auth by code (second device)');
+  it('change device', async () => {
+    await pageHelper.reloadPage();
+    let code = await extractCode();
+    let user1 = new User(null, body => body.meta.client_id = 'device1');
+    await user1.enter();
+
+    await user1.say(code);
+    let barText = await pageHelper.waitConnectionBarText('Скажите что-нибудь');
+    assert.include(barText, 'на устройстве: device1');
+
+    await page.click(PO.connectionBar.changeDeviceButton);
+    await pageHelper.waitConnectionBarText('скажите код');
+    code = await extractCode();
+    let user2 = new User(null, body => body.meta.client_id = 'device2');
+    await user2.enter();
+
+    await user2.say(code);
+    barText = await pageHelper.waitConnectionBarText('Скажите что-нибудь');
+    assert.include(barText, 'на устройстве: device2');
+
+    await user2.say('привет');
+    assert.include(user2.response.text, 'Ответ со страницы alice-dev: привет!');
+
+    await user1.say('привет');
+    assert.include(user1.response.text, 'Здесь вы можете отлаживать ваши навыки без публикации');
+  });
+
 });
 
 async function extractCode() {

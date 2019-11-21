@@ -1,25 +1,26 @@
 import { makeStyles } from '@material-ui/core/styles';
 import Button from '@material-ui/core/Button';
-import { ConnectButtonClicked } from '../store/channels';
+import { ChangeDeviceButtonClicked } from '../../store/channels';
 
 const useStyles = makeStyles(theme => ({
   root: {
     margin: 0,
+    marginLeft: theme.spacing(1),
   },
 }));
 
-export default function ConnectButton() {
+export default function ChangeDeviceButton() {
   const classes = useStyles();
 
   return (
       <Button
-        id="connect-button"
+        id="change-device-button"
         className={classes.root}
         variant="outlined"
         size="small"
-        onClick={() => ConnectButtonClicked.dispatch()}
+        onClick={() => ChangeDeviceButtonClicked.dispatch()}
       >
-        Соединиться
+        Сменить
       </Button>
   );
 }

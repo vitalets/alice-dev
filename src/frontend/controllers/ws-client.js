@@ -15,6 +15,7 @@ import {
   setConnectionState,
   setAuthCode,
   addDevice,
+  clearDevices,
 } from '../store';
 
 const wspOptions = {
@@ -51,6 +52,12 @@ export default class WSClient {
     this._wsp.sendPacked(message);
   }
 
+  clearDevices() {
+    dispatch(clearDevices());
+    this._sendDevices();
+    this._requestAuthCode();
+  }
+
   _requestAuthCode() {
     dispatch(setAuthCode(''));
     const message = protocol.requestAuthCode.buildMessage();
@@ -72,9 +79,8 @@ export default class WSClient {
 
   _handleOpen() {
     dispatch(setConnectionState(CONNECTION_STATE.CONNECTED));
-    const devices = getState().devices;
-    if (devices.length) {
-      this._sendDevices(devices);
+    if (getState().devices.length) {
+      this._sendDevices();
     } else {
       this._requestAuthCode();
     }
