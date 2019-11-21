@@ -10,6 +10,7 @@ const useStyles = makeStyles(theme => ({
     padding: theme.spacing(1),
     marginTop: theme.spacing(1),
     marginBottom: theme.spacing(1),
+    whiteSpace: 'pre-line', // to render new-lines
   },
   alice: {
     borderBottomLeftRadius: 0,
@@ -50,7 +51,7 @@ export default function Message({ type, json }) {
   return (
     <Box className={className}>
       {!isError && <MessageMenu type={type} json={json}/>}
-      {text}
+      {String(text).trim()}
     </Box>
   );
 }

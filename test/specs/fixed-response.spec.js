@@ -8,19 +8,19 @@ describe('fixed-response', () => {
     assert.equal(user.response.text, 'Ответ со страницы alice-dev: привет!');
     assert.equal(user.response.tts, 'Ответ со страницы элис-дев: привет!');
 
-    await pageHelper.setInputValue(PO.fixedResponse.text, ' Нормально \n');
+    await pageHelper.setInputValue(PO.fixedResponse.text, ' Все\nнормально \n');
     await pageHelper.setInputValue(PO.fixedResponse.tts, 'Норм');
 
     await user.say('Как дела?');
     // keep original formatting (trailing spaces) - to see raw in JSON
-    assert.equal(user.response.text, ' Нормально \n');
+    assert.equal(user.response.text, ' Все\nнормально \n');
     assert.equal(user.response.tts, 'Норм');
 
     assert.deepEqual(await pageHelper.getChatMessages(), [
       'запусти навык тест',
       'Ответ со страницы alice-dev: привет!',
       'как дела',
-      ' Нормально \n',
+      'Все\nнормально', // в чате строка тримится
     ]);
   });
 
