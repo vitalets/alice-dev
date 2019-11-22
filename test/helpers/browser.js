@@ -25,7 +25,7 @@ module.exports = class BrowserHelper {
   async _launchBrowser() {
     this.browser = await puppeteer.launch({
       headless: this.headless,
-      slowMo: this.headless ? 0 : 500
+      slowMo: this.headless ? 0 : 200
     });
   }
 

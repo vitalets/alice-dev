@@ -18,6 +18,9 @@ const fixedResponse = exports.fixedResponse = po``;
 fixedResponse.radio = po`input[name="radio-fixed-response"]`;
 fixedResponse.text = po`textarea[name="text"]`;
 fixedResponse.tts = po`textarea[name="tts"]`;
+fixedResponse.switch = po`input[name="fixed-response-mode-json"]`;
+fixedResponse.editor = po`#fixed-response-editor .jsoneditor`;
+fixedResponse.editor.textarea = po`textarea`;
 
 const chat = exports.chat = po`.chat`;
 chat.messages = po`> .message`;

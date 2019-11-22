@@ -6,12 +6,15 @@ import FormControl from '@material-ui/core/FormControl';
 
 import {useDispatch, useSelector} from 'react-redux';
 
-import Text from './Text';
-import Tts from './Tts';
+import Text from './FixedResponse/Text';
+import Tts from './FixedResponse/Tts';
+import SwitchJson from './FixedResponse/SwitchJson';
 import ProxyUrlField from './ProxyUrl/Field';
 import TestButton from './ProxyUrl/TestButton';
 import ProxyUrlHelp from './ProxyUrl/Help';
-import {MODE, setMode} from '../../store';
+import {MODE, setMode, setFixedResponse} from '../../store';
+
+const Editor = React.lazy(() => import(/* webpackChunkName: "FixedResponseEditor" */'./FixedResponse/Editor'));
 
 const useStyles = makeStyles(theme => ({
   root: {
@@ -21,27 +24,29 @@ const useStyles = makeStyles(theme => ({
     padding: theme.spacing(2),
     paddingTop: 0,
   },
-  proxyUrlWrapper: {
+  labelWrapper: {
     display: 'flex',
     marginTop: 8,
     alignItems: 'center'
   },
   radio: {
-    marginTop: theme.spacing(1),
+    flexGrow: 1,
+    marginTop: 0,
   },
 }));
 
 export default function Form() {
   const classes = useStyles();
   const mode = useSelector(state => state.mode);
+  const fixedResponseModeJson = useSelector(state => state.fixedResponseModeJson);
+  const fixedResponse = useSelector(state => state.fixedResponse);
   const dispatch = useDispatch();
 
   return (
     <FormControl component="fieldset" className={classes.root}>
       <RadioGroup value={mode} name="mode" onChange={e => dispatch(setMode(e.target.value))}>
-        <div className={classes.proxyUrlWrapper}>
+        <div className={classes.labelWrapper}>
           <FormControlLabel
-            style={{flexGrow: 1, marginTop: 0}}
             name="radio-proxy-url"
             value={MODE.PROXY_URL}
             control={<Radio color="primary" />}
@@ -52,15 +57,29 @@ export default function Form() {
           <ProxyUrlHelp />
         </div>
         <ProxyUrlField/>
-        <FormControlLabel
-          name="radio-fixed-response"
-          value={MODE.FIXED_RESPONSE}
-          control={<Radio color="primary" />}
-          label="Фиксированный ответ"
-          className={classes.radio}
-        />
-        <Text/>
-        <Tts/>
+        <div className={classes.labelWrapper}>
+          <FormControlLabel
+            name="radio-fixed-response"
+            value={MODE.FIXED_RESPONSE}
+            control={<Radio color="primary" />}
+            label="Фиксированный ответ"
+            className={classes.radio}
+          />
+          <SwitchJson/>
+        </div>
+        {fixedResponseModeJson
+          ? (
+            <React.Suspense fallback={<div>Загрузка...</div>}>
+              <Editor json={fixedResponse} onChange={json => dispatch(setFixedResponse(json))}/>
+            </React.Suspense>
+            )
+          : (
+            <div>
+              <Text/>
+              <Tts/>
+            </div>
+          )
+        }
       </RadioGroup>
     </FormControl>
   );

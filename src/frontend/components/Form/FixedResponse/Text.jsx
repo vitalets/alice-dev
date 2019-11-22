@@ -1,6 +1,6 @@
 import TextField from '@material-ui/core/TextField';
 import { useSelector, useDispatch } from 'react-redux';
-import { setFixedResponse } from '../../store';
+import {mergeFixedResponse} from '../../../store';
 import {makeStyles} from '@material-ui/core';
 
 const useStyles = makeStyles(theme => ({
@@ -22,7 +22,7 @@ export default function Text() {
       multiline
       rows="5"
       value={text}
-      onChange={e => dispatch(setFixedResponse({ text: e.target.value }))}
+      onChange={e => dispatch(mergeFixedResponse({ text: e.target.value }))}
       margin="normal"
       variant="outlined"
       fullWidth

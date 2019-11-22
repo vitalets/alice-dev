@@ -14,6 +14,7 @@ const KEYS_TO_SAVE = {
   mode: true,
   proxyUrl: true,
   fixedResponse: true,
+  fixedResponseModeJson: true,
   devices: true,
 };
 

@@ -64,4 +64,8 @@ module.exports = class PageHelper {
     await this.page.click(selector, { clickCount: 3 });
     await this.page.type(selector, value);
   }
+
+  async getInputValue(selector) {
+    return this.page.$eval(selector, el => el.value);
+  }
 };

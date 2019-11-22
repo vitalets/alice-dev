@@ -10,6 +10,7 @@ export default {
     tts: 'Ответ со страницы элис-дев: привет!',
     end_session: false,
   },
+  fixedResponseModeJson: false,
   devices: [], // {userId, deviceName}
   chatMessages: [], // {id, requestBody, responseBody}
 };

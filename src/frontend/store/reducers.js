@@ -10,6 +10,8 @@ import {
   setMode,
   setProxyUrl,
   setFixedResponse,
+  mergeFixedResponse,
+  setFixedResponseModeJson,
   addUserMessage,
   addAliceMessage,
 } from './actions';
@@ -36,7 +38,13 @@ export const rootReducer = handleActions({
     return produce(state, newState => void (newState.proxyUrl = payload));
   },
   [setFixedResponse]: (state, {payload}) => {
+    return produce(state, newState => void (newState.fixedResponse = payload));
+  },
+  [mergeFixedResponse]: (state, {payload}) => {
     return produce(state, newState => void Object.assign(newState.fixedResponse, payload));
+  },
+  [setFixedResponseModeJson]: (state, {payload}) => {
+    return produce(state, newState => void (newState.fixedResponseModeJson = payload));
   },
   [addDevice]: (state, {payload}) => {
     return produce(state, newState => {
