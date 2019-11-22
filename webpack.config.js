@@ -52,12 +52,13 @@ module.exports = () => {
       }),
       new HtmlWebpackPlugin({
         title: `Alice dev${isDevServerMode ? ' (local)' : ''}`,
-        template: 'src/frontend/index.html',
-        metrika: fs.readFileSync('src/frontend/metrika.html', 'utf8'),
+        template: 'src/frontend/assets/index.html',
+        metrika: fs.readFileSync('src/frontend/assets/metrika.html', 'utf8'),
       }),
-      new CopyPlugin([
-        { from: 'src/assets' },
-      ]),
+      new CopyPlugin([{
+        from: 'src/frontend/assets',
+        ignore: ['*.html'],
+      }]),
     ],
   };
 
