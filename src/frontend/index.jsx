@@ -15,8 +15,6 @@ Sentry.init({
   }
 });
 
-setTimeout(() => {throw new Error('abc')}, 5000);
-
 ReactDOM.render(
   <Provider store={store}>
     <App />
