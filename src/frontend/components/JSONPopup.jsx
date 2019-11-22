@@ -7,7 +7,7 @@ import IconButton from '@material-ui/core/IconButton';
 import CloseIcon from '@material-ui/icons/Close';
 
 import { ShowJSONPopup } from '../store/channels';
-const JSONViewer = React.lazy(() => import('./JSONViewer'));
+const JSONViewer = React.lazy(() => import(/* webpackChunkName: "JSONViewer" */'./JSONViewer'));
 
 const useStyles = makeStyles(theme => ({
   closeButton: {

@@ -21,7 +21,8 @@ module.exports = () => {
     entry: './src/frontend',
     output: {
       path: path.resolve(outPath),
-      filename: 'bundle.js',
+      filename: '[name].bundle.js',
+      chunkFilename: '[name].bundle.js',
     },
     resolve: {
       extensions: ['.js', '.jsx', '.json'],
