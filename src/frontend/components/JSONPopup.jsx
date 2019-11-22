@@ -1,14 +1,13 @@
 import {makeStyles} from '@material-ui/core';
 import Dialog from '@material-ui/core/Dialog';
 import DialogContent from '@material-ui/core/DialogContent';
-import DialogContentText from '@material-ui/core/DialogContentText';
 import DialogTitle from '@material-ui/core/DialogTitle';
 import DialogActions from '@material-ui/core/DialogActions';
 import IconButton from '@material-ui/core/IconButton';
 import CloseIcon from '@material-ui/icons/Close';
 
 import { ShowJSONPopup } from '../store/channels';
-import JSONViewer from './JSONViewer';
+const JSONViewer = React.lazy(() => import('./JSONViewer'));
 
 const useStyles = makeStyles(theme => ({
   closeButton: {
@@ -54,7 +53,9 @@ export default function JSONPopup() {
           </IconButton>
         </DialogTitle>
         <DialogContent dividers>
-          <JSONViewer json={json}/>
+          <React.Suspense fallback={<div>Загрузка...</div>}>
+            <JSONViewer json={json}/>
+          </React.Suspense>
         </DialogContent>
         <DialogActions>
 

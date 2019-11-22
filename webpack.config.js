@@ -88,7 +88,8 @@ function jsLoader() {
       loader: 'babel-loader',
       options: {
         plugins: [
-          ['@babel/plugin-proposal-class-properties', { loose: true }]
+          ['@babel/plugin-proposal-class-properties', { loose: true }],
+          '@babel/plugin-syntax-dynamic-import',
         ],
         presets: [
           require.resolve('@babel/preset-react'),
