@@ -10,6 +10,7 @@ import {
   ChangeDeviceButtonClicked,
 } from '../store/channels';
 import getTestRequest from './get-test-request';
+import { validateResponseBody } from './response-validator';
 
 import {
   MODE,
@@ -44,7 +45,11 @@ export default class AppController {
 
   async _handleAliceRequest(id, requestBody) {
     dispatch(addUserMessage({id, requestBody}));
-    const responseBody = await this._getAliceResponse(requestBody);
+    const originalResponseBody = await this._getAliceResponse(requestBody);
+    const validationError = validateResponseBody(originalResponseBody);
+    const responseBody = validationError
+      ? this._getErrorResponse(validationError, requestBody)
+      : originalResponseBody;
     dispatch(addAliceMessage({id, responseBody}));
     return responseBody;
   }
@@ -73,8 +78,9 @@ export default class AppController {
     const {session, version} = requestBody;
     return {
       response: {
-        text: `Error: ${error.message}`,
-        tts: 'Ошибка'
+        text: `Error: ${error.message || String(error)}`,
+        tts: 'Ошибка',
+        end_session: false,
       },
       session,
       version,
