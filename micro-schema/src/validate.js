@@ -2,27 +2,29 @@
  * Micro-schema JSON validator
  */
 const validators = require('./validators');
-const compile = require('./compile');
+const {compile, getKeys} = require('./compile');
 
-module.exports = (schema, value, {allowUnknownKeys} = {}) => {
-  // todo: handle unknown keys
-  return validate(schema, value, []);
+module.exports = (schema, object) => {
+  if (!schema.$compiled) {
+    compile(schema);
+  }
+  return validate(schema, object, []);
 };
 
 const validate = (schema, value, path = []) => {
-  const {keys, $keys} = schema.$compiled || compile(schema);
+  const {keys, $keys} = getKeys(schema);
 
   const errors = [];
 
   // validate value by $keys
   $keys.forEach($key => {
-    const fn = validators[$key];
-    const result = fn(schema[$key], value);
+    const validatorFn = validators[$key];
+    const result = validatorFn(schema[$key], value);
     errors.push(createError($key, path, result));
   });
 
   // validate all items for array
-  if (schema.$type === 'array' && schema.$item && Array.isArray(value)) {
+  if (schema.$item && Array.isArray(value)) {
     value.forEach((item, index) => {
       const itemPath = path.concat([index]);
       const results = validate(schema.$item, item, itemPath);
@@ -31,7 +33,7 @@ const validate = (schema, value, path = []) => {
   }
 
   // validate all sub objects
-  if (value) {
+  if (value && typeof value === 'object') {
     keys.forEach(key => {
       const keyPath = path.concat([key]);
       const results = validate(schema[key], value[key], keyPath);

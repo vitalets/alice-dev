@@ -1,6 +1,6 @@
 describe('$item', () => {
 
-  it('explicit $item', async () => {
+  it('defined as $item: schema', async () => {
     const schema = {
       prop: {
         $type: 'array',
@@ -21,7 +21,7 @@ describe('$item', () => {
     ]);
   });
 
-  it('implicit $item', async () => {
+  it('defined as [$item]', async () => {
     const schema = {
       prop: [
         {$type: 'number'}

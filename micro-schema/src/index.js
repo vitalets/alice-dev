@@ -3,5 +3,5 @@
  */
 
 exports.validate = require('./validate');
-exports.compile = require('./compile');
+exports.compile = require('./compile').compile;
 exports.validators = require('./validators');

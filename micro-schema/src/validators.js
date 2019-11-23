@@ -47,8 +47,4 @@ module.exports = {
       };
     }
   },
-
-  $item: () => {
-    // $item is validated separately
-  }
 };
