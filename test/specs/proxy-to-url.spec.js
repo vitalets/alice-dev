@@ -54,8 +54,10 @@ describe('proxy-to-url', () => {
   });
 
   it('cors error', async () => {
-    // no cors header in handler
-    skillServer.setHandler(() => 'running');
+    skillServer.setHandler((req, res) => {
+      res.removeHeader('Access-Control-Allow-Origin');
+      return 'running';
+    });
 
     await user.enter();
     assert.equal(user.response.text,
@@ -84,8 +86,7 @@ describe('proxy-to-url', () => {
   });
 
   it('timeout', async () => {
-    skillServer.setHandler(async (req, res) => {
-      res.setHeader('Access-Control-Allow-Origin', '*');
+    skillServer.setHandler(async () => {
       await Timeout.set(3000);
       return 'running';
     });
@@ -103,7 +104,6 @@ describe('proxy-to-url', () => {
 
   it('404', async () => {
     skillServer.setHandler(async (req, res) => {
-      res.setHeader('Access-Control-Allow-Origin', '*');
       res.writeHead(404);
       res.end();
     });

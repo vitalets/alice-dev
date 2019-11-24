@@ -1,7 +1,7 @@
 const {promisify} = require('util');
 const micro = require('micro');
 
-const defaultHandler = (req, res) => {
+const defaultHandler = req => {
   const {request, session, version} = req.body;
   const responseText = session.new
     ? `Добро пожаловать`
@@ -11,7 +11,6 @@ const defaultHandler = (req, res) => {
     tts: responseText,
     end_session: false,
   };
-  res.setHeader('Access-Control-Allow-Origin', '*');
   return {response, session, version};
 };
 
@@ -19,6 +18,7 @@ let handler = defaultHandler;
 
 const server = micro(async (req, res) => {
   if (req.method === 'POST') {
+    res.setHeader('Access-Control-Allow-Origin', '*');
     req.body = await micro.json(req);
     return handler(req, res);
   } else {

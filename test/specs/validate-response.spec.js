@@ -15,7 +15,7 @@ describe('validate-response', () => {
 
   it('show validation errors', async () => {
     // invalid response from skill
-    skillServer.setHandler((req, res) => {
+    skillServer.setHandler(() => {
       const response = {
         text: 'привет',
         tts: true,
@@ -23,7 +23,6 @@ describe('validate-response', () => {
           title: 'x'.repeat(65)
         }],
       };
-      res.setHeader('Access-Control-Allow-Origin', '*');
       return {response, version: '1.0'};
     });
 
