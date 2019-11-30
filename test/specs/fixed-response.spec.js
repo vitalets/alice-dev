@@ -1,6 +1,6 @@
 describe('fixed-response', () => {
 
-  it('respond to corresponding userId', async () => {
+  it('respond with fixed text/tts', async () => {
     const user = new User();
     await pageHelper.reloadPageForUserId(user.id);
 
@@ -43,7 +43,7 @@ describe('fixed-response', () => {
     ]);
   });
 
-  it('fix response from chat', async () => {
+  it('fix response from chat (update text/tts in form mode)', async () => {
     const user = new User();
     await pageHelper.reloadPageForUserId(user.id);
 
@@ -51,22 +51,19 @@ describe('fixed-response', () => {
     await pageHelper.setInputValue(PO.proxyUrl.input, skillServer.getUrl());
 
     await user.enter();
-    assert.equal(user.response.text, 'Добро пожаловать');
-    assert.equal(user.response.tts, 'Добро пожаловать');
-    assert.equal(user.response.end_session, false);
+    await pageHelper.waitChatMessagesCount(2);
 
-    await page.waitForSelector(PO.chat.lastMessage.menuButton);
     await page.click(PO.chat.lastMessage.menuButton);
     await page.click(PO.chatMenu.item`:first-child`);
+
+    assert.equal(await page.$eval(PO.fixedResponse.radio, el => el.checked), true);
+    assert.equal(await pageHelper.getElementText(PO.fixedResponse.text), 'Добро пожаловать');
+    assert.equal(await pageHelper.getElementText(PO.fixedResponse.tts), 'Добро пожаловать');
 
     await user.say('Как дела?');
     assert.equal(user.response.text, 'Добро пожаловать');
     assert.equal(user.response.tts, 'Добро пожаловать');
     assert.equal(user.response.end_session, false);
-
-    assert.equal(await page.$eval(PO.fixedResponse.radio, el => el.checked), true);
-    assert.equal(await pageHelper.getElementText(PO.fixedResponse.text), 'Добро пожаловать');
-    assert.equal(await pageHelper.getElementText(PO.fixedResponse.tts), 'Добро пожаловать');
     assert.deepEqual(await pageHelper.getChatMessages(), [
       'запусти навык тест',
       'Добро пожаловать',
@@ -75,12 +72,39 @@ describe('fixed-response', () => {
     ]);
   });
 
+  it('fix response from chat (update editor in json mode)', async () => {
+    const user = new User();
+    await pageHelper.reloadPageForUserId(user.id);
+
+    await page.click(PO.proxyUrl.radio);
+    await pageHelper.setInputValue(PO.proxyUrl.input, skillServer.getUrl());
+
+    await page.click(PO.fixedResponse.switchMode);
+    await page.waitForSelector(PO.fixedResponse.editor);
+
+    await user.enter();
+    await pageHelper.waitChatMessagesCount(2);
+
+    await page.click(PO.chat.lastMessage.menuButton);
+    await page.click(PO.chatMenu.item`:first-child`);
+
+    await pageHelper.waitForSelectorContainText(PO.fixedResponse.editor, '"text": "Добро пожаловать"');
+    assert.equal(await page.$eval(PO.fixedResponse.radio, el => el.checked), true);
+
+    // without this timeout editor catches focus and can't switch back to form mode
+    await page.waitFor(500);
+    await page.click(PO.fixedResponse.switchMode);
+    await page.waitForSelector(PO.fixedResponse.text);
+    assert.equal(await pageHelper.getElementText(PO.fixedResponse.text), 'Добро пожаловать');
+    assert.equal(await pageHelper.getElementText(PO.fixedResponse.tts), 'Добро пожаловать');
+  });
+
   it('edit as json: change text', async () => {
     const user = new User();
     await pageHelper.reloadPageForUserId(user.id);
 
     // переключаемся в режим json
-    await page.click(PO.fixedResponse.switch);
+    await page.click(PO.fixedResponse.switchMode);
     await page.waitForSelector(PO.fixedResponse.editor);
     assert.include(await pageHelper.getElementText(PO.fixedResponse.editor),
       '"text": "Ответ со страницы alice'
@@ -99,7 +123,7 @@ describe('fixed-response', () => {
     assert.equal(user.response.end_session, false);
 
     // переключаемся обратно на text/tts
-    await page.click(PO.fixedResponse.switch);
+    await page.click(PO.fixedResponse.switchMode);
     await page.waitForSelector(PO.fixedResponse.text);
     const text = await pageHelper.getInputValue(PO.fixedResponse.text);
     const tts = await pageHelper.getInputValue(PO.fixedResponse.tts);
@@ -111,7 +135,7 @@ describe('fixed-response', () => {
     await pageHelper.reloadPage();
 
     // переключаемся в режим json
-    await page.click(PO.fixedResponse.switch);
+    await page.click(PO.fixedResponse.switchMode);
     await page.waitForSelector(PO.fixedResponse.editor);
 
     // ставим курсор перед "text"
@@ -121,12 +145,12 @@ describe('fixed-response', () => {
     await page.keyboard.type('_');
 
     // переключаемся обратно на text/tts
-    await page.click(PO.fixedResponse.switch);
+    await page.click(PO.fixedResponse.switchMode);
     await page.waitForSelector(PO.fixedResponse.text);
     assert.equal(await pageHelper.getInputValue(PO.fixedResponse.text), '');
 
     // переключаемся обратно на json
-    await page.click(PO.fixedResponse.switch);
+    await page.click(PO.fixedResponse.switchMode);
     assert.include(await pageHelper.getElementText(PO.fixedResponse.editor),
       '"_text": "Ответ со страницы alice'
     );

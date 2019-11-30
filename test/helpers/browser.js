@@ -25,13 +25,15 @@ module.exports = class BrowserHelper {
   async _launchBrowser() {
     this.browser = await puppeteer.launch({
       headless: this.headless,
-      slowMo: this.headless ? 0 : 200
+      slowMo: this.headless ? 0 : 100
     });
   }
 
   async _preparePage() {
     this.page = (await this.browser.pages())[0];
     await this.page.setCacheEnabled(false);
+    this.page.setDefaultTimeout(1000);
+    this.page.setDefaultNavigationTimeout(3000);
     if (this.debugMode) {
       await this._applyDebugMode();
     }

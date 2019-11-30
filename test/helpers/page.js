@@ -55,8 +55,8 @@ module.exports = class PageHelper {
   }
 
   async waitChatMessagesCount(count) {
-    return this.page.waitForFunction((sel, count) => {
-      return document.querySelectorAll(sel).length >= count;
+    return this.page.waitForFunction((selector, count) => {
+      return document.querySelectorAll(selector).length >= count;
     }, {}, PO.chat.messages, count);
   }
 
@@ -67,5 +67,15 @@ module.exports = class PageHelper {
 
   async getInputValue(selector) {
     return this.page.$eval(selector, el => el.value);
+  }
+
+  async waitForSelectorContainText(selector, text) {
+    const jsHandle = await this.page.waitForFunction((selector, text) => {
+      const el = document.querySelector(selector);
+      if (el && el.textContent.includes(text)) {
+        return el.textContent;
+      }
+    }, {}, selector, text);
+    return jsHandle.jsonValue();
   }
 };

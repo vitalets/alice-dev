@@ -9,6 +9,7 @@ export default function TestButton() {
 
   return (
     <FormControlLabel
+      className="switch-to-json"
       control={
         <Switch
           checked={checked}

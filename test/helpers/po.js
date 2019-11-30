@@ -18,7 +18,8 @@ const fixedResponse = exports.fixedResponse = po``;
 fixedResponse.radio = po`input[name="radio-fixed-response"]`;
 fixedResponse.text = po`textarea[name="text"]`;
 fixedResponse.tts = po`textarea[name="tts"]`;
-fixedResponse.switch = po`input[name="fixed-response-mode-json"]`;
+//fixedResponse.switchMode = po`input[name="fixed-response-mode-json"]`;
+fixedResponse.switchMode = po`label.switch-to-json`;
 fixedResponse.editor = po`#fixed-response-editor .jsoneditor`;
 fixedResponse.editor.textarea = fixedResponse.editor` textarea`;
 

@@ -10,6 +10,7 @@ export default class Editor extends React.Component {
       navigationBar: false,
       statusBar: false,
       colorPicker: false,
+      // Option "onChangeJSON" is not applicable to modes "text" and "code".
       onChange: () => this.handleChange(),
     };
 
@@ -31,13 +32,18 @@ export default class Editor extends React.Component {
   }
 
   componentWillUnmount() {
-    if (this.jsoneditor) {
-      this.jsoneditor.destroy();
+    try {
+      if (this.jsoneditor) {
+        this.jsoneditor.destroy();
+      }
+    } catch(e) {
+      console.error(e);
+      // See: https://github.com/josdejong/jsoneditor/issues/855
     }
   }
 
   componentDidUpdate() {
-    // do nothing in didUpdate
+    this.jsoneditor.update(this.props.json);
   }
 
   render() {
