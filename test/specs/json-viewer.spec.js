@@ -7,7 +7,7 @@ describe('json-viewer', () => {
     await user.enter();
     await user.say('Привет');
 
-    await page.click(PO.chat.messages`:nth-last-child(2)`.menuButton);
+    await page.click(PO.chat.preLastMessage.menuButton);
     await page.waitForSelector(PO.chatMenu);
     await page.click(PO.chatMenu.item`:first-child`);
 
@@ -29,8 +29,8 @@ describe('json-viewer', () => {
 
     await user.enter();
 
-    await page.waitForSelector(PO.chat.messages`:last-child`.menuButton);
-    await page.click(PO.chat.messages`:last-child`.menuButton);
+    await page.waitForSelector(PO.chat.lastMessage.menuButton);
+    await page.click(PO.chat.lastMessage.menuButton);
 
     await page.waitForSelector(PO.chatMenu);
     await page.click(PO.chatMenu.item`:nth-child(2)`);

@@ -20,17 +20,20 @@ fixedResponse.text = po`textarea[name="text"]`;
 fixedResponse.tts = po`textarea[name="tts"]`;
 fixedResponse.switch = po`input[name="fixed-response-mode-json"]`;
 fixedResponse.editor = po`#fixed-response-editor .jsoneditor`;
-fixedResponse.editor.textarea = po`textarea`;
+fixedResponse.editor.textarea = fixedResponse.editor` textarea`;
 
 const chat = exports.chat = po`.chat`;
-chat.messages = po`> .message`;
-chat.messages.menuButton = po`button`;
+chat.messages = chat` .message`;
+chat.lastMessage = chat.messages`:last-child`;
+chat.lastMessage.menuButton = chat.lastMessage` button`;
+chat.preLastMessage = chat.messages`:nth-last-child(2)`;
+chat.preLastMessage.menuButton = chat.preLastMessage` button`;
 
 const chatMenu = exports.chatMenu = po`ul[role="menu"]`;
-chatMenu.item = po`li`;
+chatMenu.item = chatMenu` li`;
 
 const jsonPopup = exports.jsonPopup = po`#json-popup`;
-jsonPopup.title = po`h2`;
-jsonPopup.title.closeButton = po`button`;
-jsonPopup.content = po`.jsoneditor`;
+jsonPopup.title = jsonPopup` h2`;
+jsonPopup.title.closeButton = jsonPopup.title` button`;
+jsonPopup.content = jsonPopup` .jsoneditor`;
 

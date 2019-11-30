@@ -55,8 +55,8 @@ describe('fixed-response', () => {
     assert.equal(user.response.tts, 'Добро пожаловать');
     assert.equal(user.response.end_session, false);
 
-    await page.waitForSelector(PO.chat.messages`:last-child`.menuButton);
-    await page.click(PO.chat.messages`:last-child`.menuButton);
+    await page.waitForSelector(PO.chat.lastMessage.menuButton);
+    await page.click(PO.chat.lastMessage.menuButton);
     await page.click(PO.chatMenu.item`:first-child`);
 
     await user.say('Как дела?');
