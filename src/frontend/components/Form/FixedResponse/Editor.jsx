@@ -37,7 +37,6 @@ export default class Editor extends React.Component {
         this.jsoneditor.destroy();
       }
     } catch(e) {
-      console.error(e);
       // See: https://github.com/josdejong/jsoneditor/issues/855
     }
   }

@@ -34,13 +34,13 @@ module.exports = class BrowserHelper {
     await this.page.setCacheEnabled(false);
     this.page.setDefaultTimeout(1000);
     this.page.setDefaultNavigationTimeout(3000);
+    this.page.on('pageerror', error => console.log('PAGE ERROR:', error));
     if (this.debugMode) {
       await this._applyDebugMode();
     }
   }
 
   async _applyDebugMode() {
-    this.page.on('pageerror', message => console.log('PAGE ERROR:', message));
     this.page.on('console', async msg => {
       const args = msg.args();
       const strings = [];
