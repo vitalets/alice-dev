@@ -28,13 +28,13 @@ describe('fixed-response', () => {
   it('test button', async () => {
     await pageHelper.reloadPage();
 
-    await page.click(PO.proxyUrl.testButton);
+    await page.click(PO.testButton);
     assert.deepEqual(await pageHelper.getChatMessages(), [
       'Запусти навык тест',
       'Ответ со страницы alice-dev: привет!',
     ]);
 
-    await page.click(PO.proxyUrl.testButton);
+    await page.click(PO.testButton);
     assert.deepEqual(await pageHelper.getChatMessages(), [
       'Запусти навык тест',
       'Ответ со страницы alice-dev: привет!',

@@ -46,7 +46,7 @@ export default class AppController {
   async _handleAliceRequest(id, requestBody) {
     dispatch(addUserMessage({id, requestBody}));
     const originalResponseBody = await this._getAliceResponse(requestBody);
-    const validationError = validateResponseBody(originalResponseBody);
+    const validationError = getState().validateResponse && validateResponseBody(originalResponseBody);
     const responseBody = validationError
       ? this._getErrorResponse(validationError, requestBody)
       : originalResponseBody;

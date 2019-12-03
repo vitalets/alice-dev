@@ -19,4 +19,14 @@ describe('default state', () => {
     assert.equal(tts, 'Ответ со страницы элис-дев: привет!');
   });
 
+  it('fixed response is in form mode', async () => {
+    const checked = await page.$eval(PO.fixedResponse.switchMode, e => e.checked);
+    assert.equal(checked, false);
+  });
+
+  it('validation checkbox checked', async () => {
+    const checked = await page.$eval(PO.validationCheckbox, e => e.checked);
+    assert.equal(checked, true);
+  });
+
 });

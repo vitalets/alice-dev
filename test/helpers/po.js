@@ -9,17 +9,19 @@ const connectionBar = exports.connectionBar = po`#connection-bar`;
 connectionBar.connectButton = po`#connect-button`;
 connectionBar.changeDeviceButton = po`#change-device-button`;
 
+exports.validationCheckbox = po`#validation-checkbox`;
+exports.testButton = po`#test-button`;
+
 const proxyUrl = exports.proxyUrl = po``;
 proxyUrl.radio = po`input[name="radio-proxy-url"]`;
 proxyUrl.input = po`input[name="proxy-url"]`;
-proxyUrl.testButton = po`#test-button`;
 
 const fixedResponse = exports.fixedResponse = po``;
 fixedResponse.radio = po`input[name="radio-fixed-response"]`;
 fixedResponse.text = po`textarea[name="text"]`;
 fixedResponse.tts = po`textarea[name="tts"]`;
-//fixedResponse.switchMode = po`input[name="fixed-response-mode-json"]`;
-fixedResponse.switchMode = po`label.switch-to-json`;
+fixedResponse.switchMode = po`input[name="fixed-response-mode-json"]`;
+//fixedResponse.switchMode = po`label.switch-to-json`;
 fixedResponse.editor = po`#fixed-response-editor .jsoneditor`;
 fixedResponse.editor.textarea = fixedResponse.editor` textarea`;
 

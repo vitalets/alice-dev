@@ -11,6 +11,7 @@ export default {
     end_session: false,
   },
   fixedResponseModeJson: false,
+  validateResponse: true,
   devices: [], // {userId, deviceName}
   chatMessages: [], // {id, requestBody, responseBody}
 };

@@ -14,6 +14,7 @@ import {
   setFixedResponseModeJson,
   addUserMessage,
   addAliceMessage,
+  setValidateResponse,
 } from './actions';
 
 const MAX_MESSAGES_IN_LOG = 10;
@@ -39,6 +40,9 @@ export const rootReducer = handleActions({
   },
   [setFixedResponse]: (state, {payload}) => {
     return produce(state, newState => void (newState.fixedResponse = payload));
+  },
+  [setValidateResponse]: (state, {payload}) => {
+    return produce(state, newState => void (newState.validateResponse = payload));
   },
   [mergeFixedResponse]: (state, {payload}) => {
     return produce(state, newState => void Object.assign(newState.fixedResponse, payload));

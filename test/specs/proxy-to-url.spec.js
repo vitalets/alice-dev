@@ -35,14 +35,14 @@ describe('proxy-to-url', () => {
   });
 
   it('test button', async () => {
-    await page.click(PO.proxyUrl.testButton);
+    await page.click(PO.testButton);
     await pageHelper.waitChatMessagesCount(2);
     assert.deepEqual(await pageHelper.getChatMessages(), [
       'Запусти навык тест',
       'Добро пожаловать',
     ]);
 
-    await page.click(PO.proxyUrl.testButton);
+    await page.click(PO.testButton);
     await pageHelper.waitChatMessagesCount(4);
 
     assert.deepEqual(await pageHelper.getChatMessages(), [

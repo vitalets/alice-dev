@@ -93,4 +93,19 @@ describe('validate-response', () => {
     ]);
     assert.equal(user.response.tts, 'Ошибка');
   });
+
+  it('dont validate response if checkbox unchecked', async () => {
+    skillServer.setHandler(() => {
+      const response = {
+        text: 'привет',
+        tts: true,
+      };
+      return {response};
+    });
+
+    await page.click(PO.validationCheckbox);
+    await user.enter();
+
+    assert.equal(user.response.text, 'привет');
+  });
 });

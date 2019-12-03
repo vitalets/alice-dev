@@ -10,7 +10,6 @@ import Text from './FixedResponse/Text';
 import Tts from './FixedResponse/Tts';
 import SwitchJson from './FixedResponse/SwitchJson';
 import ProxyUrlField from './ProxyUrl/Field';
-import TestButton from './ProxyUrl/TestButton';
 import ProxyUrlHelp from './ProxyUrl/Help';
 import {MODE, setMode, setFixedResponse} from '../../store';
 
@@ -53,7 +52,6 @@ export default function Form() {
             label="Прокси на URL"
             className={classes.radio}
           />
-          <TestButton />
           <ProxyUrlHelp />
         </div>
         <ProxyUrlField/>
