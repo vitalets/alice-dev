@@ -7,6 +7,7 @@ import AppController from './controllers/App';
 
 Sentry.init({
   dsn: 'https://ef09734ff94541ec9c3ba5b577fdee57@sentry.io/1810772',
+  maxBreadcrumbs: 5,
   // to show errors in console
   // see: https://github.com/getsentry/sentry-javascript/issues/1600
   beforeSend: (event, hint) => {
