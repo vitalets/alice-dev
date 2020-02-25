@@ -32,12 +32,8 @@ export default class Editor extends React.Component {
   }
 
   componentWillUnmount() {
-    try {
-      if (this.jsoneditor) {
-        this.jsoneditor.destroy();
-      }
-    } catch(e) {
-      // See: https://github.com/josdejong/jsoneditor/issues/855
+    if (this.jsoneditor) {
+      this.jsoneditor.destroy();
     }
   }
 
