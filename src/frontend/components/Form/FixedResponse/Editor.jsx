@@ -20,12 +20,7 @@ export default class Editor extends React.Component {
   }
 
   handleChange() {
-    let json;
-    try {
-      json = this.jsoneditor.get();
-    } catch (e) {
-      // invalid json
-    }
+    const json = this.tryGetCurrentJson();
     if (json) {
       this.props.onChange(json);
     }
@@ -37,6 +32,10 @@ export default class Editor extends React.Component {
     }
   }
 
+  shouldComponentUpdate(nextProps) {
+    return JSON.stringify(nextProps.json) !== JSON.stringify(this.tryGetCurrentJson());
+  }
+
   componentDidUpdate() {
     this.jsoneditor.update(this.props.json);
   }
@@ -45,5 +44,13 @@ export default class Editor extends React.Component {
     return (
       <div id="fixed-response-editor" className="jsoneditor-react-container" ref={elem => this.container = elem} />
     );
+  }
+
+  tryGetCurrentJson() {
+    try {
+      return this.jsoneditor.get();
+    } catch (e) {
+      // invalid json
+    }
   }
 }

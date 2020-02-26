@@ -70,12 +70,17 @@ module.exports = class PageHelper {
   }
 
   async waitForSelectorContainText(selector, text) {
-    const jsHandle = await this.page.waitForFunction((selector, text) => {
-      const el = document.querySelector(selector);
-      if (el && el.textContent.includes(text)) {
-        return el.textContent;
-      }
-    }, {}, selector, text);
-    return jsHandle.jsonValue();
+    try {
+      const jsHandle = await this.page.waitForFunction((selector, text) => {
+        const el = document.querySelector(selector);
+        if (el && el.textContent.includes(text)) {
+          return el.textContent;
+        }
+      }, {}, selector, text);
+      return jsHandle.jsonValue();
+    } catch (e) {
+      e.message = `Wait for selector '${selector}' to contain text '${text}'`;
+      throw e;
+    }
   }
 };
