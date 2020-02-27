@@ -22,7 +22,7 @@ const useStyles = makeStyles(theme => ({
     backgroundColor: theme.palette.primary.main,
     color: theme.palette.primary.contrastText,
   },
-  newSession: {
+  italic: {
     fontStyle: 'italic'
   },
   error: {
@@ -35,8 +35,9 @@ export default function Message({ type, json }) {
   const classes = useStyles();
   const isUserMessage = type === 'user';
   const isNewSession = isUserMessage && json.session.new;
+  const isButtonPressed = isUserMessage && json.request.type === 'ButtonPressed';
   const text = isUserMessage
-    ? (isNewSession ? json.request.original_utterance : json.request.command)
+    ? getUserText(json.request, isNewSession, isButtonPressed)
     : json.response.text;
   const isError = !isUserMessage && /^Error/.test(text);
 
@@ -45,7 +46,7 @@ export default function Message({ type, json }) {
     classes.root,
     isUserMessage ? classes.user : classes.alice,
     isError && classes.error,
-    isNewSession && classes.newSession,
+    (isNewSession || isButtonPressed) && classes.italic,
   );
 
   return (
@@ -54,4 +55,10 @@ export default function Message({ type, json }) {
       {String(text).trim()}
     </Box>
   );
+}
+
+function getUserText(request, isNewSession, isButtonPressed) {
+  return isButtonPressed
+    ? `ButtonPressed ${JSON.stringify(request.payload)}`
+    : (isNewSession ? request.original_utterance : request.command);
 }
