@@ -33,6 +33,8 @@ export default class Editor extends React.Component {
   }
 
   shouldComponentUpdate(nextProps) {
+    // не обновляем контент в редакторе, если изменение прилетело от себя же,
+    // т.к. это приводит к ошибкам: https://github.com/josdejong/jsoneditor/issues/913
     return JSON.stringify(nextProps.json) !== JSON.stringify(this.tryGetCurrentJson());
   }
 
@@ -42,7 +44,7 @@ export default class Editor extends React.Component {
 
   render() {
     return (
-      <div id="fixed-response-editor" className="jsoneditor-react-container" ref={elem => this.container = elem} />
+      <div id="fixed-response-editor" style={{height: 300}} className="jsoneditor-react-container" ref={elem => this.container = elem} />
     );
   }
 
