@@ -58,32 +58,28 @@ export default class AppController {
     try {
       return getState().mode === MODE.PROXY_URL
         ? await new ProxyToUrl(requestBody).proxy()
-        : this._getFixedResponse(requestBody);
+        : this._getFixedResponse();
     } catch (e) {
       logger.error(e);
-      return this._getErrorResponse(e, requestBody);
+      return this._getErrorResponse(e);
     }
   }
 
-  _getFixedResponse(requestBody) {
-    const {session, version} = requestBody;
+  _getFixedResponse() {
     return {
       response: getState().fixedResponse,
-      session,
-      version,
+      version: '1.0',
     };
   }
 
-  _getErrorResponse(error, requestBody) {
-    const {session, version} = requestBody;
+  _getErrorResponse(error) {
     return {
       response: {
         text: `Ошибка: ${error.message || String(error)}`,
         tts: 'Ошибка',
         end_session: false,
       },
-      session,
-      version,
+      version: '1.0',
     };
   }
 

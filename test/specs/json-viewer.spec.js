@@ -39,7 +39,7 @@ describe('json-viewer', () => {
     assert.equal(await pageHelper.getElementText(PO.jsonPopup.title), 'JSON ответа');
     await page.waitForSelector(PO.jsonPopup.content);
     assert.include(await pageHelper.getElementText(PO.jsonPopup.content),
-      'object{3}response{3}text:Ответ со страницы alice-dev: привет!tts:Ответ со страницы элис-дев: привет!'
+      'object{2}response{3}text:Ответ со страницы alice-dev: привет!tts:Ответ со страницы элис-дев: привет!'
     );
 
     // close popup
