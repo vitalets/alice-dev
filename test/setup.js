@@ -19,7 +19,7 @@ const debugMode = process.env.DEBUG_MODE;
 const headless = process.env.PUPPETEER_HEADLESS !== 'false';
 Logger.setLogLevel(debugMode ? 'debug' : 'none');
 
-const staticPath = process.env.NODE_ENV==='production' ? 'dist/prod' : 'dist/dev';
+const staticPath = process.env.NODE_ENV === 'production' ? 'dist/prod' : 'dist/dev';
 console.log(`TESTING PATH: ${staticPath}`);
 
 const screenshotsDir = 'screenshots';

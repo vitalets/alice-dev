@@ -2,7 +2,7 @@ const {promisify} = require('util');
 const micro = require('micro');
 
 const defaultHandler = req => {
-  const {request, session, version} = req.body;
+  const { request, session } = req.body;
   const responseText = session.new
     ? `Добро пожаловать`
     : `Навык получил команду: ${request.command}`;
@@ -11,7 +11,7 @@ const defaultHandler = req => {
     tts: responseText,
     end_session: false,
   };
-  return {response, session, version};
+  return { response, version: '1.0' };
 };
 
 let handler = defaultHandler;

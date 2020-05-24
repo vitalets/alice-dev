@@ -78,7 +78,7 @@ export default class AppController {
     const {session, version} = requestBody;
     return {
       response: {
-        text: `Error: ${error.message || String(error)}`,
+        text: `Ошибка: ${error.message || String(error)}`,
         tts: 'Ошибка',
         end_session: false,
       },

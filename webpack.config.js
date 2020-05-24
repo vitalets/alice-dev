@@ -56,10 +56,14 @@ module.exports = () => {
         template: 'src/frontend/assets/index.html',
         metrika: fs.readFileSync('src/frontend/assets/metrika.html', 'utf8'),
       }),
-      new CopyPlugin([{
-        from: 'src/frontend/assets',
-        ignore: ['*.html'],
-      }]),
+      new CopyPlugin({
+        patterns: [{
+          from: 'src/frontend/assets',
+          globOptions: {
+            ignore: ['*.html'],
+          }
+        }]
+      }),
     ],
   };
 

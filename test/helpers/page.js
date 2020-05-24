@@ -12,7 +12,7 @@ module.exports = class PageHelper {
   async reloadPage(appState = null) {
     await this.setAppState(appState);
     await this.page.reload();
-    await this.waitConnectionBarText('Подключено');
+    await this.waitConnectionBarText('Подключено', { timeout: 2000 });
   }
 
   async reloadPageForUserId(userId) {
@@ -44,13 +44,13 @@ module.exports = class PageHelper {
     return this.page.$eval(selector, el => el.textContent);
   }
 
-  async waitConnectionBarText(text) {
+  async waitConnectionBarText(text, options = {}) {
     const jsHandle = await this.page.waitForFunction((sel, text) => {
       const el = document.querySelector(sel);
       if (el && el.textContent.includes(text)) {
         return el.textContent;
       }
-    }, {}, PO.connectionBar, text);
+    }, options, PO.connectionBar, text);
     return jsHandle.jsonValue();
   }
 

@@ -27,18 +27,16 @@ describe('validate-response', () => {
 
     await user.enter();
     assert.deepEqual(user.response.text.split('\n'), [
-      'Error: Неверный тип поля "response.tts": "boolean" вместо "string"',
+      'Ошибка: Неверный тип поля "response.tts": "boolean" вместо "string"',
       'Превышена длина поля "response.buttons.0.title": 65, максимум 64',
       'Отсутствует обязательное поле "response.end_session"',
-      'Отсутствует обязательное поле "session"',
     ]);
     assert.equal(user.response.tts, 'Ошибка');
 
     assert.deepEqual((await pageHelper.getChatMessages())[1].split('\n'), [
-      'Error: Неверный тип поля "response.tts": "boolean" вместо "string"',
+      'Ошибка: Неверный тип поля "response.tts": "boolean" вместо "string"',
       'Превышена длина поля "response.buttons.0.title": 65, максимум 64',
       'Отсутствует обязательное поле "response.end_session"',
-      'Отсутствует обязательное поле "session"',
     ]);
   });
 
@@ -59,7 +57,7 @@ describe('validate-response', () => {
 
     await user.enter();
     assert.deepEqual(user.response.text.split('\n'), [
-      'Error: Отсутствует обязательное поле "response.card.image_id"',
+      'Ошибка: Отсутствует обязательное поле "response.card.image_id"',
       'Превышена длина поля "response.card.title": 129, максимум 128'
     ]);
     assert.equal(user.response.tts, 'Ошибка');
@@ -87,7 +85,7 @@ describe('validate-response', () => {
 
     await user.enter();
     assert.deepEqual(user.response.text.split('\n'), [
-      'Error: Превышена длина поля "response.card.header.text": 65, максимум 64',
+      'Ошибка: Превышена длина поля "response.card.header.text": 65, максимум 64',
       'Отсутствует обязательное поле "response.card.items.0.image_id"',
       'Превышена длина поля "response.card.items.0.title": 129, максимум 128'
     ]);
@@ -100,11 +98,18 @@ describe('validate-response', () => {
         text: 'привет',
         tts: true,
       };
-      return {response};
+      return { response }; // no 'version' field
     });
 
     await page.click(PO.validationCheckbox);
-    await user.enter();
+    try {
+      await user.enter();
+    } catch(e) {
+      // alice-dev пропускает ответ без 'version', но сам alice-tester ловит эту ошибку
+      if (e.message !== 'Отсутствует обязательное поле "version"') {
+        throw e;
+      }
+    }
 
     assert.equal(user.response.text, 'привет');
   });

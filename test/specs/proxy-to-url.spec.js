@@ -61,14 +61,14 @@ describe('proxy-to-url', () => {
 
     await user.enter();
     assert.equal(user.response.text,
-      `Error: Прокси URL не ответил. Проверьте, что навык запущен на ${skillServer.getUrl()} и возвращает заголовок Access-Control-Allow-Origin.`
+      `Ошибка: Прокси URL не ответил. Проверьте, что навык запущен на ${skillServer.getUrl()} и возвращает заголовок Access-Control-Allow-Origin.`
     );
     assert.equal(user.response.tts, 'Ошибка');
 
     await user.say('Привет');
 
     assert.equal(user.response.text,
-      `Error: Прокси URL не ответил. Проверьте, что навык запущен на ${skillServer.getUrl()} и возвращает заголовок Access-Control-Allow-Origin.`
+      `Ошибка: Прокси URL не ответил. Проверьте, что навык запущен на ${skillServer.getUrl()} и возвращает заголовок Access-Control-Allow-Origin.`
     );
     assert.equal(user.response.tts, 'Ошибка');
     assert.equal(
@@ -79,9 +79,9 @@ describe('proxy-to-url', () => {
 
     assert.deepEqual(await pageHelper.getChatMessages(), [
       'запусти навык тест',
-      `Error: Прокси URL не ответил. Проверьте, что навык запущен на ${skillServer.getUrl()} и возвращает заголовок Access-Control-Allow-Origin.`,
+      `Ошибка: Прокси URL не ответил. Проверьте, что навык запущен на ${skillServer.getUrl()} и возвращает заголовок Access-Control-Allow-Origin.`,
       'привет',
-      `Error: Прокси URL не ответил. Проверьте, что навык запущен на ${skillServer.getUrl()} и возвращает заголовок Access-Control-Allow-Origin.`,
+      `Ошибка: Прокси URL не ответил. Проверьте, что навык запущен на ${skillServer.getUrl()} и возвращает заголовок Access-Control-Allow-Origin.`,
     ]);
   });
 
@@ -96,7 +96,7 @@ describe('proxy-to-url', () => {
 
     assert.deepEqual(await pageHelper.getChatMessages(), [
       'запусти навык тест',
-      'Error: Proxy URL не ответил за 2000 мс',
+      'Ошибка: Proxy URL не ответил за 2000 мс',
     ]);
     assert.include(user.response.text, 'Proxy URL не ответил за 2000 мс');
     assert.include(user.response.tts, 'Ошибка');
@@ -113,9 +113,9 @@ describe('proxy-to-url', () => {
 
     assert.deepEqual(await pageHelper.getChatMessages(), [
       'запусти навык тест',
-      'Error: Proxy URL: 404 Not Found',
+      'Ошибка: Proxy URL: 404 Not Found',
     ]);
-    assert.include(user.response.text, 'Error: Proxy URL: 404 Not Found');
+    assert.include(user.response.text, 'Ошибка: Proxy URL: 404 Not Found');
     assert.include(user.response.tts, 'Ошибка');
   });
 });
