@@ -40,7 +40,7 @@
     "alice-renderer": "^1.0.0",
     "chnl": "^1.2.0",
     "clsx": "^1.1.0",
-    "immer": "^6.0.8",
+    "immer": "^8.0.1",
     "jsoneditor": "^9.0.0",
     "lodash.throttle": "^4.1.1",
     "loggee": "^0.2.0",
